@@ -1,0 +1,19 @@
+<table>
+  <tr>
+    <th>Id</th>
+    <th>Brand</th>
+    <th>Model</th>
+    <th>Price</th>
+    <th>Size</th>
+  </tr>
+<% @posts.each do |post| %>
+<% attr = PostParser.parse(post) %>
+  <tr>
+    <td><%= post.id %></td>
+    <td><%= attr[:brand] %></td>
+    <td><%= attr[:model] %></td>
+    <td>€<%= attr[:price] %></td>
+    <td><%= attr[:size] %></td>
+  </tr>
+<% end %>
+</table>
