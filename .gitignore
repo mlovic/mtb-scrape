@@ -1,3 +1,5 @@
 db/debug.log
 db/foromtb.db
 show_bike.rb
+*.log
+*.db
