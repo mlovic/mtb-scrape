@@ -8,13 +8,15 @@ require_relative 'post'
 
 class ForoMtb
 
-  FOROMTB_URI = 'http://www.foromtb.com/forums/btt-con-suspensi%C3%B3n-trasera.60/page-3'
+  FOROMTB_URI = 'http://www.foromtb.com/forums/btt-con-suspensi%C3%B3n-trasera.60/'
+  # PROBLEM: DOES NOT WORK WITH FIRST PAGE: to do with sticky notes
 
-  def scrape_first_page(num_posts = nil)
-
-    visit_first_page
+  def scrape_page(page_num, num_posts = nil)
+    
+    visit_page(page_num)
 
     nodes = @page.root.css('.discussionListItem')
+    puts "#{nodes.size} nodes found"
 
     remove_sticky!(nodes)
 
@@ -23,7 +25,7 @@ class ForoMtb
     nodes.each do |n|
 
       @current_thread = n.attr(:id).split('-').last.to_i
-      p @current_thread
+      puts "#{@current_thread}: #{post_preview_title(n)}"
 
       # IDEAS TO IMPROVE THIS
       # ================
@@ -78,9 +80,11 @@ class ForoMtb
   private
 
   # TODO get_page(number)
-    def visit_first_page
+    def visit_page(num)
       @agent = Mechanize.new
-      @page = @agent.get FOROMTB_URI
+      p URI.join(FOROMTB_URI, "page-#{num}")
+      @page = @agent.get URI.join(FOROMTB_URI, "page-#{num}")
+      #@page = @agent.get FOROMTB_URI
       puts 'retrieved main page...'
     end
 
@@ -91,11 +95,18 @@ class ForoMtb
     end
 
     # Get rid of sticky posts
+    # NOT WORKING
     def remove_sticky!(nodes)
+      # come up with .sticky? method
+      #   and with .title method
+      #   PostPreview mixin to extend node?
       nodes.each do |n|
+        #pp n
+        #nodes.each { |t| p t.css('.title').text.strip } # post_preview_ttle
+        #puts "Evaluating #{post_preview_title(n)}... #{n.attributes["class"].value}"
         if n && n.attributes["class"].value.include?('sticky')
           nodes.delete(n)
-          puts 'Sticky removed'
+          puts 'Sticky removed: ' + post_preview_title(n)
         end
       end
     end
@@ -115,6 +126,10 @@ class ForoMtb
       #p page.root.css('.titleBar .DateTime').methods
       #attributes[:created_at] = page.root.css('abbr .DateTime').attr(:data-time)
       return attributes
+    end
+
+    def post_preview_title(n)
+      n.css('.title').text.strip
     end
 
 end

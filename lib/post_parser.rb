@@ -41,10 +41,12 @@ class PostParser
         str.match(/compro/i) || str.match(/busco/i)
       end
       def contains_cuadro?(str)
+        # search also in desc? Maybe use price to decide as well
         str.match(/cuadro/i)
       end
 
       def find_size(str)
+        # TODO fix: detecting only x without -s or -l
         size_regex = /talla\s([xs,s,m,l,xl])/i
         str.match(size_regex) && str.match(size_regex).captures.first
       end
@@ -55,6 +57,7 @@ class PostParser
         # TODO find better way
         brands.each do |b|
           return str.match(/(#{b})\s(\w+)?/i).captures if str.match(/(#{b})\s(\w+)?/i)
+          # above doesn't take dash as an acceptable word character
         end
         nil
       end
@@ -64,6 +67,11 @@ class PostParser
       end
 
       def find_price(str)
+        # TODO improve algorithm
+        #   search for all occurrences of price
+        #   detect 'ahora 3000e'
+        #   choose most likely price band i.e. 1000e more likely than 150e
+        #
         num = /([0-9]?\.?[0-9]{3})/
         price_regex = Regexp.union /[€]#{num}/, /#{num}\s?[€]/, /#{num}\s?eur/i, 
                                    /precio\s?#{num}/, /#{num}e/

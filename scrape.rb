@@ -16,7 +16,8 @@ Post.all.each do |post|
 end
 
 fmtb = ForoMtb.new
-fmtb.scrape_first_page(4)
+#fmtb.scrape_first_page(4)
+fmtb.scrape_page(3, 4)
 
 
 # TODO open dataset: mtb index. all bikes: model, year, travel, msrp
