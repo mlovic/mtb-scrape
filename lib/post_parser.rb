@@ -17,25 +17,29 @@ class PostParser
 
       price = find_price(post.title) || find_price(post.description_no_html)
       attributes[:price] = price
-      puts price ? "price found: €#{price}" : "no price found"
 
       brand = find_brand(post.title)
       attributes[:brand] = brand.first if brand
       attributes[:model] = brand.last if brand && brand.size > 1
-      puts brand ? "brand found: #{brand}" : "no brand found: #{post.title}"
 
       # Get size
       size = find_size(post.title) || find_size(post.description_no_html)
       attributes[:size] = size
-      puts "size: #{size}" if size
 
-      puts "Frame only!!" if contains_cuadro?(post.title)
       attributes[:frame_only] = contains_cuadro?(post.title)
 
+      #print(post, attributes)
       return attributes
     end
 
     private
+
+      def print(post, atr)
+        puts atr[:price] ? "price found: €#{atr[:price]}" : "no price found"
+        puts atr[:brand] ? "brand found: #{atr[:brand]}" : "no brand found: #{post.title}"
+        puts "size: #{atr[:size]}" if atr[:size]
+        puts "Frame only!!" if contains_cuadro?(post.title)
+      end
 
       def buyer?(str)
         str.match(/compro/i) || str.match(/busco/i)
@@ -80,11 +84,11 @@ class PostParser
   end
 end
 
-Post.all.each do |p|
-  puts p.id.to_s + '. ' + p.title
-  PostParser.parse(p)
-  puts '---------------------------'
-end
+#Post.all.each do |p|
+  #puts p.id.to_s + '. ' + p.title
+  #PostParser.parse(p)
+  #puts '---------------------------'
+#end
 
 #post = Post.find(32)
 #puts post.description_no_html

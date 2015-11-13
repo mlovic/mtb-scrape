@@ -14,7 +14,8 @@ module PostPreview
   end
 
   def title
-    n.css('.title').text.strip
+    # fix the .last hack. Or make comment
+    css('.title a').last.text.strip
   end
 
 end

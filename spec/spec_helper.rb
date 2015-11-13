@@ -19,6 +19,7 @@
 #
 require_relative 'helpers'
 require_relative '../lib/post_preview'
+require_relative '../lib/post_parser'
 require 'nokogiri'
 require 'pp'
 
