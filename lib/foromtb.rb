@@ -10,11 +10,7 @@ require_relative 'post_preview'
 class ForoMtb
 
   FOROMTB_URI = 'http://www.foromtb.com/forums/btt-con-suspensi%C3%B3n-trasera.60/'
-  # PROBLEM: DOES NOT WORK WITH FIRST PAGE: to do with sticky notes
-  #
-  #
-  # Create
-  #
+
   def initialize
     mech_logger = Logger.new('mechanize.log')
     mech_logger.level = Logger::INFO
@@ -58,16 +54,15 @@ class ForoMtb
       #@last_message_time = Time.at(unix_time).to_datetime
       # TODO change to activerecord validation?
       @last_message_time = n.last_message_at
-      if Post.where(thread_id: @current_thread).size > 0
+      if Post.find_by(thread_id: @current_thread)
         puts 'Post already in db'
-        post = Post.where(thread_id: @current_thread).first #take?
+        post = Post.find_by!(thread_id: @current_thread)
         unless @last_message_time == post.last_message_at
           post.last_message_at = @last_message_time
           puts "Updated last message time (#{post.id})" if post.save
         end
         next
       end
-      puts 'passed if'
 
       post_page = get_post_page(n)
 

@@ -20,8 +20,22 @@
 require_relative 'helpers'
 require_relative '../lib/post_preview'
 require_relative '../lib/post_parser'
+require_relative '../lib/foromtb'
 require 'nokogiri'
 require 'pp'
+require 'vcr'
+require 'webmock'
+require 'database_cleaner'
+
+# Later move to use only when needed!
+ActiveRecord::Base.logger = Logger.new('db/test_debug.log')
+configuration = YAML::load(IO.read('db/database.yml'))
+ActiveRecord::Base.establish_connection(configuration['test'])
+
+VCR.configure do |config|
+  config.cassette_library_dir = "spec/fixtures/vcr_cassettes"
+  config.hook_into :webmock
+end
 
 RSpec.configure do |config|
 
@@ -47,6 +61,11 @@ RSpec.configure do |config|
     # a real object. This is generally recommended, and will default to
     # `true` in RSpec 4.
     mocks.verify_partial_doubles = true
+
+  config.before(:suite) do
+    DatabaseCleaner.clean_with(:truncation)
+  end
+
   end
 
 # The settings below are suggested to provide a good initial experience
