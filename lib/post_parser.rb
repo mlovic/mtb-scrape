@@ -26,7 +26,7 @@ class PostParser
       size = find_size(post.title) || find_size(post.description_no_html)
       attributes[:size] = size
 
-      attributes[:frame_only] = contains_cuadro?(post.title)
+      attributes[:frame_only] = contains_cuadro?(post.title) != nil # best way?
 
       #print(post, attributes)
       return attributes
@@ -52,7 +52,8 @@ class PostParser
       def find_size(str)
         # TODO fix: detecting only x without -s or -l
         size_regex = /talla\s([xs,s,m,l,xl])/i
-        str.match(size_regex) && str.match(size_regex).captures.first
+        str.match(size_regex) && str.match(size_regex).captures.first.downcase
+        # work with lowercase?
       end
 
       def find_brand(str)
