@@ -1,5 +1,8 @@
 module PostPreview
 
+  def scrape
+  end
+
   def sticky?
     self.attributes["class"].value.include?('sticky')
   end
@@ -16,6 +19,14 @@ module PostPreview
   def title
     # fix the .last hack. Or make comment
     css('.title a').last.text.strip
+  end
+
+  def all_attrs
+    {
+      thread_id: thread_id,
+      last_message_at: last_message_at,
+      title: title
+    }
   end
 
 end

@@ -1,31 +1,36 @@
+require 'mechanize'
 require_relative 'spec_helper'
+require_relative '../lib/fmtb_post'
 
-RSpec.describe PostPreview do
-  let(:post_preview) { 
-    doc = Nokogiri::HTML::Document.parse(fixture('post_preview.html'))
-    doc.at('li').extend PostPreview
-    # think of better way to do this. Maube Node.new.content = str
-    #
-    # real class uses element, test uses document. Both inherit from node, 
-    #   which is what matters appartently
+RSpec.describe FmtbPost do
+  let(:fmtb_post) { 
+    doc = Nokogiri::HTML::Document.parse(fixture('post_preview.html')).at('li')
+    agent = Mechanize.new
+    page = VCR.use_cassette('get_first_page') { ForoMtb.new.visit_page(1) }
+    FmtbPost.new doc, agent, page
   }
+
   let(:sticky_post_preview) {
     doc = Nokogiri::HTML::Document.parse(fixture('sticky_post_preview.html'))
     doc.at('li').extend PostPreview
   }
+
+  it 'should have preview methods' do
+    expect(fmtb_post).to respond_to :title
+  end
 
   describe '#sticky' do
     it 'returns true when post is sticky' do
       expect(sticky_post_preview).to be_sticky
     end
     it 'returns false when post is not sticky' do
-      expect(post_preview).to_not be_sticky
+      expect(fmtb_post).to_not be_sticky
     end
   end
 
   describe '#thread_id' do
     it 'returns thread id' do
-      expect(post_preview.thread_id).to eq 1281012
+      expect(fmtb_post.thread_id).to eq 1281012
     end
     # raise error if no thread id found?
     # special error for no found
@@ -33,24 +38,20 @@ RSpec.describe PostPreview do
 
   describe '#last_message_at' do
     it 'returns time of last thread message' do
-      expect(post_preview.last_message_at).to eq DateTime.parse('11 Nov 2015 07:29:28 +01:00')
+      expect(fmtb_post.last_message_at).to eq DateTime.parse('11 Nov 2015 07:29:28 +01:00')
     end
   end
 
   describe 'title' do
     it 'returns post title' do
-      expect(post_preview.title).to eq 'Santa cruz driver 8'
+      expect(fmtb_post.title).to eq 'Santa cruz driver 8'
     end
   end
 
-  describe 'all_attrs' do
+  describe 'scrape' do
     it 'returns a hash of attrs' do
-      expect(post_preview.all_attrs).to be_a Hash
+      expect(fmtb_post.scrape).to be_a Hash
     end
-  end
-
-  describe '#created_at' do
-    
   end
 
 end
