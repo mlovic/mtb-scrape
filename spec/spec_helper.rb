@@ -35,7 +35,15 @@ ActiveRecord::Base.establish_connection(configuration['test'])
 VCR.configure do |config|
   config.cassette_library_dir = "spec/fixtures/vcr_cassettes"
   config.hook_into :webmock
-  config.allow_http_connections_when_no_cassette = true # TODO remove
+  #config.allow_http_connections_when_no_cassette = true # TODO remove
+
+  # changed to access cassette response body. Could hurt performance
+  #config.preserve_exact_body_bytes do |http_msg|
+
+  #config.before_record do |i|
+    #i.response.body.force_encoding('UTF-7')
+  #end
+
 end
 
 RSpec.configure do |config|

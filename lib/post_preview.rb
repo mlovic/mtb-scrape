@@ -21,11 +21,23 @@ module PostPreview
     css('.title a').last.text.strip
   end
 
+  def posted_at
+    # error somteimes: undefined method 'value' for nil:nilClass
+    date_element = css('.posterDate .DateTime')
+    if data_time_attr = date_element.attr('data-time')
+      unix_time = data_time_attr.value.to_i
+      return Time.at(unix_time).to_datetime
+    else
+      return DateTime.parse date_element.text
+    end
+  end
+
   def all_attrs
     {
       thread_id: thread_id,
       last_message_at: last_message_at,
-      title: title
+      title: title,
+      posted_at: posted_at
     }
   end
 

@@ -13,6 +13,10 @@ RSpec.describe PostPreview do
     doc = Nokogiri::HTML::Document.parse(fixture('sticky_post_preview.html'))
     doc.at('li').extend PostPreview
   }
+  let(:post_preview_2) {
+    doc = Nokogiri::HTML::Document.parse(fixture('post_preview_2.html'))
+    doc.at('li').extend PostPreview
+  }
 
   describe '#sticky' do
     it 'returns true when post is sticky' do
@@ -49,7 +53,13 @@ RSpec.describe PostPreview do
     end
   end
 
-  describe '#created_at' do
+  describe '#posted_at' do
+    it 'returns time of post publication when unix_time is offered' do
+      expect(post_preview.posted_at.change(sec: 0)).to eq DateTime.parse('7 Nov 2015 12:59:00 +01:00') # round seconds down
+    end
+    it 'returns time of post publication when unix_time is not offered' do
+      expect(post_preview_2.posted_at).to eq DateTime.parse('18 May 2015')
+    end
     
   end
 

@@ -50,7 +50,12 @@ RSpec.describe FmtbPost do
 
   describe 'scrape' do
     it 'returns a hash of attrs' do
-      expect(fmtb_post.scrape).to be_a Hash
+      # mock scrape
+      VCR.use_cassette('scrape_post') do
+        expect(fmtb_post.scrape).to be_a Hash
+        expect(fmtb_post.scrape.keys.sort).to eq %i[title description posted_at last_message_at images uri thread_id].sort
+      end
+
     end
   end
 
