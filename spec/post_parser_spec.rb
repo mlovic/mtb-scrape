@@ -25,6 +25,10 @@ RSpec.describe PostParser do
       expect(PostParser.parse(post)[:seller]).to be false
     end
 
+    it 'returns Hash of attributes' do
+      expect(PostParser.parse(post).keys).to eq [:price, :brand, :model, :size, :frame_only, :uri]
+    end
+
   end
 
 end

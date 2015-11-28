@@ -4,3 +4,4 @@ show_bike.rb
 *.log
 *.db
 todo
+site/*

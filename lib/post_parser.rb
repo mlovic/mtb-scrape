@@ -28,6 +28,8 @@ class PostParser
 
       attributes[:frame_only] = contains_cuadro?(post.title) != nil # best way?
 
+      attributes[:uri] = post.uri
+
       #print(post, attributes)
       return attributes
     end
