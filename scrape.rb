@@ -28,7 +28,7 @@ class Scraper
   end
 end
 
-(1..2).each do |i|
+(5..10).each do |i|
   page = ForoMtb.new.visit_page(i)
   page.posts.each do |p|
 
@@ -44,7 +44,11 @@ end
 
     # Create post in db
     new_post = Post.new(p.scrape)
-    puts "Post created successfully: #{new_post.title}" if new_post.save
+    if new_post.save
+      puts "Post created successfully: #{new_post.title}" 
+    else
+      p new_post
+    end
   end
 end
 

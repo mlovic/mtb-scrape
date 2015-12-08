@@ -37,6 +37,9 @@ class PostParser
       attributes[:thread_id] = post.thread_id
 
       #print(post, attributes)
+      #if attributes[:brand]
+      Bike.create!(price: attributes[:price], frame_only: attributes[:frame_only])
+      
       return attributes
     end
 

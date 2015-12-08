@@ -30,6 +30,13 @@ RSpec.describe PostParser do
       expect(PostParser.parse(post).keys).to eq [:price, :brand, :model, :size, :frame_only, :uri, :thread_id]
     end
 
+    it 'saves bike in db' do
+      expect(Bike.all.size).to eq 0
+      PostParser.parse(post)
+      expect(Bike.all.size).to eq 1
+      expect(Bike.take.price).to eq 1250
+    end
+
   end
 
 end

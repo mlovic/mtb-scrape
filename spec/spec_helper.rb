@@ -22,6 +22,7 @@ require_relative '../lib/post_preview'
 require_relative '../lib/post_parser'
 require_relative '../lib/foromtb'
 require_relative '../lib/date_element_parser'
+require_relative '../lib/bike'
 require 'nokogiri'
 require 'pp'
 require 'vcr'
@@ -72,7 +73,8 @@ RSpec.configure do |config|
     # `true` in RSpec 4.
     mocks.verify_partial_doubles = true
 
-  config.before(:suite) do
+  # TODO too slow?
+  config.before(:each) do
     DatabaseCleaner.clean_with(:truncation)
   end
 
