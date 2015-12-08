@@ -8,4 +8,5 @@ class Post < ActiveRecord::Base
   def description_no_html
     Nokogiri::HTML(description).xpath("//text()").remove.to_s
   end
+
 end

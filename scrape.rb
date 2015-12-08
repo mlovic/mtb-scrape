@@ -28,22 +28,24 @@ class Scraper
   end
 end
 
-page = ForoMtb.new.visit_page(1)
-page.posts.each do |p|
+(1..2).each do |i|
+  page = ForoMtb.new.visit_page(i)
+  page.posts.each do |p|
 
-  puts "#{@current_thread}: #{n.title}"
+    puts "#{@current_thread}: #{p.title}"
 
-  if Post.find_by(thread_id: p.thread_id)
-    post = Post.find_by!(thread_id: p.thread_id)
-    unless p.last_message_at == post.last_message_at
-      post.update last_message_at: p.last_message_at
+    if Post.find_by(thread_id: p.thread_id)
+      post = Post.find_by!(thread_id: p.thread_id)
+      unless p.last_message_at == post.last_message_at
+        post.update last_message_at: p.last_message_at
+      end
+      next
     end
-    next
-  end
 
-  # Create post in db
-  new_post = Post.new(n.scrape)
-  puts "Post created successfully: #{new_post.title}" if new_post.save
+    # Create post in db
+    new_post = Post.new(p.scrape)
+    puts "Post created successfully: #{new_post.title}" if new_post.save
+  end
 end
 
 puts "#{Post.all.size} posts in db"

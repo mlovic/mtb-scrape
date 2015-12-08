@@ -13,22 +13,28 @@ class PostParser
 
       attributes = {}
 
-      return {seller: false} if buyer?(post.title)
+      #return {seller: false} if buyer?(post.title)
+      return nil if buyer?(post.title) # so that dnatables doesn't get undefined
 
       price = find_price(post.title) || find_price(post.description_no_html)
       attributes[:price] = price
 
-      brand = find_brand(post.title)
-      attributes[:brand] = brand.first if brand
-      attributes[:model] = brand.last if brand && brand.size > 1
+      brand = find_brand(post.title) || find_brand(post.description_no_html)
+      attributes[:brand] = brand ? brand.first.capitalize : nil
+      if brand && brand.size > 1  # TODO refactor this
+        attributes[:model] = brand.last && brand.last.capitalize
+      else
+        attributes[:model] = nil
+      end
 
       # Get size
       size = find_size(post.title) || find_size(post.description_no_html)
-      attributes[:size] = size
+      attributes[:size] = size && size.upcase
 
       attributes[:frame_only] = contains_cuadro?(post.title) != nil # best way?
 
       attributes[:uri] = post.uri
+      attributes[:thread_id] = post.thread_id
 
       #print(post, attributes)
       return attributes
@@ -64,6 +70,7 @@ class PostParser
         # TODO find better way
         brands.each do |b|
           return str.match(/(#{b})\s(\w+)?/i).captures if str.match(/(#{b})\s(\w+)?/i)
+          # TODO match only word. Currently matching ks from sworks
           # above doesn't take dash as an acceptable word character
         end
         nil
