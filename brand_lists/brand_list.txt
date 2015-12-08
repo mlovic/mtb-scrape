@@ -68,7 +68,6 @@ Author
 Avalon
 Avanti
 AventÃ³n
-Avid
 Axiom
 Axle Release
 Azonic
@@ -360,19 +359,16 @@ Ellis Briggs
 Ellsworth
 Emilio Bozzi
 Endurance Films
-Enduro
 Endurox
 Energizer
 Engin Cycles
 Enigma Titanium
-Epic
 Ergon
 Esbit
 Europa
 Evelo
 Eveready
 Evil
-Evo
 Excess Components
 Exustar
 Ezee
@@ -421,7 +417,6 @@ Forge Bikes
 Formula
 Fortified (lights)
 Foundry Cycles
-Fox
 Fram
 Frances
 Francesco Moser (F. Moser)
@@ -563,6 +558,7 @@ Inspired
 Intense
 Iride Bicycles
 Iron Horse Bicycles
+Ironhorse
 Islabikes
 Issimo Designs
 Italvega
@@ -589,7 +585,6 @@ K2
 KBC
 KHS Bicycles
 KMC
-KS
 KT Tape
 KTM
 KW Bicycle
@@ -899,7 +894,6 @@ RPM
 RRB (Rat Rod Bikes)
 RST
 Rabeneick
-RaceFace
 Racktime
 Radio Bike Co
 Radio Flyer
@@ -930,7 +924,6 @@ Ride2
 Ridgeback
 Ridley
 Riese und MÃ¼ller
-Ritchey
 Ritte
 Rivendell Bicycle Works
 Roadmaster
@@ -957,7 +950,6 @@ Rudge-Whitworth
 S and M (S&M)
 S and S
 SCOTT
-SDG
 SE Bikes (SE Racing)
 SKS
 SLS3
@@ -1230,7 +1222,6 @@ Voodoo
 Vortrieb
 VÃ©loSoleX
 WD-40 Bike
-WTB
 Wabi Cycles
 Wahoo Fitness
 Wald
