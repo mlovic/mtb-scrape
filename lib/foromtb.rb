@@ -8,6 +8,7 @@ require_relative 'post'
 require_relative 'post_preview'
 require_relative 'post_page'
 require_relative 'list_page'
+require_relative 'date_element_parser'
 
 class ForoMtb
 

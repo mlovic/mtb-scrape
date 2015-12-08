@@ -1,3 +1,5 @@
+require 'chronic'
+
 module PostPreview
 
   def scrape
@@ -24,12 +26,7 @@ module PostPreview
   def posted_at
     # error somteimes: undefined method 'value' for nil:nilClass
     date_element = css('.posterDate .DateTime')
-    if data_time_attr = date_element.attr('data-time')
-      unix_time = data_time_attr.value.to_i
-      return Time.at(unix_time).to_datetime
-    else
-      return DateTime.parse date_element.text
-    end
+    DateElementParser.parse(date_element)
   end
 
   def all_attrs
