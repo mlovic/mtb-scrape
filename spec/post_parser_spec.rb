@@ -11,9 +11,9 @@ RSpec.describe PostParser do
     end
 
     it 'finds size' do
-      expect(PostParser.parse(post)[:size]).to eq 'l'
+      expect(PostParser.parse(post)[:size]).to eq 'L'
       post.description = 'Santa Cruz v10 talla S'
-      expect(PostParser.parse(post)[:size]).to eq 's'
+      expect(PostParser.parse(post)[:size]).to eq 'S'
     end
 
     it 'finds buyer' do
@@ -32,9 +32,15 @@ RSpec.describe PostParser do
 
     it 'saves bike in db' do
       expect(Bike.all.size).to eq 0
+      Brand.create name: 'Mondraker'
       PostParser.parse(post)
       expect(Bike.all.size).to eq 1
-      expect(Bike.take.price).to eq 1250
+      bike = Bike.take
+      expect(bike.price).to eq 1250
+      expect(bike.size).to eq 'L'
+      expect(bike.frame_only).to be true
+      expect(bike.brand_name).to eq 'Mondraker'
+      pp bike
     end
 
   end

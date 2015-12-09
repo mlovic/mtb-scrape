@@ -20,7 +20,8 @@ class PostParser
       attributes[:price] = price
 
       brand = find_brand(post.title) || find_brand(post.description_no_html)
-      attributes[:brand] = brand ? brand.first.capitalize : nil
+      attributes[:brand] = brand ? brand.first.titleize : nil
+
       if brand && brand.size > 1  # TODO refactor this
         attributes[:model] = brand.last && brand.last.capitalize
       else
@@ -38,7 +39,14 @@ class PostParser
 
       #print(post, attributes)
       #if attributes[:brand]
-      Bike.create!(price: attributes[:price], frame_only: attributes[:frame_only])
+     
+      
+      bike = Bike.new(price: attributes[:price], 
+                      frame_only: attributes[:frame_only],
+                      size: attributes[:size],
+                      brand: Brand.find_by(name: attributes[:brand])
+                     )
+      bike.save!
       
       return attributes
     end

@@ -10,7 +10,6 @@ class DateElementParser
   end
 
   def self.change_month_to_en(str)
-    # really only need some of these
     dict = {ene: 'january',
             abr: 'april',
             ago: 'august',
