@@ -27,12 +27,18 @@ class PostParser
       else
         attributes[:model] = nil
       end
+      
+      # Brand.scan title
+      # else scan desc
+      #
+      # Size.scan title if not desc
+
 
       # Get size
       size = find_size(post.title) || find_size(post.description_no_html)
       attributes[:size] = size && size.upcase
 
-      attributes[:frame_only] = contains_cuadro?(post.title) != nil # best way?
+      attributes[:frame_only] = contains_cuadro?(post.title) != nil # best way? !!
 
       attributes[:uri] = post.uri
       attributes[:thread_id] = post.thread_id
@@ -53,13 +59,6 @@ class PostParser
 
     private
 
-      def print(post, atr)
-        puts atr[:price] ? "price found: €#{atr[:price]}" : "no price found"
-        puts atr[:brand] ? "brand found: #{atr[:brand]}" : "no brand found: #{post.title}"
-        puts "size: #{atr[:size]}" if atr[:size]
-        puts "Frame only!!" if contains_cuadro?(post.title)
-      end
-
       def buyer?(str)
         str.match(/compro/i) || str.match(/busco/i)
       end
@@ -77,13 +76,26 @@ class PostParser
 
       def find_brand(str)
         # TODO must be single word
-        brands = read_brands.map(&:strip)
+        #brands = read_brands.map(&:strip)
         # TODO find better way
+        # maybe use detect, but have to deal with capting models too
+        brands = Brand.confirmed.map(&:name)
+        p brands.first
+        #brands = Brand.all.map(&:name)
         brands.each do |b|
+          # TODO make words following brand optional in regex!! 
+          #   'Vendo Giant' doesn't match
           return str.match(/(#{b})\s(\w+)?/i).captures if str.match(/(#{b})\s(\w+)?/i)
           # TODO match only word. Currently matching ks from sworks
           # above doesn't take dash as an acceptable word character
         end
+
+        brands = Brand.unconfirmed.map(&:name)
+        p brands.first
+        brands.each do |b|
+          return str.match(/(#{b})\s(\w+)?/i).captures if str.match(/(#{b})\s(\w+)?/i)
+        end
+
         nil
       end
 
@@ -102,6 +114,15 @@ class PostParser
                                    /precio\s?#{num}/, /#{num}e/
         str.match(price_regex) && str.match(price_regex).captures.compact.first.gsub('.', '').to_i
       end
+
+      def print(post, atr)
+        puts atr[:price] ? "price found: €#{atr[:price]}" : "no price found"
+        puts atr[:brand] ? "brand found: #{atr[:brand]}" : "no brand found: #{post.title}"
+        puts "size: #{atr[:size]}" if atr[:size]
+        puts "Frame only!!" if contains_cuadro?(post.title)
+      end
+
+
   end
 end
 
@@ -111,6 +132,3 @@ end
   #puts '---------------------------'
 #end
 
-#post = Post.find(32)
-#puts post.description_no_html
-#PostParser.parse post

@@ -5,8 +5,12 @@ RSpec.describe Brand do
     #brand = Brand.create(name: 'Mondraker')
     #expect { brand.destroy }.to raise_error ActiveRecord::ReadOnlyRecord
   #end
+  let!(:brand) { Brand.create name: 'Mondraker' }
+  it 'should have a unique name' do
+    invalid_brand = Brand.create(name: 'Mondraker')
+    expect(invalid_brand.save).to be false
+  end
   describe 'confirmation status' do
-    let!(:brand) { Brand.create name: 'Mondraker' }
     it 'is unconfirmed by default' do
       expect(brand.confirmed?).to be false
       expect(brand.confirmation_status).to eq 'unconfirmed'
