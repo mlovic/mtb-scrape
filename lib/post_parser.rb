@@ -9,7 +9,7 @@ class PostParser
 
   class << self
 
-    def parse(post)
+    def get_bike_attributes(post)
 
       attributes = {}
 
@@ -45,19 +45,25 @@ class PostParser
 
       #print(post, attributes)
       #if attributes[:brand]
-     
       
+      return attributes
+    end
+
+    def parse(post)
+      return nil if Bike.find_by(post_id: post.id)
+      attributes = get_bike_attributes(post)
       bike = Bike.new(price: attributes[:price], 
                       frame_only: attributes[:frame_only],
                       size: attributes[:size],
                       brand: Brand.find_by(name: attributes[:brand])
                      )
       bike.save!
-      
+      p bike
       return attributes
     end
 
     private
+
 
       def buyer?(str)
         str.match(/compro/i) || str.match(/busco/i)
@@ -80,7 +86,6 @@ class PostParser
         # TODO find better way
         # maybe use detect, but have to deal with capting models too
         brands = Brand.confirmed.map(&:name)
-        p brands.first
         #brands = Brand.all.map(&:name)
         brands.each do |b|
           # TODO make words following brand optional in regex!! 
@@ -91,7 +96,6 @@ class PostParser
         end
 
         brands = Brand.unconfirmed.map(&:name)
-        p brands.first
         brands.each do |b|
           return str.match(/(#{b})\s(\w+)?/i).captures if str.match(/(#{b})\s(\w+)?/i)
         end
