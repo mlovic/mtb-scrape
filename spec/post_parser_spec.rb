@@ -31,6 +31,7 @@ RSpec.describe PostParser do
     end
 
     it 'saves bike in db' do
+      pending
       expect(Bike.all.size).to eq 0
       Brand.create name: 'Mondraker', confirmation_status: 'confirmed' 
       PostParser.parse(post)
@@ -46,18 +47,15 @@ RSpec.describe PostParser do
       post.title = 'Marzzochi Mondraker Plunder con ruedas Mavic crossmax'
       mondraker = Brand.create name: 'Mondraker', confirmation_status: 'confirmed' 
       mavic     = Brand.create name: 'Mavic'    , confirmation_status: 'unconfirmed'
-      PostParser.parse post
+      attrs = PostParser.parse post
 
-      bike = Bike.take
-      expect(bike.brand_name).to eq 'Mondraker'
+      expect(attrs[:brand]).to eq 'Mondraker'
 
       mondraker.unconfirmed!
       mavic.confirmed!
-      Bike.take.destroy
-      PostParser.parse post
+      attrs = PostParser.parse post
 
-      bike = Bike.take
-      expect(bike.brand_name).to eq 'Mavic'
+      expect(attrs[:brand]).to eq 'Mavic'
 
     end
 

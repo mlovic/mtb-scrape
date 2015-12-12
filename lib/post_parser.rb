@@ -1,6 +1,7 @@
 require 'nokogiri'
 
 require_relative 'post'
+require_relative 'model_finder'
 
 # TODO deal with this
 require_relative '../init'
@@ -9,7 +10,12 @@ class PostParser
 
   class << self
 
-    def get_bike_attributes(post)
+    # parse(post)
+    #   parser = self.new(post)
+    #   parser.find_price
+    #   
+
+    def parse(post)
 
       attributes = {}
 
@@ -18,6 +24,10 @@ class PostParser
 
       price = find_price(post.title) || find_price(post.description_no_html)
       attributes[:price] = price
+
+      finder = ModelFinder.new(post.title, post.description)
+      attributes[:brand] = finder.get_brand && finder.get_brand.name
+      attributes[:model] = finder.get_model.name || finder.get_model
 
       brand = find_brand(post.title) || find_brand(post.description_no_html)
       attributes[:brand] = brand ? brand.first.titleize : nil
@@ -48,19 +58,20 @@ class PostParser
       
       return attributes
     end
+    alias_method :get_post_attributes, :parse
 
-    def parse(post)
-      return nil if Bike.find_by(post_id: post.id)
-      attributes = get_bike_attributes(post)
-      bike = Bike.new(price: attributes[:price], 
-                      frame_only: attributes[:frame_only],
-                      size: attributes[:size],
-                      brand: Brand.find_by(name: attributes[:brand])
-                     )
-      bike.save!
-      p bike
-      return attributes
-    end
+    #def parse(post)
+      #return nil if Bike.find_by(post_id: post.id)
+      #attributes = get_bike_attributes(post)
+      #bike = Bike.new(price: attributes[:price], 
+                      #frame_only: attributes[:frame_only],
+                      #size: attributes[:size],
+                      #brand: Brand.find_by(name: attributes[:brand])
+                     #)
+      #bike.save!
+      #p bike
+      #return attributes
+    #end
 
     private
 
