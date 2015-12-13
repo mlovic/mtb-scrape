@@ -6,9 +6,7 @@ RSpec.describe ModelFinder do
   let(:description) { post.description }
 
   before do
-    b = Brand.create name: 'Mondraker', confirmation_status: 'confirmed' 
-    m = Model.create name: 'Foxy'
-    b.models << m
+    Brand.create name: 'Mondraker', confirmation_status: 'confirmed' 
   end
 
   let(:finder) { ModelFinder.new(title, description) }
@@ -19,8 +17,17 @@ RSpec.describe ModelFinder do
 
   # should be able to test on individual strings
 
-  it 'get_model' do
-    expect(finder.get_model.name).to eq 'Foxy'
+  describe '#get_model' do
+    
+    it 'works when model exists' do
+      Model.create name: 'Foxy', brand_id: 1
+      expect(finder.get_model.name).to eq 'Foxy'
+    end
+
+    it 'creates model when model does not exist' do
+      expect(finder.get_model.name).to eq 'Foxy'
+      expect(Model.all.size).to eq 1
+    end
   end
 
 end

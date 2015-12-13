@@ -9,6 +9,7 @@ class Bike < ActiveRecord::Base
   delegate :thread_id, to: :post
   delegate :name, to: :brand, prefix: true, allow_nil: true
   delegate :name, to: :model, prefix: true, allow_nil: true
+  delegate :id, to: :model, prefix: true, allow_nil: true
 
   #validates :name, presence: true
 end
