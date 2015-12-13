@@ -17,6 +17,8 @@ RSpec.describe ModelFinder do
     expect(finder.get_brand.name).to eq 'Mondraker'
   end
 
+  # should be able to test on individual strings
+
   it 'get_model' do
     expect(finder.get_model.name).to eq 'Foxy'
   end

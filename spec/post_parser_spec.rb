@@ -27,7 +27,7 @@ RSpec.describe PostParser do
     end
 
     it 'returns Hash of attributes' do
-      expect(PostParser.parse(post).keys).to eq [:price, :brand, :model, :size, :frame_only, :uri, :thread_id]
+      expect(PostParser.parse(post).keys).to eq [:price, :brand_id, :model_id, :size, :frame_only, :uri, :thread_id]
     end
 
     it 'saves bike in db' do
@@ -49,14 +49,13 @@ RSpec.describe PostParser do
       mavic     = Brand.create name: 'Mavic'    , confirmation_status: 'unconfirmed'
       attrs = PostParser.parse post
 
-      expect(attrs[:brand]).to eq 'Mondraker'
+      expect(attrs[:brand_id]).to eq Brand.find_by(name: 'Mondraker').id
 
       mondraker.unconfirmed!
       mavic.confirmed!
       attrs = PostParser.parse post
 
-      expect(attrs[:brand]).to eq 'Mavic'
-
+      expect(attrs[:brand_id]).to eq Brand.find_by(name: 'Mavic').id
     end
 
   end

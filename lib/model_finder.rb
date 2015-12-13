@@ -22,7 +22,6 @@ class ModelFinder
     @after_brand_text or return nil
     possible_name = @after_brand_text.split(' ').first.titleize 
     Model.where(brand_id: @brand.id, name: possible_name).take || possible_name
-     
   end
 
   def search_for_brand
@@ -32,7 +31,7 @@ class ModelFinder
       [:confirmed, :unconfirmed].each do |status|
 
         Brand.send(status).each do |b| # use find here
-          if match = str.match(/#{b.name}/i)
+          if match = str.match(/\b#{b.name}\b/i)
             # improve this
             @after_brand_text = str.split(match.to_s).last.strip
             @brand = b

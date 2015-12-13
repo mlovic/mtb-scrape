@@ -20,23 +20,32 @@ class PostParser
       attributes = {}
 
       #return {seller: false} if buyer?(post.title)
-      return nil if buyer?(post.title) # so that dnatables doesn't get undefined
+      return {buyer: true} if buyer?(post.title) # so that dnatables doesn't get undefined
 
       price = find_price(post.title) || find_price(post.description_no_html)
       attributes[:price] = price
 
       finder = ModelFinder.new(post.title, post.description)
-      attributes[:brand] = finder.get_brand && finder.get_brand.name
-      attributes[:model] = finder.get_model.name || finder.get_model
-
-      brand = find_brand(post.title) || find_brand(post.description_no_html)
-      attributes[:brand] = brand ? brand.first.titleize : nil
-
-      if brand && brand.size > 1  # TODO refactor this
-        attributes[:model] = brand.last && brand.last.capitalize
+      attributes[:brand_id] = finder.get_brand && finder.get_brand.id
+      model = finder.get_model
+      if model.class == String
+        #attributes[:model_name] = finder.get_model
+        #goes up without model_id or name. it'll use the post.title
+        # fix this
+      elsif model.class == Model 
+        attributes[:model_id] = finder.get_model.id
       else
-        attributes[:model] = nil
+        attributes[:model_id] = nil
       end
+
+      #brand = find_brand(post.title) || find_brand(post.description_no_html)
+      #attributes[:brand] = brand ? brand.first.titleize : nil
+
+      #if brand && brand.size > 1  # TODO refactor this
+        #attributes[:model] = brand.last && brand.last.capitalize
+      #else
+        #attributes[:model] = nil
+      #end
       
       # Brand.scan title
       # else scan desc
@@ -81,6 +90,7 @@ class PostParser
       end
       def contains_cuadro?(str)
         # search also in desc? Maybe use price to decide as well
+        # also check for 'cuadro o bici complete'
         str.match(/cuadro/i)
       end
 

@@ -3,9 +3,12 @@ require 'active_record'
 class Bike < ActiveRecord::Base
   belongs_to :post
   belongs_to :brand
+  belongs_to :model
   #delegate post methods to post
-  delegate :title, to: :post
-  delegate :name, to: :brand, prefix: true
+  delegate :title,     to: :post
+  delegate :thread_id, to: :post
+  delegate :name, to: :brand, prefix: true, allow_nil: true
+  delegate :name, to: :model, prefix: true, allow_nil: true
 
   #validates :name, presence: true
 end
