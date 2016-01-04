@@ -3,5 +3,6 @@ db/foromtb.db
 show_bike.rb
 *.log
 *.db
+*.db.bak
 todo
 site/*

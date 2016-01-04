@@ -7,6 +7,10 @@ class Model < ActiveRecord::Base
   validates :name, presence: true
   validates :name, uniqueness: {scope: :brand_id,
                                 case_sensitive: false}
+  validates :travel, numericality: { only_integer: true,
+                                     greater_than_or_equal_to: 100,
+                                     less_than_or_equal_to: 230 }
+
   belongs_to :brand
   has_many :bikes
 

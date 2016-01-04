@@ -1,6 +1,8 @@
 require 'active_record'
 
 class Bike < ActiveRecord::Base
+  scope :ordered_by_last_message, -> { joins(:post).order('last_message_at DESC') }
+
   belongs_to :post
   belongs_to :brand
   belongs_to :model
