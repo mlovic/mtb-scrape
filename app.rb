@@ -10,15 +10,16 @@ require 'lib/brand'
 require 'lib/model'
 require 'lib/post'
 
-set :server, 'thin'
 
 configure :development do
+  set :server, 'thin'
   set :database, {adapter: "sqlite3", database: "db/foromtb.db"}
   ActiveRecord::Base.logger = Logger.new('db/debug.log')
 end
 
 configure :production do
-  ActiveRecord::Base.establish_connection(ENV['DATABASE_URL'] || 'postgres://localhost/mydb')
+  set :server, 'unicorn'
+  set :database, {adapter: "sqlite3", database: "db/foromtb.db"}
 end
 #pp ENV
 

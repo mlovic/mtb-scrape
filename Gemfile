@@ -3,10 +3,14 @@ source 'https://rubygems.org'
 gem 'sinatra'
 gem 'activerecord'
 gem 'sinatra-activerecord'
-gem 'thin'
 gem 'chronic'
 
+gem :production do
+  gem 'unicorn'
+end
+
 group :test, :development do
+  gem 'thin'
   gem 'sqlite3'
   gem 'rspec'
 
