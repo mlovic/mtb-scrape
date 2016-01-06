@@ -1,0 +1,78 @@
+
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="style.css" rel="stylesheet">
+<script type="text/javascript" charset="utf-8" src="jquery-2.1.4.js"></script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<script src="bikes.js"></script>
+
+<div class="col-md-9">
+    <div class="alert alert-success" id="confirmation-message">
+      Confirmed!
+  </div>
+</div>
+
+<%= erb :form %>
+
+<table id="bikes-table-new" class="table">
+  <thead>
+    <tr>
+      <th>thread_id</th>
+      <th></th>
+      <th>price</th>
+      <th>brand</th>
+      <th></th>
+      <th>model</th>
+      <th></th>
+      <th>size</th>
+      <th>travel</th>
+      <th>title</th>
+    </tr>
+  </thead>
+  <tbody>
+  <% @bikes.each do |bike| %>
+    <tr class='bike' id="<%= bike.id %>">
+      <%#Might want to remove just number from id field later%>
+      <td><%= bike.thread_id %></td>
+      <td>
+      <% if bike.frame_only %>
+        <img src="bike_frame_30px.png" alt="bike frame" />
+      <% end %>
+      </td>
+      <td>€<%= bike.price %></td>
+      <td><%= bike.brand_name %></td>
+      <td>
+      <% if bike.brand&.unconfirmed? %>
+          <button type="button" class="btn confirm-brand" data-brand-id="<%= bike.brand.id %>">
+            <span class="glyphicon glyphicon-ok"></span>
+          </button>
+          
+          <button type="button" class="btn delete-brand" data-brand-id="<%= bike.brand.id %>">
+            <span class="glyphicon glyphicon-remove"></span>
+          </button>
+      <% end %>
+      </td>
+      <td><%= bike.model_name or word_after_brand(bike) %></td>
+      <td>
+      <% unless bike.model&.confirmed? %>
+        <form action="/confirm-model" method="post">
+          <button type="button" class="btn confirm-model" data-model-id="<%= bike.model_id %>" data-bike-id="<%= bike.id %>">
+            <span class="glyphicon glyphicon-ok"></span>
+          </button>
+        </form>
+      <% end %>
+      </td>
+      <td><%= bike.size %></td>
+      <td>
+        <% if bike.model&.travel  %>
+          <%= bike.model&.travel %>
+        <% else %>
+          <form class="travel-form" action="add-travel" method="post">
+            <input type="text" name="travel" class="travel-input" value="" />
+          </form>
+        <% end %>
+    </td>
+      <td><%= bike.title %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>

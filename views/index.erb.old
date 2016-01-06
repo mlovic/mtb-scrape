@@ -1,0 +1,21 @@
+<table id="bikes-table">
+  <thead>
+    <tr>
+      <th>thread_id</th>
+      <th>price</th>
+      <th>brand</th>
+      <th>model</th>
+      <th>size</th>
+      <th>frame_only</th>
+      <th>uri</th>
+    </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>
+  <%#<script type="text/javascript" charset="utf-8" src="jquery-2.1.4.js"></script>%>
+  <script type="text/javascript" charset="utf-8" src="jquery-1.7.2.min.js"></script>
+  <script type="text/javascript" charset="utf-8" src="jquery.dynatable.js"></script>
+  <script type="text/javascript" charset="utf-8" src="main.js"></script>
+    
+  

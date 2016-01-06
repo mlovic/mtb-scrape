@@ -1,0 +1,91 @@
+require 'sinatra'
+require 'pp'
+require 'thin'
+
+#require_relative '../lib/post'
+#require_relative '../lib/post_parser'
+require_relative 'mtb_scrape'
+
+set :server, 'thin'
+
+helpers do
+  def word_after_brand(bike)
+    brand_name, str = bike.brand_name, bike.title # move outside of helper?
+    brand_name ? str.split(/#{brand_name}/i).last.split(' ').first.to_s : nil
+  end
+end
+
+# actually fix this at some point
+before do
+  p params
+end
+
+after do
+  ActiveRecord::Base.clear_active_connections!
+end 
+
+get '/' do
+  #does params automatically split string into array?
+  #params[:min_travel] ||= 0 if params[:min_travel] == ''
+  #params[:max_travel] ||= 230 if  params[:max_travel] == ''
+  #params[:min_price] ||= 0 if params[:min_price] == ''
+  #params[:max_price] ||= 12000 if params[:max_price] == ''
+  @bikes = Bike.joins(:model)
+  #@bikes = @bikes.where(models: { 'travel > ?' => params[:min_travel] }) if params[:min_travel]
+  #@bikes = @bikes.where(models: { 'travel < ?' => params[:max_travel] }) if params[:max_travel]
+  @bikes = @bikes.where('models.travel > ?', params[:min_travel] ) unless params[:min_travel].blank?
+  @bikes = @bikes.where('models.travel < ?', params[:max_travel] ) unless params[:max_travel].blank?
+  @bikes = @bikes.where('price > ?', params[:min_price])           unless params[:min_price].blank?
+  @bikes = @bikes.where('price < ?', params[:max_price])           unless params[:max_price].blank?
+  @bikes = @bikes.where(size: params[:sizes].split(','))           unless params[:sizes].blank?
+  @bikes = @bikes.ordered_by_last_message
+  erb :index
+end
+
+post '/add-travel/:id' do
+  Bike.find(params['id']).model.update!(travel: params['travel'])
+  # error unless if travel.valid?
+end
+
+post '/confirm-brand' do
+  Brand.find(params['id']).confirmed!
+  # take away and put into mtbscrape
+end
+
+post '/delete-brand' do
+  brand = Brand.find(params['id'])
+  puts 'Destroying brand ' + brand.name
+  brand.destroy
+end
+
+post '/confirm-model' do
+  #bike = Bike.find(params['bike_id'])
+  Model.find(params['id']).confirmed!
+  # confirm bike as well?
+  #
+  #model = Model.create!(name: params['model_name'].titleize, 
+                        #brand_id: bike.brand.id)
+  #bike.model = model
+  # update other bikes with same model name
+  # i think we should follow same confirmation_status system as with brands
+  #bike.!save
+end
+
+get '/bikes/:thread_id' do |id|
+  p id.class
+  @post = Post.where(thread_id: id.to_i).take
+  erb :show
+end
+
+get '/data' do
+  content_type :json
+  @posts = Post.all
+  puts 'retrieved posts'
+  @posts = @posts.map do |p|
+    PostParser.get_bike_attributes(p) # nil for buyers
+  end
+  puts 'parsed posts'
+  #pp @posts
+  @posts = @posts.compact.to_json.gsub('null', '""') # TODO fix hack, move to js?
+  @posts
+end

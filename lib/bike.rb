@@ -2,6 +2,8 @@ require 'active_record'
 
 class Bike < ActiveRecord::Base
   scope :ordered_by_last_message, -> { joins(:post).order('last_message_at DESC') }
+  #scope :ordered_by_last_message, -> { joins(:post).order('last_message_at DESC') }
+  #scope :
 
   belongs_to :post
   belongs_to :brand
@@ -12,6 +14,8 @@ class Bike < ActiveRecord::Base
   delegate :name, to: :brand, prefix: true, allow_nil: true
   delegate :name, to: :model, prefix: true, allow_nil: true
   delegate :id, to: :model, prefix: true, allow_nil: true
+
+
 
   #validates :name, presence: true
 end

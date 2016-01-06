@@ -1,0 +1,35 @@
+<form action="/" method="get">
+
+  <label for="min_travel">min travel</label>
+  <input type="text" name="min_travel" value="" />
+  
+  <label for="max_travel">max travel</label>
+  <input type="text" name="max_travel" id="max_travel" value="" />
+
+  min price
+  <input type="text" name="min_price" />
+  max price
+  <input type="text" name="max_price" value="" />
+
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" name="sizes[]" value="S">
+      S
+    </label>
+  </div>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" name="sizes[]" value="M">
+      M
+    </label>
+  </div>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" name="sizes[]" value="L">
+      L
+    </label>
+  </div>
+
+  <input type="submit" name="submit" id="submit-button" value="submit" />
+
+</form>
