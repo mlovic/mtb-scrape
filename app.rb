@@ -9,6 +9,7 @@ require 'lib/brand'
 require 'lib/model'
 require 'lib/post'
 
+p ENV['RACK_ENV']
 
 configure :development do
   require 'thin'
