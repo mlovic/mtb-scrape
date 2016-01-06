@@ -55,7 +55,7 @@ get '/' do
   @bikes = @bikes.where('models.travel < ?', params[:max_travel] ) unless params[:max_travel].blank?
   @bikes = @bikes.where('price > ?', params[:min_price])           unless params[:min_price].blank?
   @bikes = @bikes.where('price < ?', params[:max_price])           unless params[:max_price].blank?
-  @bikes = @bikes.where(size: params[:sizes].split(','))           unless params[:sizes].blank?
+  @bikes = @bikes.where(size: params[:sizes])                      unless params[:sizes].blank?
   @bikes = @bikes.ordered_by_last_message
   erb :index
 end
