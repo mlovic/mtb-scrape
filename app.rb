@@ -19,6 +19,7 @@ configure :development do
 end
 
 configure :production do
+  set :root, File.dirname(__FILE__) 
   require 'unicorn'
   set :server, 'unicorn'
   set :database, {adapter: "sqlite3", database: "db/foromtb.db"}
