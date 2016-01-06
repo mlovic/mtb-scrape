@@ -6,3 +6,5 @@ show_bike.rb
 *.db.bak
 todo
 site/*
+.agignore
+utils/*

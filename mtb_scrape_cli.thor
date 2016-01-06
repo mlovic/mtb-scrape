@@ -5,6 +5,10 @@ $LOAD_PATH << '.'
 
 require 'mtb_scrape'
 
+ActiveRecord::Base.logger = Logger.new('db/debug.log')
+configuration = YAML::load(IO.read('db/database.yml'))
+ActiveRecord::Base.establish_connection(configuration['development'])
+
 #module MtbScrape 
   class MtbCli < Thor
     package_name "Mtb"

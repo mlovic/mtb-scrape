@@ -4,7 +4,7 @@ require_relative 'post'
 require_relative 'model_finder'
 
 # TODO deal with this
-require_relative '../init'
+#require_relative '../init'
 
 class PostParser
 

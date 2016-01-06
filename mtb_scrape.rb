@@ -1,4 +1,4 @@
-require_relative 'init'
+#require_relative 'init'
 #require_relative 'lib/post_parser'
 #require_relative 'lib/foromtb'
 #require_relative 'lib/post'
@@ -6,10 +6,6 @@ require_relative 'init'
 Dir[File.dirname(__FILE__) + '/lib/*.rb'].each {|file| require file }
 
 module MtbScrape
-
-  ActiveRecord::Base.logger = Logger.new('db/debug.log')
-  configuration = YAML::load(IO.read('db/database.yml'))
-  ActiveRecord::Base.establish_connection(configuration['development'])
 
   # Not being used
   class Scraper

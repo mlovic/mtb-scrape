@@ -23,7 +23,7 @@ class ForoMtb
   FOROMTB_URI = 'http://www.foromtb.com/forums/btt-con-suspensi%C3%B3n-trasera.60/'
 
   def initialize
-    mech_logger = Logger.new('mechanize.log')
+    mech_logger = Logger.new('logs/mechanize.log')
     mech_logger.level = Logger::INFO
     Mechanize.log = mech_logger
   end
