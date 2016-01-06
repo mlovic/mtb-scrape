@@ -2,7 +2,6 @@ $:.unshift File.dirname(__FILE__)
 
 require 'sinatra'
 require 'pp'
-require 'thin'
 require "sinatra/activerecord"
 
 require 'lib/bike'
@@ -12,12 +11,14 @@ require 'lib/post'
 
 
 configure :development do
+  require 'thin'
   set :server, 'thin'
   set :database, {adapter: "sqlite3", database: "db/foromtb.db"}
   ActiveRecord::Base.logger = Logger.new('db/debug.log')
 end
 
 configure :production do
+  require 'unicorn'
   set :server, 'unicorn'
   set :database, {adapter: "sqlite3", database: "db/foromtb.db"}
 end
