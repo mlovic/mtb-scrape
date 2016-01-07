@@ -5,7 +5,7 @@ gem 'activerecord'
 gem 'sinatra-activerecord'
 gem 'chronic'
 
-gem :production do
+group :production do
   gem 'unicorn'
 end
 
