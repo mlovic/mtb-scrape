@@ -37,5 +37,10 @@ ActiveRecord::Base.establish_connection(configuration['development'])
       say 'Created new brand' if MtbScrape::create_new_brand(name)
     end
 
+    desc 'add_brand NAME', 'add new brand to the DB'
+    def add_brand(name)
+      Brand.create(name: name, confirmation_status: 1)
+    end
+
   end
 #end
