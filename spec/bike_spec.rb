@@ -1,8 +1,14 @@
 require_relative 'spec_helper'
 
 RSpec.describe Bike do
-  let!(:post) { Post.create(fixture('post.yml')) }
-  let!(:bike) { Bike.new(fixture('bike.yml')) }
+  let(:post) { Post.create(fixture('post.yml')) }
+  #let(:bike) { Bike.new(fixture('bike.yml')) }
+  let(:bike) { build(:bike) }
+
+  it 'factory' do
+    bike = build(:bike)
+    expect(bike.save).to eq true
+  end
 
   it 'delegates post methods to post' do
     bike.post = post
@@ -21,6 +27,17 @@ RSpec.describe Bike do
     #p Bike.joins(:post).first.last_message_at
     expect(Bike.all.map(&:id)).to eq [1, 2]
     expect(Bike.ordered_by_last_message.map(&:id)).to eq [2, 1]
+  end
+
+  it 'same' do
+    pending
+    bike.post  = post
+    bike.brand = Brand.create(name: 'Mondraker')
+    bike.save!
+    new_bike = Bike.new(fixture('bike.yml'))
+    new_bike.post = post
+    new_bike.brand = Brand.take
+    expect(bike.attributes).to eq new_bike.attributes
   end
 
 end

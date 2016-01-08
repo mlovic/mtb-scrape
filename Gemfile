@@ -19,5 +19,6 @@ group :test, :development do
   gem 'webmock'
   gem 'database_cleaner'
   gem 'guard-rspec'
+  gem 'factory_girl'
 end
 

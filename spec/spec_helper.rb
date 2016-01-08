@@ -31,6 +31,9 @@ require 'pp'
 require 'vcr'
 require 'webmock'
 require 'database_cleaner'
+require 'factory_girl'
+
+require_relative 'factories'
 
 # Later move to use only when needed!
 ActiveRecord::Base.logger = Logger.new('db/test_debug.log')
@@ -54,6 +57,7 @@ end
 RSpec.configure do |config|
 
   config.include Helpers
+  config.include FactoryGirl::Syntax::Methods
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.
@@ -75,6 +79,17 @@ RSpec.configure do |config|
     # a real object. This is generally recommended, and will default to
     # `true` in RSpec 4.
     mocks.verify_partial_doubles = true
+
+
+    ## TODO still don't work
+  #config.before(:suite) do
+    #begin
+      #DatabaseCleaner.start
+      #FactoryGirl.lint
+    #ensure
+      #DatabaseCleaner.clean
+    #end
+  #end
 
   # TODO too slow?
   config.before(:each) do
