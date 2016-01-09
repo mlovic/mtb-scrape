@@ -17,6 +17,8 @@ class PostParser
 
     def parse(post)
 
+      # TODO check for despiece
+
       attributes = {}
 
       #return {seller: false} if buyer?(post.title)
@@ -61,6 +63,7 @@ class PostParser
 
       attributes[:uri] = post.uri
       attributes[:thread_id] = post.thread_id
+      attributes[:name] ||= nil
 
       #print(post, attributes)
       #if attributes[:brand]

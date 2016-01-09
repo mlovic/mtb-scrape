@@ -22,6 +22,12 @@ ActiveRecord::Base.establish_connection(configuration['development'])
     def parse_posts
     end
 
+    desc 'reparse', 'reparses posts for all bikes in DB'
+    method_option :dry, type: :boolean
+    def reparse
+      BikeUpdater.new.update_bikes(dry_run: options[:dry])
+    end
+
     desc 'reset_bikes', 'deletes all bikes recreates them after parsing all posts'
     def reset_bikes
       MtbScrape::reset_bikes

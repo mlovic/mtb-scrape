@@ -27,7 +27,7 @@ RSpec.describe PostParser do
     end
 
     it 'returns Hash of attributes' do
-      expect(PostParser.parse(post).keys).to eq [:price, :brand_id, :model_id, :size, :frame_only, :uri, :thread_id]
+      expect(PostParser.parse(post).keys).to eq [:price, :brand_id, :model_id, :size, :frame_only, :uri, :thread_id, :name]
     end
 
     it 'saves bike in db' do
