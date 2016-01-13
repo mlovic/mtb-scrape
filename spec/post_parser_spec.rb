@@ -1,6 +1,15 @@
 require_relative 'spec_helper'
 
 RSpec.describe PostParser do
+
+  describe 'price' do
+    it 'finds price' do
+      post = build(:post)
+      expect(PostParser.parse(post)[:price]).to eq 1250
+
+    end
+  end
+
   let(:post) { Post.new(fixture('post.yml')) }
   describe '.parse' do
     # think works? left half done
@@ -27,7 +36,7 @@ RSpec.describe PostParser do
     end
 
     it 'returns Hash of attributes' do
-      expect(PostParser.parse(post).keys).to eq [:price, :brand_id, :model_id, :size, :frame_only, :uri, :thread_id, :name]
+      expect(PostParser.parse(post).keys).to match_array [:price, :brand_id, :model_id, :size, :frame_only, :uri, :thread_id, :name]
     end
 
     it 'saves bike in db' do

@@ -93,6 +93,7 @@ module MtbScrape
         if Post.find_by(thread_id: p.thread_id)
           post = Post.find_by!(thread_id: p.thread_id)
           # TODO check if post has been edited. Title at least
+          # check for "vendida"!!
           unless p.last_message_at == post.last_message_at
             post.update last_message_at: p.last_message_at
             post_update_count += 1

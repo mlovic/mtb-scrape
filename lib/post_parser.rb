@@ -2,6 +2,7 @@ require 'nokogiri'
 
 require_relative 'post'
 require_relative 'model_finder'
+require_relative 'price_finder'
 
 # TODO deal with this
 #require_relative '../init'
@@ -24,9 +25,8 @@ class PostParser
       #return {seller: false} if buyer?(post.title)
       return {buyer: true} if buyer?(post.title) # so that dnatables doesn't get undefined
 
-      price = find_price(post.title) || find_price(post.description_no_html)
-      attributes[:price] = price
-
+      attributes[:frame_only] = !!contains_cuadro?(post.title) 
+      
       finder = ModelFinder.new(post.title, post.description)
       attributes[:brand_id] = finder.get_brand && finder.get_brand.id
       model = finder.get_model
@@ -39,6 +39,9 @@ class PostParser
       else
         attributes[:model_id] = nil
       end
+
+      pfinder = PriceFinder.new(post.title, post.description, model, attributes[:frame_only])
+      attributes[:price] = pfinder.find_price
 
       #brand = find_brand(post.title) || find_brand(post.description_no_html)
       #attributes[:brand] = brand ? brand.first.titleize : nil
@@ -59,7 +62,6 @@ class PostParser
       size = find_size(post.title) || find_size(post.description_no_html)
       attributes[:size] = size && size.upcase
 
-      attributes[:frame_only] = contains_cuadro?(post.title) != nil # best way? !!
 
       attributes[:uri] = post.uri
       attributes[:thread_id] = post.thread_id
@@ -131,17 +133,7 @@ class PostParser
         File.readlines('brand_lists/brand_list.txt')
       end
 
-      def find_price(str)
-        # TODO improve algorithm
-        #   search for all occurrences of price
-        #   detect 'ahora 3000e'
-        #   choose most likely price band i.e. 1000e more likely than 150e
-        #
-        num = /([0-9]?\.?[0-9]{3})/
-        price_regex = Regexp.union /[€]#{num}/, /#{num}\s?[€]/, /#{num}\s?eur/i, 
-                                   /precio\s?#{num}/, /#{num}e/
-        str.match(price_regex) && str.match(price_regex).captures.compact.first.gsub('.', '').to_i
-      end
+      # new token?
 
       def print(post, atr)
         puts atr[:price] ? "price found: €#{atr[:price]}" : "no price found"
