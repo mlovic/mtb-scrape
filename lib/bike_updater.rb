@@ -17,6 +17,10 @@ class BikeUpdater
     def to_s
       "#{@bike_id} - #{@field}:  #{@old} -> #{@new}"
     end
+
+    def post_title
+      Bike.find(@bike_id).post.title
+    end
   end
 
   class Report
@@ -57,7 +61,7 @@ class BikeUpdater
   private
     def report
       @changes.each do |c|
-        puts c.to_s
+        puts c.to_s + c.post_title
       end
       GENERATED_ATTRS.each do |a|
         rel_changes = @changes.select { |c| c.field == a }
