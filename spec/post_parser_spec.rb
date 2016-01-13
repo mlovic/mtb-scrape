@@ -21,8 +21,8 @@ RSpec.describe PostParser do
 
     it 'finds size' do
       expect(PostParser.parse(post)[:size]).to eq 'L'
-      post.description = 'Santa Cruz v10 talla S'
-      expect(PostParser.parse(post)[:size]).to eq 'S'
+      post.description = 'Santa Cruz v10 talla xs'
+      expect(PostParser.parse(post)[:size]).to eq 'XS'
     end
 
     it 'finds buyer' do

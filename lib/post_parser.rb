@@ -4,17 +4,9 @@ require_relative 'post'
 require_relative 'model_finder'
 require_relative 'price_finder'
 
-# TODO deal with this
-#require_relative '../init'
-
 class PostParser
 
   class << self
-
-    # parse(post)
-    #   parser = self.new(post)
-    #   parser.find_price
-    #   
 
     def parse(post)
 
@@ -22,7 +14,6 @@ class PostParser
 
       attributes = {}
 
-      #return {seller: false} if buyer?(post.title)
       return {buyer: true} if buyer?(post.title) # so that dnatables doesn't get undefined
 
       attributes[:frame_only] = !!contains_cuadro?(post.title) 
@@ -43,20 +34,6 @@ class PostParser
       pfinder = PriceFinder.new(post.title, post.description, model, attributes[:frame_only])
       attributes[:price] = pfinder.find_price
 
-      #brand = find_brand(post.title) || find_brand(post.description_no_html)
-      #attributes[:brand] = brand ? brand.first.titleize : nil
-
-      #if brand && brand.size > 1  # TODO refactor this
-        #attributes[:model] = brand.last && brand.last.capitalize
-      #else
-        #attributes[:model] = nil
-      #end
-      
-      # Brand.scan title
-      # else scan desc
-      #
-      # Size.scan title if not desc
-
 
       # Get size
       size = find_size(post.title) || find_size(post.description_no_html)
@@ -68,7 +45,6 @@ class PostParser
       attributes[:name] ||= nil
 
       #print(post, attributes)
-      #if attributes[:brand]
       
       return attributes
     end
@@ -89,7 +65,6 @@ class PostParser
 
     private
 
-
       def buyer?(str)
         str.match(/compro/i) || str.match(/busco/i)
       end
@@ -100,10 +75,8 @@ class PostParser
       end
 
       def find_size(str)
-        # TODO fix: detecting only x without -s or -l
-        size_regex = /talla\s([xs,s,m,l,xl])/i
+        size_regex = /talla\s((xs|s|m|l|xl))/i
         str.match(size_regex) && str.match(size_regex).captures.first.downcase
-        # work with lowercase?
       end
 
       def find_brand(str)
@@ -129,12 +102,6 @@ class PostParser
         nil
       end
 
-      def read_brands
-        File.readlines('brand_lists/brand_list.txt')
-      end
-
-      # new token?
-
       def print(post, atr)
         puts atr[:price] ? "price found: €#{atr[:price]}" : "no price found"
         puts atr[:brand] ? "brand found: #{atr[:brand]}" : "no brand found: #{post.title}"
@@ -142,13 +109,5 @@ class PostParser
         puts "Frame only!!" if contains_cuadro?(post.title)
       end
 
-
   end
 end
-
-#Post.all.each do |p|
-  #puts p.id.to_s + '. ' + p.title
-  #PostParser.parse(p)
-  #puts '---------------------------'
-#end
-
