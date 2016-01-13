@@ -7,6 +7,7 @@ class BikeUpdater
 
     def initialize(bike_id, field, old_value, new_value)
       @bike_id, @field, @old, @new = bike_id, field, old_value, new_value
+      @logger = Logger.new($stdout)
     end
 
     def new_attr?
@@ -40,8 +41,8 @@ class BikeUpdater
 
       next if old_attrs == new_attrs
       puts 'found change'
-      p old_attrs
-      p new_attrs
+      #p old_attrs
+      #p new_attrs
       old_attrs.each do |k, v|
         next if new_attrs[k] == v
         @changes << Change.new(bike.id, k, v, new_attrs[k]) 
@@ -65,6 +66,7 @@ class BikeUpdater
         new_changes.each { |c| puts c }
         puts "#{new_changes.count} new attributes found of #{a}"
         puts ''
+        #@logger.info works
       end
       puts "#{@num_bikes_changed} bikes changed"
       puts "#{@changes.count} total changes"
