@@ -5,8 +5,14 @@
 #require_relative 'lib/post_preview'
 Dir[File.dirname(__FILE__) + '/lib/*.rb'].each {|file| require file }
 
+
 module MtbScrape
 
+  logger = Logger.new(STDOUT)
+
+  def log(arg)
+    logger.info arg
+  end
   # Not being used
   class Scraper
     def self.scrape(num_pages = 1, &block)
@@ -44,7 +50,9 @@ module MtbScrape
     create_new_bikes(new_posts)
   end
 
-  def self.create_new_bikes(posts)
+  def self.create_new_bikes(posts = nil)
+    bike_count = 0
+    posts ||= Post.wherebike
     posts.each do |post|
       attributes = PostParser.parse(post)
       next if attributes[:buyer]
@@ -56,7 +64,9 @@ module MtbScrape
                       post_id: post.id
                      )
       bike.save!
+      bike_count += 1
     end
+    puts "#{bike_count} new bikes in db"
   end
 
   def self.create_new_brand(name)
@@ -69,6 +79,7 @@ module MtbScrape
     end_page = start_page + num_pages - 1
 
     new_posts = []
+    post_update_count = 0
 
     (start_page..end_page).each do |i|
 
@@ -81,8 +92,10 @@ module MtbScrape
 
         if Post.find_by(thread_id: p.thread_id)
           post = Post.find_by!(thread_id: p.thread_id)
+          # TODO check if post has been edited. Title at least
           unless p.last_message_at == post.last_message_at
             post.update last_message_at: p.last_message_at
+            post_update_count += 1
           end
           next
         end
@@ -98,11 +111,27 @@ module MtbScrape
       end
     end
 
+    puts "#{post_update_count} posts updated in db"
     puts "#{new_posts.size} new posts in db"
-    puts "#{Post.all.size} total posts in db"
+    # TODO not working. Error from Arel. Maybe ruby 2.3 thing?  `rescue in visit': Cannot visit ThreadSafe::Array (TypeError)   
+     #puts "#{Post.count} total posts in db"
     return new_posts
+  rescue
+    unless Bike.find_by(post_id: Post.last.id)
+      puts 'There are posts in the database that need to be parsed'
+      puts "Try\n\n\tthor mtb_scrape:parse_lonely_posts\n\n"
+    end
+    raise
+  end
+  
+  def parse_lonely_posts
+    
   end
 
+  def self.parse_posts
+    # TODO should re-parse all posts in db
+    
+  end
 
 
   ROOT_DIR = '/home/marko/mtb_scrape'

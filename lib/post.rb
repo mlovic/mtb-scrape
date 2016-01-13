@@ -7,6 +7,8 @@ class Post < ActiveRecord::Base
   validates :uri, presence: true
   validates :last_message_at, presence: true
 
+  has_one :bike
+
   # make default?
   def description_no_html
     Nokogiri::HTML(description).xpath("//text()").remove.to_s

@@ -27,6 +27,7 @@ require_relative '../lib/brand'
 require_relative '../lib/model'
 require_relative '../lib/model_finder'
 require_relative '../lib/bike_updater'
+require_relative '../mtb_scrape'
 require 'nokogiri'
 require 'pp'
 require 'vcr'
@@ -59,6 +60,10 @@ RSpec.configure do |config|
 
   config.include Helpers
   config.include FactoryGirl::Syntax::Methods
+
+  config.filter_run :focus => true
+  config.run_all_when_everything_filtered = true
+
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.
