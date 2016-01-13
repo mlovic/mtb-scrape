@@ -32,7 +32,7 @@
   <% @bikes.each do |bike| %>
     <tr class='bike' id="<%= bike.id %>">
       <%#Might want to remove just number from id field later%>
-      <td><%= bike.thread_id %></td>
+      <td><a href="<%= bike.post.uri %>"><%= bike.thread_id %></a></td>
       <td>
       <% if bike.frame_only %>
         <img src="bike_frame_30px.png" alt="bike frame" />
