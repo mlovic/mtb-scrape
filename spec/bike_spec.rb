@@ -15,8 +15,6 @@ RSpec.describe Bike do
   end
 
   it 'factory' do
-    #bike = build(:bike)
-    #
     bike = build(:bike, :with_names, brand_name: 'Mondraker', model_name: 'Foxy')
     expect(bike.save).to eq true
   end

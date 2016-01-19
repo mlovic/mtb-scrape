@@ -8,7 +8,11 @@ class PriceFinder
                                 /precio\s?#{num}/i, /#{num}e/i
   PRIORITY_REGEX = Regexp.union /la\svendo\spor\s?#{num}/i, 
                                 /ahora\s?[a-zA-Z]+\s?#{num}/i,
-                                /rebajada\s?\w?#{num}/i
+                                /rebajada\s?\w?#{num}/i,
+                                /precio\s?final:?\s*#{num}/i # TODO not catching
+                                                             # bike number 1380
+                                
+                                # TODO ahora [eurosign]2100 wouldn't work
   # precio final:
                                 
   # TODO log how many matches are found

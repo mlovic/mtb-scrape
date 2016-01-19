@@ -19,14 +19,21 @@ RSpec.describe PriceFinder do
     expect(finder.find_price).to eq 3000
   end
 
-  it 'la vendo por' do
-    finder = PriceFinder.new('no price', 'La compre por 3000e, la vendo por 1700')
-    expect(finder.find_price).to eq 1700
-  end
+  describe 'priority regexes' do
+    it 'la vendo por' do
+      finder = PriceFinder.new('no price', 'La compre por 3000e, la vendo por 1700')
+      expect(finder.find_price).to eq 1700
+    end
 
-  it 'ahora' do
-    finder = PriceFinder.new('no price', 'La vendia por 2400e, ahora por 2100')
-    expect(finder.find_price).to eq 2100
+    it 'ahora' do
+      finder = PriceFinder.new('no price', 'La vendia por 2400e, ahora por 2100')
+      expect(finder.find_price).to eq 2100
+    end
+
+    it 'precio final' do
+      finder = PriceFinder.new('no price', 'La vendia pr 2400e, precio final: 2100')
+      expect(finder.find_price).to eq 2100
+    end
   end
 
   it 'no euro symbol' do
