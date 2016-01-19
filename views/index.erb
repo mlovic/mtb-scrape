@@ -16,6 +16,7 @@
 <table id="bikes-table-new" class="table">
   <thead>
     <tr>
+      <th>id</th>
       <th>thread_id</th>
       <th></th>
       <th>price</th>
@@ -32,6 +33,7 @@
   <% @bikes.each do |bike| %>
     <tr class='bike' id="<%= bike.id %>">
       <%#Might want to remove just number from id field later%>
+      <td><%= bike.id %></td>
       <td><a href="<%= bike.post.uri %>"><%= bike.thread_id %></a></td>
       <td>
       <% if bike.frame_only %>

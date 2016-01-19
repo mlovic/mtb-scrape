@@ -21,6 +21,7 @@ class ModelFinder
     search_for_brand unless @after_brand_text && @brand
     @after_brand_text or return nil
     possible_name = @after_brand_text.split(' ').first.titleize 
+    # TODO accepting blank i think
     # TODO Confirmed first!
     # use below first_or_create
     Model.where(brand_id: @brand.id, name: possible_name).take ||

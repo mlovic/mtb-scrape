@@ -7,8 +7,8 @@ FactoryGirl.define do
     #else
       #brand
     #end
-      brand { build(:brand, name: brand_name) }
-      model { build(:model, brand_name: brand.name) }
+      #brand { build(:brand, name: brand_name) }
+      #model { build(:model, brand_name: brand.name) }
       #model { build(:model, name: model_name, brand_name: brand.name) }
     trait :with_names do
       transient do

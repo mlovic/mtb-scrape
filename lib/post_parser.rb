@@ -19,6 +19,7 @@ class PostParser
       attributes[:frame_only] = !!contains_cuadro?(post.title) 
       
       finder = ModelFinder.new(post.title, post.description)
+      # TODO should be desc without html
       attributes[:brand_id] = finder.get_brand && finder.get_brand.id
       model = finder.get_model
       if model.class == String

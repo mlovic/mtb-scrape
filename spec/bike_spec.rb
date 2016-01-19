@@ -5,8 +5,19 @@ RSpec.describe Bike do
   #let(:bike) { Bike.new(fixture('bike.yml')) }
   let(:bike) { build(:bike) }
 
+  it 'model' do
+    p build(:model)
+    p build(:model, brand_name: 'One')
+  end
+
+  it 'with traits' do
+    p build(:bike, :with_names, brand_name: 'Mondraker', model_name: 'Foxy')
+  end
+
   it 'factory' do
-    bike = build(:bike)
+    #bike = build(:bike)
+    #
+    bike = build(:bike, :with_names, brand_name: 'Mondraker', model_name: 'Foxy')
     expect(bike.save).to eq true
   end
 

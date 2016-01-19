@@ -14,6 +14,10 @@ class BikeUpdater
       @old.nil?
     end
 
+    def lost_attr?
+      @new.nil?
+    end
+
     def to_s
       "#{@bike_id} - #{@field}:  #{@old} -> #{@new}"
     end
@@ -44,12 +48,10 @@ class BikeUpdater
       new_attrs = parsed_attributes.slice(*GENERATED_ATTRS)
 
       next if old_attrs == new_attrs
-      puts 'found change'
-      #p old_attrs
-      #p new_attrs
       old_attrs.each do |k, v|
         next if new_attrs[k] == v
         @changes << Change.new(bike.id, k, v, new_attrs[k]) 
+        puts @changes.last.to_s
         bike.update! @changes.last.field => @changes.last.new unless dry_run
       end
       @num_bikes_changed += 1
@@ -66,9 +68,13 @@ class BikeUpdater
       GENERATED_ATTRS.each do |a|
         rel_changes = @changes.select { |c| c.field == a }
         new_changes = rel_changes.select { |c| c.new_attr? }
-        puts "=============="
+        old_changes = rel_changes.select { |c| c.lost_attr? }
+
         new_changes.each { |c| puts c }
+        old_changes.each { |c| puts c }
         puts "#{new_changes.count} new attributes found of #{a}"
+        puts "#{old_changes.count} attributes attributes lost"
+        puts "=============="
         puts ''
         #@logger.info works
       end

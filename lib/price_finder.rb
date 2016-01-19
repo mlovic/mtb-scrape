@@ -9,6 +9,7 @@ class PriceFinder
   PRIORITY_REGEX = Regexp.union /la\svendo\spor\s?#{num}/i, 
                                 /ahora\s?[a-zA-Z]+\s?#{num}/i,
                                 /rebajada\s?\w?#{num}/i
+  # precio final:
                                 
   # TODO log how many matches are found
 
@@ -62,7 +63,6 @@ class PriceFinder
 
   def get_tokens(str, priority: false)
     regex = priority ? PRIORITY_REGEX : PRICE_REGEX
-    p str.scan(regex).flatten.compact
     tokens = str.scan(regex).flatten.compact.map { |t| t.gsub('.', '') }.map(&:to_i)
     return tokens.present? ? tokens : nil
     # maybe this shouldn't return nil
