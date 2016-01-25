@@ -24,6 +24,7 @@ module MtbScrape
       end
 
       puts "#{Post.all.size} posts in db"
+      # use count when possible
     end
   end
 

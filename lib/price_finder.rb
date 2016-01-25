@@ -13,6 +13,8 @@ class PriceFinder
                                                              # bike number 1380
                                 
                                 # TODO ahora [eurosign]2100 wouldn't work
+                                #
+                                # TODO add 'rebajado a...'
   # precio final:
                                 
   # TODO log how many matches are found

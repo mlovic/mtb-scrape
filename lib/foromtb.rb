@@ -77,6 +77,7 @@ class ForoMtb
     end
 
     puts "#{Post.all.size} posts in db"
+    # TODO change to count when arel thing fixed
 
   end
 
