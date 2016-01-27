@@ -24,4 +24,10 @@ RSpec.describe BikeUpdater do
 
     expect(Bike.first.brand_name).to eq 'Mondraker'
   end
+
+  it 'single bike' do
+    @updater.update_bikes(id: 1, dry_run: false)
+
+    expect(Bike.first.brand_name).to eq 'Specialized'
+  end
 end

@@ -19,11 +19,27 @@ class BikeUpdater
     end
 
     def to_s
+      # TODO dry this up
+         #{@field.split('_').first}:  
+      #p @field
+      #if @field == :model_id
+        #"#{@bike_id} - model:  #{Model.find(@old).name} -> #{Model.find(@new).name if @new}"
+      #elsif @field == :brand_id
+      # can't find Brand by id?
+        #"#{@bike_id} - brand:  #{Brand.find(@old).name} -> #{Brand.find(@new).name if @new}"
+      #else
+        #"#{@bike_id} - #{@field}:  #{@old} -> #{@new}"
+      #end
       "#{@bike_id} - #{@field}:  #{@old} -> #{@new}"
     end
 
     def post_title
       Bike.find(@bike_id).post.title
+    end
+
+    private
+    def old_model_name
+      
     end
   end
 
@@ -39,10 +55,18 @@ class BikeUpdater
 
   GENERATED_ATTRS = %i(name brand_id price frame_only size model_id)
 
-  def update_bikes(dry_run: false)
+  def update_bikes(id: nil, dry_run: false)
     # find each?
-    Bike.all.each do |bike|
+    # TODO fix this
+    if id
+      bikes = [Bike.find(id)]
+    else
+      bikes = Bike.all
+    end
+
+    bikes.each do |bike|
       parsed_attributes = PostParser.parse(bike.post)
+      # TODO still creating models even when dry. deal with? 
 
       old_attrs = bike.attributes.symbolize_keys.slice(*GENERATED_ATTRS)
       new_attrs = parsed_attributes.slice(*GENERATED_ATTRS)
@@ -58,6 +82,12 @@ class BikeUpdater
     end
 
     report
+  #CV
+  # TODO what to do here
+  rescue ActiveRecord::RecordInvalid => invalid
+    p invalid
+    p invalid.record
+    puts invalid.record.errors
   end
 
   private
