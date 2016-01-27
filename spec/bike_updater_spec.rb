@@ -13,7 +13,14 @@ RSpec.describe BikeUpdater do
     @updater = BikeUpdater.new
     allow(@updater).to receive(:report)
   end
-  it '.update' do
+
+  it '.update_bike' do
+    @updater.update_bike(1)
+
+    expect(Bike.first.brand_name).to eq 'Specialized'
+  end
+
+  it '.update_bikes' do
     @updater.update_bikes
 
     expect(Bike.first.brand_name).to eq 'Specialized'

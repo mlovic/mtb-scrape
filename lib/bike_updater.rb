@@ -55,6 +55,26 @@ class BikeUpdater
 
   GENERATED_ATTRS = %i(name brand_id price frame_only size model_id)
 
+  def update_bike(id, dry_run: false)
+    bike = Bike.find(id)
+
+    parsed_attributes = PostParser.parse(bike.post)
+    # TODO still creating models even when dry. deal with? 
+
+    old_attrs = bike.attributes.symbolize_keys.slice(*GENERATED_ATTRS)
+    new_attrs = parsed_attributes.slice(*GENERATED_ATTRS)
+
+    return if old_attrs == new_attrs
+    old_attrs.each do |k, v|
+      next if new_attrs[k] == v
+      @changes << Change.new(bike.id, k, v, new_attrs[k]) 
+      puts @changes.last.to_s
+      bike.update! @changes.last.field => @changes.last.new unless dry_run
+    end
+    @num_bikes_changed += 1
+    @changes
+  end
+
   def update_bikes(id: nil, dry_run: false)
     # find each?
     # TODO fix this
@@ -65,20 +85,7 @@ class BikeUpdater
     end
 
     bikes.each do |bike|
-      parsed_attributes = PostParser.parse(bike.post)
-      # TODO still creating models even when dry. deal with? 
-
-      old_attrs = bike.attributes.symbolize_keys.slice(*GENERATED_ATTRS)
-      new_attrs = parsed_attributes.slice(*GENERATED_ATTRS)
-
-      next if old_attrs == new_attrs
-      old_attrs.each do |k, v|
-        next if new_attrs[k] == v
-        @changes << Change.new(bike.id, k, v, new_attrs[k]) 
-        puts @changes.last.to_s
-        bike.update! @changes.last.field => @changes.last.new unless dry_run
-      end
-      @num_bikes_changed += 1
+      update_bike(bike.id, dry_run: dry_run)
     end
 
     report
