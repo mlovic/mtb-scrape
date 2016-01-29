@@ -18,6 +18,8 @@ class PostParser
 
       attributes[:frame_only] = !!contains_cuadro?(post.title) 
       
+      # TODO use no_html
+      #finder = ModelFinder.new(post.title, post.description_no_html)
       finder = ModelFinder.new(post.title, post.description)
       # TODO should be desc without html
       attributes[:brand_id] = finder.get_brand && finder.get_brand.id
@@ -69,6 +71,7 @@ class PostParser
       def buyer?(str)
         str.match(/compro/i) || str.match(/busco/i)
       end
+
       def contains_cuadro?(str)
         # search also in desc? Maybe use price to decide as well
         # also check for 'cuadro o bici complete'
