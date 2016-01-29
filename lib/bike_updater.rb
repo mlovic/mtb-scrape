@@ -33,6 +33,16 @@ class BikeUpdater
       "#{@bike_id} - #{@field}:  #{@old} -> #{@new}"
     end
 
+    def report
+      if @field == :model_id
+        "#{@bike_id} - model:  #{Model.find_by(id: @old)&.name} -> #{Model.find_by(id: @new)&.name}"
+      elsif @field == :brand_id
+        "#{@bike_id} - brand:  #{Brand.find_by(id: @old)&.name} -> #{Brand.find_by(id: @new)&.name}"
+      else
+        "#{@bike_id} - #{@field}:  #{@old} -> #{@new}"
+      end
+    end
+
     def post_title
       Bike.find(@bike_id).post.title
     end
@@ -68,7 +78,8 @@ class BikeUpdater
     old_attrs.each do |k, v|
       next if new_attrs[k] == v
       @changes << Change.new(bike.id, k, v, new_attrs[k]) 
-      puts @changes.last.to_s
+      #puts @changes.last.to_s
+      puts @changes.last.report
       bike.update! @changes.last.field => @changes.last.new unless dry_run
     end
     @num_bikes_changed += 1
