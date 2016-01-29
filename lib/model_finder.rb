@@ -6,8 +6,6 @@ class ModelFinder
   end
 
     #brand_regex = /(#{b})\s(\w+)?/i make this a private func?
-    #brands = Brand.all.map(&:name)
-      # TODO make words following brand optional in regex!! 
       #   'Vendo Giant' doesn't match  - space char not optional i think
       # TODO match only word. Currently matching ks from sworks
       # above doesn't take dash as an acceptable word character
@@ -25,16 +23,13 @@ class ModelFinder
     Brand.send(status).find do |b| # use find here
       if match = str.match(/\b#{b.name}\b/i)
         @brand_context = str.split(match.to_s, 2).last
-        #p @brand_context
       end
-        #@after_brand_text = str.split(match.to_s).last.strip
     end
   end
 
   def scan_for_model(str, status = nil, brand_id: nil)
     models = filter_models(status, brand_id)
     models.find do |m| # use find here
-      #p m.name
       str.match(/\b#{m.name}\b/i)
     end
   end
@@ -57,60 +52,37 @@ class ModelFinder
   def get_model
     @brand ||= get_brand
     if @brand
-      models = @brand.models
       if model = scan_for_model(@brand_context, :confirmed, brand_id: @brand.id) || 
                  scan_for_model(@brand_context, :unconfirmed, brand_id: @brand.id)
         return model
       else
         guess_model(@brand_context)
       end
+    else
+      scan_for_model(@title, :confirmed) ||
+      scan_for_model(@description, :confirmed)
+      scan_for_model(@title, :unconfirmed) ||
+      scan_for_model(@description, :unconfirmed)
     end
   end
 
+  # TODO blacklist: precio, doble, years, wheel size
   def guess_model(str)
-    match = str.strip.match(/^(\w+)\b/)
+    possible_name = /(\w{3,14})/
+    match = str.strip.match(/^#{possible_name}\b/)
     if match
-      model_name = match.captures.first.to_s.titleize
+      model_name = match.captures.first.to_s.downcase.capitalize
       Model.create!(brand_id: @brand.id, name: model_name)
     end
   end
 
-  def elses
-    search_for_brand unless @after_brand_text && @brand
-    @after_brand_text or return nil
-    possible_name = @after_brand_text.split(' ').first.titleize 
-    # TODO change to below. It breaks right now
-    #possible_name = @after_brand_text.split(/[\s+\/]/).first.titleize 
-    # TODO improve above. accepting .com right now
-    # TODO accepting blank i think
-    # TODO Confirmed first!
-    # use below first_or_create
-    Model.where(brand_id: @brand.id, name: possible_name).take ||
-      Model.create!(brand_id: @brand.id, name: possible_name)
-  rescue ActiveRecord::RecordInvalid => invalid
-    p invalid
-    p invalid.record
-    puts invalid.record.errors
-  end
+  #rescue ActiveRecord::RecordInvalid => invalid
+    #p invalid
+    #p invalid.record
+    #puts invalid.record.errors
 
-  def search_for_brand
-    #return @search_results if @search_results
+    #[@title, @description].each do |str| # consider using any num of texts
+      #[:confirmed, :unconfirmed].each do |status|
 
-    [@title, @description].each do |str| # consider using any num of texts
-      [:confirmed, :unconfirmed].each do |status|
-
-        Brand.send(status).each do |b| # use find here
-          if match = str.match(/\b#{b.name}\b/i)
-            # improve this
-            @after_brand_text = str.split(match.to_s).last.strip
-            @brand = b
-            return b
-          end
-        end
-
-      end
-    end
-    nil
-  end
 
 end
