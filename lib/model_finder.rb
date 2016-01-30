@@ -1,7 +1,7 @@
 class ModelFinder
 
   def initialize(title, description)
-    @title = title
+    @title = ActiveSupport::Inflector.transliterate(title)
     @description = description
   end
 
