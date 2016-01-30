@@ -3,6 +3,9 @@ $:.unshift File.dirname(__FILE__)
 require 'sinatra'
 require 'pp'
 require "sinatra/activerecord"
+require 'will_paginate'
+require 'will_paginate/active_record'  # or data_mapper/sequel
+require "will_paginate-bootstrap"
 
 require 'lib/bike'
 require 'lib/brand'
@@ -56,7 +59,7 @@ get '/' do
   #params[:max_travel] ||= 230 if  params[:max_travel] == ''
   #params[:min_price] ||= 0 if params[:min_price] == ''
   #params[:max_price] ||= 12000 if params[:max_price] == ''
-  @bikes = Bike.joins(:model)
+  @bikes = Bike.paginate(page: params[:page], per_page: 50).joins(:model)
   #@bikes = @bikes.where(models: { 'travel > ?' => params[:min_travel] }) if params[:min_travel]
   #@bikes = @bikes.where(models: { 'travel < ?' => params[:max_travel] }) if params[:max_travel]
   @bikes = @bikes.where('models.travel > ?', params[:min_travel] ) unless params[:min_travel].blank?
