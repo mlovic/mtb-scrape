@@ -14,6 +14,8 @@ class Bike < ActiveRecord::Base
   delegate :name, to: :brand, prefix: true, allow_nil: true
   delegate :name, to: :model, prefix: true, allow_nil: true
   delegate :id, to: :model, prefix: true, allow_nil: true
+  delegate :time_since_last_message, to: :post, allow_nil: true
+  delegate :time_since_posted, to: :post, allow_nil: true
 
   def generated_attributes
     attributes.slice %i(name brand_id price frame_only size model_id)

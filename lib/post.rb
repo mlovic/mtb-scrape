@@ -14,4 +14,12 @@ class Post < ActiveRecord::Base
     Nokogiri::HTML(description).xpath("//text()").remove.to_s
   end
 
+  def time_since_last_message
+    Time.now - last_message_at
+  end
+
+  def time_since_posted
+    Time.now - posted_at
+  end
+
 end

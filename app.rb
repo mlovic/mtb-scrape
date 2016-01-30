@@ -31,6 +31,14 @@ helpers do
     brand_name, str = bike.brand_name, bike.title # move outside of helper?
     brand_name ? str.split(/#{brand_name}/i).last.split(' ').first.to_s : nil
   end
+
+  def humanize(secs)
+    { d: 60*60*24, h: 60*60, m: 60, s: 1 }.each do |k, v|
+      next if secs < v
+      return "#{(secs / v).to_i} #{k}"
+    end
+  end
+
 end
 
 # actually fix this at some point
