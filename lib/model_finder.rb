@@ -11,7 +11,9 @@ class ModelFinder
       # above doesn't take dash as an acceptable word character
   
   def get_brand
+    # TODO how about throw/catch here
     @brand = scan_for_brand(@title, :confirmed) ||
+             # scan_for_model(@title, :confirmed)&.brand
              scan_for_brand(@description, :confirmed) ||
              scan_for_brand(@title, :unconfirmed) ||
              scan_for_brand(@description, :unconfirmed)
@@ -31,6 +33,7 @@ class ModelFinder
     models = filter_models(status, brand_id)
     models.find do |m| # use find here
       str.match(/\b#{m.name}\b/i)
+      # here i could directly end. throw model
     end
   end
 
