@@ -16,6 +16,7 @@ class PriceFinder
                                 #
                                 # TODO add 'rebajado a...'
   # precio final:
+                                # could also filter by last digit being a 0
                                 
   # TODO log how many matches are found
 

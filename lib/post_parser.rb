@@ -26,7 +26,7 @@ class PostParser
 
       model = attributes[:model_id]
 
-      pfinder = PriceFinder.new(post.title, post.description, model, attributes[:frame_only])
+      pfinder = PriceFinder.new(post.title, post.description_no_html, model, attributes[:frame_only])
       attributes[:price] = pfinder.find_price
 
 
