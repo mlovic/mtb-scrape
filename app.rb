@@ -15,7 +15,7 @@ configure :development do
   require 'thin'
   set :server, 'thin'
   set :database, {adapter: "sqlite3", database: "db/foromtb.db"}
-  ActiveRecord::Base.logger = Logger.new('db/debug.log')
+  #ActiveRecord::Base.logger = Logger.new('db/debug.log')
 end
 
 configure :production do
@@ -74,6 +74,24 @@ post '/delete-brand' do
   brand = Brand.find(params['id'])
   puts 'Destroying brand ' + brand.name
   brand.destroy
+end
+
+post '/update-model' do
+  # TODO what if bike is not found. Other exception handling
+  # or if invalid
+  # or no change
+  # or name has been taken
+  model = Bike.find(params['bike_id']).model
+  model.update(name: params['value'])
+  model.confirmed! # maybe unwise
+  params['value']
+end
+
+post '/update-submodel' do
+  model = Bike.find(params['bike_id']).model
+  model.update(submodel: params['value'])
+  model.confirmed!
+  params['value']
 end
 
 post '/confirm-model' do

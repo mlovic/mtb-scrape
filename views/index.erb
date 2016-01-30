@@ -4,6 +4,7 @@
 <script type="text/javascript" charset="utf-8" src="jquery-2.1.4.js"></script>
 <script src="bootstrap/js/bootstrap.min.js"></script>
 <script src="bikes.js"></script>
+<script src="jeditable.js"></script>
 
 <div class="col-md-9">
     <div class="alert alert-success" id="confirmation-message">
@@ -54,8 +55,8 @@
           </button>
       <% end %>
       </td>
-      <td><%= bike.model_name or word_after_brand(bike) %></td>
-      <td><%= bike.model && bike.model.submodel %></td>
+      <td class="model-name"><%= bike.model_name or word_after_brand(bike) %></td>
+      <td class="submodel-name"><%= bike.model && bike.model.submodel %></td>
       <td>
       <% unless bike.model&.confirmed? %>
         <form action="/confirm-model" method="post">

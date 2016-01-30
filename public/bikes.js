@@ -2,7 +2,25 @@ $(document).ready( function() {
 
   $('#confirmation-message').hide();
 
+  //var bikeID = .parents('.bike').attr('id');
+  console.log($(this)); 
+  //$('.model-name').editable('/' + console.log($(this)));
 
+  $('.model-name').each(function() {
+     var $this = $(this);
+     //$this.editable('/bikes/' + $this.parent().attr('id') + '/update', {
+     // Use REST?
+     $this.editable('/update-model', {
+        submitdata  : { bike_id : $this.parent().attr('id') }
+     });
+  });
+
+  $('.submodel-name').each(function() {
+     var $this = $(this);
+     $this.editable('/update-submodel', {
+        submitdata  : { bike_id : $this.parent().attr('id') }
+     });
+  });
 
   $('.travel-form').submit(function (e) {
       var form = $(this);
