@@ -23,9 +23,10 @@ class ModelFinder
   def scan_for_brand(str, status = :all)
     #[:confirmed, :unconfirmed].each do |status|
     Brand.send(status).find do |b| # use find here
-      if match = str.match(/\b#{b.name}\b/i)
+      if match = str.match(/\b#{b.name.gsub(' ', "\s?")}\b/i)
         @brand_context = str.split(match.to_s, 2).last
         # TODO tolerate space in brand name. same for model
+        #   gsub space for \s? on interpolation?
         # also ignore c from commencal
       end
     end
@@ -35,7 +36,9 @@ class ModelFinder
     models = filter_models(status, brand_id)
     models.find do |m| # use find here
       # TODO remove tildes
+      # # TODO blacklist?
       str.match(/\b#{m.name}\b/i)
+        #throw :found_model
       # here i could directly end. throw model
     end
   end

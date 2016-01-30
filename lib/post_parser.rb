@@ -11,7 +11,9 @@ class PostParser
     def parse(post)
 
       # TODO check for despiece
+      # TODO check for vendida
 
+      # TODO wheel size
       attributes = {}
 
       return {buyer: true} if buyer?(post.title) # so that dnatables doesn't get undefined
