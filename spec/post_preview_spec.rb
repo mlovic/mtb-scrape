@@ -43,6 +43,18 @@ RSpec.describe PostPreview do
     end
   end
 
+  describe 'username' do
+    it 'returns username of poster' do
+      expect(post_preview.username).to eq 'pol dh'
+    end
+  end
+
+  describe 'visits' do
+    it 'returns username of poster' do
+      expect(post_preview.visits).to eq 221
+    end
+  end
+
   describe 'all_attrs' do
     it 'returns a hash of attrs' do
       expect(post_preview.all_attrs).to be_a Hash

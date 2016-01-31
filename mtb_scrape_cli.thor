@@ -14,8 +14,10 @@ ActiveRecord::Base.establish_connection(configuration['development'])
     package_name "Mtb"
 
     desc 'scrape NUM_PAGES', 'scrapes N number of pages from foromtb'
+    method_option :offset, type: :numeric
     def scrape(num_pages)
-      MtbScrape::fmtb_scrape(num_pages.to_i)
+      offset = options[:offset]
+      MtbScrape::fmtb_scrape(num_pages.to_i, start_page: offset)
     end
 
     desc 'parse_posts', 'parses all posts in db and saves them in bikes table'
