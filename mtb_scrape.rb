@@ -48,13 +48,14 @@ module MtbScrape
   end
 
   def self.update(num_pages = 5)
+    raise 'not using this now, too many posts in db'
     new_posts = fmtb_scrape(num_pages) # 5? think about this
     create_new_bikes(new_posts)
   end
 
   def self.create_new_bikes(posts = nil)
     bike_count = 0
-    posts ||= Post.wherebike
+    posts ||= Post.wherebike # what is this?
     posts.each do |post|
       attributes = PostParser.parse(post)
       next if attributes[:buyer]
@@ -75,13 +76,40 @@ module MtbScrape
     Brand.create(name: name, confirmation_status: 1)
   end
 
+  def self.scrape_page(page_num)
+  end
+
+  def self.eval_post(p)
+    puts p.title
+
+    if Post.find_by(thread_id: p.thread_id)
+      post = Post.find_by!(thread_id: p.thread_id)
+      puts "  #{post.id}"
+      # TODO check if post has been edited. Title at least
+      # check for "vendida"!!
+      unless p.last_message_at == post.last_message_at
+        post.update last_message_at: p.last_message_at
+        post_update_count += 1
+      end
+      return
+    end
+
+    # Create post in db
+    new_post = Post.new(p.scrape)
+    if new_post.save
+      puts "Post created successfully: #{new_post.title}" 
+    else
+      p new_post
+    end
+    puts "  #{new_post.id}"
+  end
+
   def self.fmtb_scrape(num_pages = 1, options = {})
     # TODO implement a min time between requests
 
     start_page = options[:start_page] || 1
     end_page = start_page + num_pages - 1
 
-    new_posts = []
     post_update_count = 0
 
     (start_page..end_page).each do |i|
@@ -90,40 +118,18 @@ module MtbScrape
       page = ForoMtb.new.visit_page(i)
       page.posts.each do |p|
 
+        eval_post(p)
         #puts "#{@current_thread}: #{p.title}"
-        puts p.title
-
-        if Post.find_by(thread_id: p.thread_id)
-          post = Post.find_by!(thread_id: p.thread_id)
-          puts "  #{post.id}"
-          # TODO check if post has been edited. Title at least
-          # check for "vendida"!!
-          unless p.last_message_at == post.last_message_at
-            post.update last_message_at: p.last_message_at
-            post_update_count += 1
-          end
-          next
-        end
-
-        # Create post in db
-        new_post = Post.new(p.scrape)
-        if new_post.save
-          puts "Post created successfully: #{new_post.title}" 
-          new_posts << new_post
-        else
-          p new_post
-        end
-        puts "  #{new_post.id}"
       end
     end
 
     puts "#{post_update_count} posts updated in db"
-    puts "#{new_posts.size} new posts in db"
+    # TODO fix below
+    #puts "#{new_posts.size} new posts in db"
     puts "Oldest last message in db: #{Post.oldest_last_message.to_s}"
     puts "Oldest last message seen: #{Post.order('updated_at DESC').first.last_message_at.to_s}"
     # TODO not working. Error from Arel. Maybe ruby 2.3 thing?  `rescue in visit': Cannot visit ThreadSafe::Array (TypeError)   
      #puts "#{Post.count} total posts in db"
-    return new_posts
   rescue
     unless Bike.find_by(post_id: Post.last.id)
       puts 'There are posts in the database that need to be parsed'
