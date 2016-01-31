@@ -35,6 +35,7 @@ module MtbScrape
     Post.all.each do |post|
       attributes = PostParser.parse(post)
       next if attributes[:buyer]
+      # TODO pass attrs hash to bike
       bike = Bike.new(price: attributes[:price], 
                       frame_only: attributes[:frame_only],
                       size: attributes[:size],
@@ -75,6 +76,7 @@ module MtbScrape
   end
 
   def self.fmtb_scrape(num_pages = 1, options = {})
+    # TODO implement a min time between requests
 
     start_page = options[:start_page] || 1
     end_page = start_page + num_pages - 1
@@ -117,7 +119,8 @@ module MtbScrape
 
     puts "#{post_update_count} posts updated in db"
     puts "#{new_posts.size} new posts in db"
-    puts "Oldest last message: #{Post.oldest_last_message.to_s}"
+    puts "Oldest last message in db: #{Post.oldest_last_message.to_s}"
+    puts "Oldest last message seen: #{Post.order('updated_at DESC').first.last_message_at.to_s}"
     # TODO not working. Error from Arel. Maybe ruby 2.3 thing?  `rescue in visit': Cannot visit ThreadSafe::Array (TypeError)   
      #puts "#{Post.count} total posts in db"
     return new_posts
