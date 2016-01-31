@@ -78,7 +78,3 @@ end
         #end
         
         #foropost not being passed agent and page on init
-
-
-
-

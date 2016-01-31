@@ -10,7 +10,7 @@ RSpec.describe PostParser do
     end
   end
 
-  let(:post) { Post.new(fixture('post.yml')) }
+  let(:post) { build(:post) }
   describe '.parse' do
     # think works? left half done
     it 'finds frame_only' do
@@ -35,8 +35,13 @@ RSpec.describe PostParser do
       expect(PostParser.parse(post)[:seller]).to be false
     end
 
-    it 'returns Hash of attributes' do
-      expect(PostParser.parse(post).keys).to match_array [:price, :brand_id, :model_id, :size, :frame_only, :uri, :thread_id, :name]
+    it 'adds attributes to post' do
+      # don't think it does, DEL
+    end
+
+    it 'returns only attributes needed for bike' do
+      expect(PostParser.parse(post).keys).to match_array [:price, :brand_id, :model_id, :size, :frame_only]
+      # TODO add sold
     end
 
     it 'saves bike in db' do

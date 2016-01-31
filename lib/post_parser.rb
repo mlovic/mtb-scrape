@@ -35,9 +35,9 @@ class PostParser
       attributes[:size] = size && size.upcase
 
 
-      attributes[:uri] = post.uri
-      attributes[:thread_id] = post.thread_id
-      attributes[:name] ||= nil
+      #attributes[:uri] = post.uri
+      #attributes[:thread_id] = post.thread_id
+      #attributes[:name] ||= nil
 
       #print(post, attributes)
       
