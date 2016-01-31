@@ -29,9 +29,6 @@ module PostPage
     self.uri.to_s
   end
 
-
-
-
       #attributes[:thread_id] = @current_thread # TODO make this better
       #attributes[:last_message_at] = @last_message_time
 

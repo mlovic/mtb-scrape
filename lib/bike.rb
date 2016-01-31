@@ -9,7 +9,7 @@ class Bike < ActiveRecord::Base
   scope :max_price,  ->(val) { where size: val }
   scope :size,       ->(val) { where 'price <= ?', val }
 
-  # CV
+  # CV - whole commit
   def self.filter(attrs)
     supported_filters = [:min_travel, :max_travel, :min_price, :max_price, :size]
     attrs.slice(*supported_filters).reduce(all.joins(:model)) do |scope, (key, value)|

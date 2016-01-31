@@ -1,4 +1,5 @@
 class DateElementParser
+  # TODO log error when doesn't work
   def self.parse(date_element)
     if data_time_attr = date_element.attr('data-time')
       unix_time = data_time_attr.value.to_i
@@ -18,7 +19,6 @@ class DateElementParser
     }
     dict.each do |k, v|
       if month = str.match(/#{k.to_s}/i)
-        puts 'changed month: ' + month.to_s
         return str.gsub month.to_s, v
       end
     end

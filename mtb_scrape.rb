@@ -117,6 +117,7 @@ module MtbScrape
 
     puts "#{post_update_count} posts updated in db"
     puts "#{new_posts.size} new posts in db"
+    puts "Oldest last message: #{Post.oldest_last_message.to_s}"
     # TODO not working. Error from Arel. Maybe ruby 2.3 thing?  `rescue in visit': Cannot visit ThreadSafe::Array (TypeError)   
      #puts "#{Post.count} total posts in db"
     return new_posts

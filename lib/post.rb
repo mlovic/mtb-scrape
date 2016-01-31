@@ -9,6 +9,11 @@ class Post < ActiveRecord::Base
 
   has_one :bike
 
+  def self.oldest_last_message
+    order('last_message_at ASC').first.last_message_at
+    # TODO add index to last_message at. cv?
+  end
+
   # make default?
   def description_no_html
     Nokogiri::HTML(description).xpath("//text()").remove.to_s
