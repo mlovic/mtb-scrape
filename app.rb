@@ -54,20 +54,8 @@ after do
 end 
 
 get '/' do
-  #does params automatically split string into array?
-  #params[:min_travel] ||= 0 if params[:min_travel] == ''
-  #params[:max_travel] ||= 230 if  params[:max_travel] == ''
-  #params[:min_price] ||= 0 if params[:min_price] == ''
-  #params[:max_price] ||= 12000 if params[:max_price] == ''
   @bikes = Bike.paginate(page: params[:page], per_page: 50).joins(:model)
-  #@bikes = @bikes.where(models: { 'travel > ?' => params[:min_travel] }) if params[:min_travel]
-  #@bikes = @bikes.where(models: { 'travel < ?' => params[:max_travel] }) if params[:max_travel]
-  @bikes = @bikes.where('models.travel > ?', params[:min_travel] ) unless params[:min_travel].blank?
-  @bikes = @bikes.where('models.travel < ?', params[:max_travel] ) unless params[:max_travel].blank?
-  @bikes = @bikes.where('price > ?', params[:min_price])           unless params[:min_price].blank?
-  @bikes = @bikes.where('price < ?', params[:max_price])           unless params[:max_price].blank?
-  @bikes = @bikes.where(size: params[:sizes])                      unless params[:sizes].blank?
-  @bikes = @bikes.ordered_by_last_message
+  @bikes = @bikes.filter(params).ordered_by_last_message
   erb :index
 end
 

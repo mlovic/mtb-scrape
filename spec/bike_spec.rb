@@ -10,6 +10,26 @@ RSpec.describe Bike do
     p build(:model, brand_name: 'One')
   end
 
+  describe '.filter' do
+    before do
+      create(:bike, model: create(:model, travel: 120))
+      create(:bike, model: create(:model, travel: 160))
+      create(:bike, model: create(:model, travel: 180))
+    end
+
+    it 'returns fraction of results' do
+      params = { min_travel: 160, max_travel: 170 }
+      bikes = Bike.filter(params)
+      expect(bikes.size).to eq 1
+    end
+
+    it 'params can be nil' do
+      params = { min_travel: 160, max_travel: ''}
+      bikes = Bike.filter(params)
+      expect(bikes.size).to eq 2
+    end
+  end
+
   it 'with traits' do
     p build(:bike, :with_names, brand_name: 'Mondraker', model_name: 'Foxy')
   end

@@ -53,7 +53,7 @@ class PriceFinder
     end
 
     tokens = get_tokens(@description)
-    return nil if tokens.nil?
+    return if tokens.nil?
     return tokens.first if tokens&.size == 1
     return filter_by_realistic(tokens).first
   end
