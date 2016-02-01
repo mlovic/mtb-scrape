@@ -25,6 +25,12 @@ RSpec.describe PostParser do
       expect(PostParser.parse(post)[:size]).to eq 'XS'
     end
 
+    it 'finds is_sold' do
+      expect(PostParser.parse(post)[:is_sold]).to eq false
+      post.title = 'Vendida!! - Santa Cruz v10 talla xs'
+      expect(PostParser.parse(post)[:is_sold]).to eq true
+    end
+
     it 'finds buyer' do
       pending 'changed to accomodate Dynatable'
       # figure this out
@@ -40,7 +46,7 @@ RSpec.describe PostParser do
     end
 
     it 'returns only attributes needed for bike' do
-      expect(PostParser.parse(post).keys).to match_array [:price, :brand_id, :model_id, :size, :frame_only]
+      expect(PostParser.parse(post).keys).to match_array [:price, :brand_id, :model_id, :size, :frame_only, :is_sold]
       # TODO add sold
     end
 

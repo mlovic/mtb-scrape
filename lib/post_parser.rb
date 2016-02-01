@@ -19,6 +19,7 @@ class PostParser
       return {buyer: true} if buyer?(post.title) # so that dnatables doesn't get undefined
 
       attributes[:frame_only] = !!contains_cuadro?(post.title) 
+      attributes[:is_sold] = sold?(post.title)
       
       finder = ModelFinder.new(post.title, post.description_no_html)
       attributes[:brand_id] = finder.get_brand&.id 
@@ -34,11 +35,6 @@ class PostParser
       size = find_size(post.title) || find_size(post.description_no_html)
       attributes[:size] = size && size.upcase
 
-
-      #attributes[:uri] = post.uri
-      #attributes[:thread_id] = post.thread_id
-      #attributes[:name] ||= nil
-
       #print(post, attributes)
       
       return attributes
@@ -46,6 +42,10 @@ class PostParser
     alias_method :get_post_attributes, :parse
 
     private
+
+      def sold?(str)
+        !!str.match(/vendid/i)
+      end
 
       def buyer?(str)
         str.match(/compro/i) || str.match(/busco/i)

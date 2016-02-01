@@ -33,7 +33,11 @@ class Bike < ActiveRecord::Base
   delegate :time_since_posted, to: :post, allow_nil: true
 
   def generated_attributes
-    attributes.slice %i(name brand_id price frame_only size model_id)
+    attributes.slice %i(name brand_id price frame_only size model_id is_sold)
+  end
+
+  def sold?
+    is_sold
   end
 
   #validates :name, presence: true

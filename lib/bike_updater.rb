@@ -63,7 +63,8 @@ class BikeUpdater
     @num_bikes_changed = 0
   end
 
-  GENERATED_ATTRS = %i(name brand_id price frame_only size model_id)
+  GENERATED_ATTRS = %i(name brand_id price frame_only size model_id is_sold)
+  # TODO probably not the place for this
 
   def update_bike(id, dry_run: false)
     bike = Bike.find(id)
