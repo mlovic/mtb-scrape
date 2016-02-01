@@ -16,4 +16,17 @@ RSpec.describe MtbScrape do
       end
     end
   end
+
+  describe '.parse_virgin_posts' do
+    it 'works', focus: true do
+      VCR.use_cassette 'scrape_first_page' do
+
+        MtbScrape.fmtb_scrape
+
+        MtbScrape.parse_virgin_posts
+        expect(Bike.count).to eq 19
+        # todo here count working??
+      end
+    end
+  end
 end

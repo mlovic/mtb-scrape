@@ -9,6 +9,8 @@ class Post < ActiveRecord::Base
 
   has_one :bike
 
+  scope :not_parsed, -> { joins('LEFT OUTER JOIN bikes ON bikes.post_id = posts.id').where('post_id IS NULL') }
+
   def self.oldest_last_message
     order('last_message_at ASC').first.last_message_at
     # TODO add index to last_message at. cv?

@@ -47,10 +47,24 @@ module MtbScrape
     end
   end
 
+  def self.parse_virgin_posts
+    # TODO somehow consolidate with updater
+    counter = 0
+    Post.not_parsed.each do |post|
+      attributes = PostParser.parse(post)
+      next if attributes[:buyer]
+      bike = Bike.new(attributes)
+      bike.post = post
+      bike.save!
+      counter += 1
+    end
+    puts "parsed #{counter} new posts"
+  end
+
   def self.update(num_pages = 5)
-    raise 'not using this now, too many posts in db'
+    # really only have to go to last_message_at of last in db
     new_posts = fmtb_scrape(num_pages) # 5? think about this
-    create_new_bikes(new_posts)
+    parse_virgin_posts
   end
 
   def self.create_new_bikes(posts = nil)
@@ -89,7 +103,7 @@ module MtbScrape
       # check for "vendida"!!
       unless p.last_message_at == post.last_message_at
         post.update last_message_at: p.last_message_at
-        post_update_count += 1
+        #post_update_count += 1
       end
       return
     end
@@ -128,6 +142,7 @@ module MtbScrape
     #puts "#{new_posts.size} new posts in db"
     puts "Oldest last message in db: #{Post.oldest_last_message.to_s}"
     puts "Oldest last message seen: #{Post.order('updated_at DESC').first.last_message_at.to_s}"
+    # try where(nil).size
     # TODO not working. Error from Arel. Maybe ruby 2.3 thing?  `rescue in visit': Cannot visit ThreadSafe::Array (TypeError)   
      #puts "#{Post.count} total posts in db"
   rescue

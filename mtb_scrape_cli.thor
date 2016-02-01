@@ -22,6 +22,7 @@ ActiveRecord::Base.establish_connection(configuration['development'])
 
     desc 'parse_posts', 'parses all posts in db and saves them in bikes table'
     def parse_posts
+      MtbScrape.parse_virgin_posts
     end
 
     desc 'reparse', 'reparses posts for all bikes in DB'
