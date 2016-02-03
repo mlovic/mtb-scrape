@@ -6,12 +6,16 @@ class Bike < ActiveRecord::Base
   scope :min_travel, ->(val) { where 'models.travel >= ?', val }
   scope :max_travel, ->(val) { where 'models.travel <= ?', val }
   scope :min_price,  ->(val) { where 'price >= ?', val }
-  scope :max_price,  ->(val) { where size: val }
-  scope :size,       ->(val) { where 'price <= ?', val }
+  scope :max_price,  ->(val) { where 'price <= ?', val }
+  scope :size,       ->(val) { where size: val }
+  scope :brand_id,   ->(val) { where brand_id: val }
+  scope :model_id,   ->(val) { where model_id: val }
 
   # CV - whole commit
   def self.filter(attrs)
-    supported_filters = [:min_travel, :max_travel, :min_price, :max_price, :size]
+    # TODO strings or syms?
+    supported_filters = [:min_travel, :max_travel, :min_price, :max_price, 
+                         :size, :brand_id, :model_id].map(&:to_s)
     attrs.slice(*supported_filters).reduce(all.joins(:model)) do |scope, (key, value)|
       value.present? ? scope.send(key, value) : scope
     end  

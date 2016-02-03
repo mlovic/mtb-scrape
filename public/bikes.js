@@ -22,6 +22,8 @@ $(document).ready( function() {
       data: 'brand_id='+brand,
       success: function(data, status) {
         $('#model-select').empty();
+        // best way?
+        $('#model-select').append('<option value="">Todos</option>');
         $.each(data, function(i, m) {
           $('#model-select').append('<option value="' + m.id + '">' + m.name + '</option>');
         });

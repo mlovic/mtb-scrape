@@ -34,6 +34,8 @@ require 'vcr'
 require 'webmock'
 require 'database_cleaner'
 require 'factory_girl'
+require 'will_paginate'
+require 'will_paginate/active_record'
 
 require_relative 'factories'
 

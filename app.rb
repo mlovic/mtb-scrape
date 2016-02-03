@@ -55,9 +55,9 @@ end
 
 get '/' do
   # TODO joins and pluck to reduce num of db calls
-  @bikes = Bike.paginate(page: params[:page], per_page: 50).joins(:model)
-  @bikes = @bikes.filter(params).ordered_by_last_message
   @brands = Brand.confirmed
+  @bikes = Bike.paginate(page: params[:page], per_page: 10).joins(:model)
+  @bikes = @bikes.filter(params).ordered_by_last_message
   erb :index
 end
 

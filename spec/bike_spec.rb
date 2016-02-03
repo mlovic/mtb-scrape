@@ -17,8 +17,15 @@ RSpec.describe Bike do
       create(:bike, model: create(:model, travel: 180))
     end
 
+    it 'with paginate', focus: true do
+      params = { 'min_travel' => '160', 'max_travel' => '170' }
+
+      bikes = Bike.paginate(page: params[:page], per_page: 2).joins(:model)
+      bikes = bikes.filter(params).ordered_by_last_message
+      expect(bikes.size).to eq 1
+    end
     it 'returns fraction of results' do
-      params = { min_travel: 160, max_travel: 170 }
+      params = { min_travel: '160', max_travel: '170' }
       bikes = Bike.filter(params)
       expect(bikes.size).to eq 1
     end
