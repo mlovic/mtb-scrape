@@ -11,8 +11,11 @@ class PostParser
     def parse(post)
 
       # TODO check for despiece
-      # TODO check for vendida
-
+      # TODO check for retirad@ / se retira / retiro la bici / comprado
+      # TODO check for cambio?
+      # # TODO maybe mark as solid, good example or shakey (cambio, cerrado, vendida (without rest of title), etc)
+      # for stats purposes. Maybe also take into account how sure, like if 
+      # info was found in title or multiple prices were found
       # TODO wheel size
       attributes = {}
 
