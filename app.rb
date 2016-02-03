@@ -54,8 +54,10 @@ after do
 end 
 
 get '/' do
+  # TODO joins and pluck to reduce num of db calls
   @bikes = Bike.paginate(page: params[:page], per_page: 50).joins(:model)
   @bikes = @bikes.filter(params).ordered_by_last_message
+  @brands = Brand.confirmed
   erb :index
 end
 
@@ -110,6 +112,13 @@ get '/bikes/:thread_id' do |id|
   p id.class
   @post = Post.where(thread_id: id.to_i).take
   erb :show
+end
+
+get '/models' do
+  content_type :json
+  if params['brand_id']
+    Model.confirmed.where(brand_id: params['brand_id']).select(:id, :name).to_json
+  end
 end
 
 get '/data' do

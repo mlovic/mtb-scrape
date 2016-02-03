@@ -5,6 +5,31 @@ $(document).ready( function() {
   //var bikeID = .parents('.bike').attr('id');
   console.log($(this)); 
   //$('.model-name').editable('/' + console.log($(this)));
+  //
+  $('.chosen').chosen();
+
+  $('#brand-select').on('change', function(evt, params) {
+    console.log($('#brand-select').val())
+    var brand = $('#brand-select').val()
+    setModelOptions(brand);
+  });
+
+  //cv?
+  function setModelOptions(brand) {
+    $.ajax({
+      type: 'GET',
+      url: '/models', // data here?
+      data: 'brand_id='+brand,
+      success: function(data, status) {
+        $('#model-select').empty();
+        $.each(data, function(i, m) {
+          $('#model-select').append('<option value="' + m.id + '">' + m.name + '</option>');
+        });
+        $('#model-select').prop('disabled', false);
+        $('#model-select').trigger('chosen:updated');
+      }
+    });
+  }
 
   $('.model-name').each(function() {
      var $this = $(this);

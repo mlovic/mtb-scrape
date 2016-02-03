@@ -8,3 +8,7 @@
 #model-col {
   width: 50px;
 }
+
+.chosen {
+  min-width: 140px;
+}

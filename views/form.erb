@@ -30,6 +30,15 @@
     </label>
   </div>
 
+  <select name="brand" id="brand-select" class="chosen">
+    <% @brands.each do |b| %>
+    <option value="<%= b.id %>"><%= b.name %></option>
+    <% end %>
+  </select>
+
+  <select name="model" id="model-select" class="chosen" disabled>
+  </select>
+
   <input type="submit" name="submit" id="submit-button" value="submit" />
 
 </form>
