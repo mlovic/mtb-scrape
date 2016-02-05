@@ -1,38 +1,30 @@
 <form action="/" method="get">
 
   <label for="min_travel">min travel</label>
-  <input type="text" name="min_travel" value="" />
+  <input type="text" name="min_travel" value="<%= params[:min_travel] %>" />
   
   <label for="max_travel">max travel</label>
-  <input type="text" name="max_travel" id="max_travel" value="" />
+  <input type="text" name="max_travel" id="max_travel" value="<%= params[:max_travel] %>" />
 
   <label for="max_travel">min price</label>
-  <input type="text" name="min_price" />
+  <input type="text" name="min_price" value="<%= params[:min_price] %>"/>
   max price
-  <input type="text" name="max_price" value="" />
+  <input type="text" name="max_price" value="<%= params[:max_price] %>" />
 
   <div class="checkbox">
-    <label>
-      <input type="checkbox" name="sizes[]" value="S">
-      S
-    </label>
-  </div>
-  <div class="checkbox">
-    <label>
-      <input type="checkbox" name="sizes[]" value="M">
-      M
-    </label>
-  </div>
-  <div class="checkbox">
-    <label>
-      <input type="checkbox" name="sizes[]" value="L">
-      L
-    </label>
+    <% %w[XS S M L XL].each do |size| %>
+      <label>
+        <input type="checkbox" name="sizes[]" value="<%= size %>" <%= "checked" if params[:sizes]&.include? size %>/>
+        <%= size %>
+      </label>
+    <% end %>
   </div>
 
   <select name="brand_id" id="brand-select" class="chosen">
     <%# TODO improve the default option UX%>
-    <option value="">Todos</option>
+    <%#also giving default option twice now%>
+    <option value="">None</option>
+    <option value="<%= params[:brand_id] %>"><%= Brand.find_by(id: params[:brand_id])&.name || "Todos" %></option>
     <% @brands.each do |b| %>
     <option value="<%= b.id %>"><%= b.name %></option>
     <% end %>

@@ -9,6 +9,10 @@
   width: 50px;
 }
 
+#last-msg-at-col {
+  width: 55px;
+}
+
 .chosen {
   min-width: 140px;
 }

@@ -11,6 +11,8 @@ class Bike < ActiveRecord::Base
   scope :brand_id,   ->(val) { where brand_id: val }
   scope :model_id,   ->(val) { where model_id: val }
 
+  # TODO use price and travel ranges? could use slider
+
   # CV - whole commit
   def self.filter(attrs)
     # TODO strings or syms?

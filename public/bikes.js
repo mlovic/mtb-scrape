@@ -14,6 +14,10 @@ $(document).ready( function() {
     setModelOptions(brand);
   });
 
+  if ($('#brand-select').val() != "") {
+    $('#brand-select').trigger('chosen:updated');
+  }
+
   //cv?
   function setModelOptions(brand) {
     $.ajax({
