@@ -56,8 +56,10 @@ end
 get '/' do
   # TODO joins and pluck to reduce num of db calls
   @brands = Brand.confirmed
-  @bikes = Bike.paginate(page: params[:page], per_page: 50).joins(:model)
-  @bikes = @bikes.filter(params).order_by(params[:order])
+  @bikes  = Bike.paginate(page: params[:page], per_page: 50)
+                .includes(:model, :brand, :post)
+                .filter(params)
+                .order_by(params[:order])
   erb :index
 end
 
