@@ -10,6 +10,7 @@ class PostParser
 
     def parse(post)
 
+      # TODO add T-L to talla notation
       # TODO check for despiece
       # TODO check for retirad@ / se retira / retiro la bici / comprado
       # TODO check for cambio?

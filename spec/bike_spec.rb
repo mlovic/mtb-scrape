@@ -10,28 +10,43 @@ RSpec.describe Bike do
     p build(:model, brand_name: 'One')
   end
 
+  describe '.order_by' do
+    # TODO
+
+    it 'rejects unsupported orders' do
+      expect { Bike.order_by('nil') }.to_not raise_error
+    end 
+  end
+
   describe '.filter' do
     before do
-      create(:bike, model: create(:model, travel: 120))
-      create(:bike, model: create(:model, travel: 160))
-      create(:bike, model: create(:model, travel: 180))
+      create(:bike, price: 1000, model: create(:model, travel: 120))
+      create(:bike, price: 1500, model: create(:model, travel: 160))
+      create(:bike, price: 2000, model: create(:model, travel: 180))
     end
 
-    it 'with paginate', focus: true do
+    it 'with paginate' do
       params = { 'min_travel' => '160', 'max_travel' => '170' }
 
       bikes = Bike.paginate(page: params[:page], per_page: 2).joins(:model)
       bikes = bikes.filter(params).ordered_by_last_message
       expect(bikes.size).to eq 1
     end
+
+    it 'with prices' do
+      params = { 'min_price' => '1200', 'max_price' => '1700' }
+      bikes = Bike.filter(params)
+      expect(bikes.size).to eq 1
+    end
+
     it 'returns fraction of results' do
-      params = { min_travel: '160', max_travel: '170' }
+      params = { 'min_travel' => '160', 'max_travel' => '170' }
       bikes = Bike.filter(params)
       expect(bikes.size).to eq 1
     end
 
     it 'params can be nil' do
-      params = { min_travel: 160, max_travel: ''}
+      params = { 'min_travel' => 160, 'max_travel' => ''}
       bikes = Bike.filter(params)
       expect(bikes.size).to eq 2
     end

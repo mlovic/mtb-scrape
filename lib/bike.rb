@@ -1,7 +1,8 @@
 require 'active_record'
 
 class Bike < ActiveRecord::Base
-  scope :ordered_by_last_message, -> { joins(:post).order('last_message_at DESC') }
+  scope :ordered_by_last_message,  -> { joins(:post).order('last_message_at DESC') }
+  scope :ordered_by_last_posted,   -> { joins(:post).order('posted_at DESC') }
 
   scope :min_travel, ->(val) { where 'models.travel >= ?', val }
   scope :max_travel, ->(val) { where 'models.travel <= ?', val }
@@ -21,6 +22,14 @@ class Bike < ActiveRecord::Base
     attrs.slice(*supported_filters).reduce(all.joins(:model)) do |scope, (key, value)|
       value.present? ? scope.send(key, value) : scope
     end  
+    # TODO is above 'all' making query?
+  end
+
+  def self.order_by(order)
+    # TODO fix map to_s
+    supported_orders = [:last_message, :last_posted].map(&:to_s)
+    return ordered_by_last_message unless supported_orders.include? order 
+    send("ordered_by_#{order}")
   end
 
   #scope :ordered_by_last_message, -> { joins(:post).order('last_message_at DESC') }

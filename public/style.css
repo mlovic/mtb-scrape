@@ -16,3 +16,7 @@
 .chosen {
   min-width: 140px;
 }
+
+.brand-name {
+  text-align: right;
+}

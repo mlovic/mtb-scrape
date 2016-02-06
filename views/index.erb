@@ -49,7 +49,7 @@
       <% end %>
       </td>
       <td>€<%= bike.price %></td>
-      <td><%= bike.brand_name %></td>
+      <td class="brand-name"><%= bike.brand_name %></td>
       <td>
       <% if bike.brand&.unconfirmed? %>
           <button type="button" class="btn confirm-brand" data-brand-id="<%= bike.brand.id %>">

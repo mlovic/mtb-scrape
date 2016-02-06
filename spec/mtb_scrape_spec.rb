@@ -18,7 +18,7 @@ RSpec.describe MtbScrape do
   end
 
   describe '.parse_virgin_posts' do
-    it 'works', focus: true do
+    it 'works' do
       VCR.use_cassette 'scrape_first_page' do
 
         MtbScrape.fmtb_scrape
