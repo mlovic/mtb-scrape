@@ -9,6 +9,14 @@
   width: 50px;
 }
 
+.model-name:hover {
+  text-decoration: underline;
+}
+
+.submodel-name:hover {
+  text-decoration: underline;
+}
+
 #last-msg-at-col {
   width: 55px;
 }
