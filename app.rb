@@ -11,6 +11,7 @@ require 'lib/bike'
 require 'lib/brand'
 require 'lib/model'
 require 'lib/post'
+require 'mtb_scrape'
 
 p ENV['RACK_ENV']
 
