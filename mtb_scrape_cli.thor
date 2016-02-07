@@ -28,9 +28,11 @@ ActiveRecord::Base.establish_connection(configuration['development'])
     desc 'reparse', 'reparses posts for all bikes in DB'
     method_option :dry, type: :boolean
     method_option :id, type: :numeric
+    method_option :count, type: :numeric, aliases: '-c'
     def reparse
-      # TODO should be able to reparse just one (1755)
-      BikeUpdater.new.update_bikes(id: options[:id], dry_run: options[:dry])
+      BikeUpdater.new.update_bikes(count: options[:count], 
+                                   id: options[:id], 
+                                   dry_run: options[:dry])
     end
 
     desc 'reset_bikes', 'deletes all bikes recreates them after parsing all posts'

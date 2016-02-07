@@ -87,13 +87,15 @@ class BikeUpdater
     @changes
   end
 
-  def update_bikes(id: nil, dry_run: false)
+  def update_bikes(count: nil, id: nil, dry_run: false)
     # find each?
     # TODO fix this
     if id
       bikes = [Bike.find(id)]
-    else
-      bikes = Bike.all
+    elsif count
+      bikes = Bike.ordered_by_last_message.limit(count) # limit?
+    elsif
+      bikes = Bike.all # okay?
     end
 
     bikes.each do |bike|
