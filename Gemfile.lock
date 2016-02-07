@@ -149,6 +149,7 @@ DEPENDENCIES
   sinatra-activerecord
   sqlite3
   thin
+  thor
   unicorn
   vcr
   webmock

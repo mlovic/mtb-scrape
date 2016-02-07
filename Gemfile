@@ -6,6 +6,7 @@ gem 'sinatra-activerecord'
 gem 'chronic'
 gem 'will_paginate'
 gem 'will_paginate-bootstrap'
+gem 'thor'
 
 group :production do
   gem 'unicorn'
