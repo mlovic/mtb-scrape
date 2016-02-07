@@ -22,8 +22,10 @@ configure :development do
 end
 
 configure :production do
-  set :root, File.dirname(__FILE__) 
   require 'unicorn'
+  require 'fmtb_scheduler'
+  FmtbScheduler.start
+  set :root, File.dirname(__FILE__) 
   set :server, 'unicorn'
   set :database, {adapter: "sqlite3", database: "db/foromtb.db"}
 end

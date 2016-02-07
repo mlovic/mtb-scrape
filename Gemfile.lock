@@ -95,6 +95,7 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.3.0)
     rspec-support (3.3.0)
+    rufus-scheduler (3.2.0)
     safe_yaml (1.0.4)
     sinatra (1.4.6)
       rack (~> 1.4)
@@ -143,6 +144,7 @@ DEPENDENCIES
   guard-rspec
   mechanize
   rspec
+  rufus-scheduler
   sinatra
   sinatra-activerecord
   sqlite3

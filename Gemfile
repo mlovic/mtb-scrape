@@ -9,6 +9,7 @@ gem 'will_paginate-bootstrap'
 
 group :production do
   gem 'unicorn'
+  gem 'rufus-scheduler'
 end
 
 group :test, :development do
