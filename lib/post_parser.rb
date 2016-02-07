@@ -10,7 +10,7 @@ class PostParser
 
     def parse(post)
 
-      # TODO add T-L to talla notation
+      # TODO add inches to size
       # TODO check for despiece
       # TODO check for retirad@ / se retira / retiro la bici / comprado
       # TODO check for cambio?
@@ -18,6 +18,9 @@ class PostParser
       # for stats purposes. Maybe also take into account how sure, like if 
       # info was found in title or multiple prices were found
       # TODO wheel size
+      #
+      # TODO what if they update only desc. Like make a discount. Reparse periodically?
+      # TODO follow posts
       attributes = {}
 
       return {buyer: true} if buyer?(post.title) # so that dnatables doesn't get undefined
@@ -62,8 +65,12 @@ class PostParser
       end
 
       def find_size(str)
-        size_regex = /talla\s((xs|s|m|l|xl))/i
-        str.match(size_regex) && str.match(size_regex).captures.first.downcase
+        letter = "(xs|s|m|l|xl)"
+        size_regex = Regexp.union /talla\s#{letter}/i, /t\s?-\s?#{letter}/i,
+                                  /\(#{letter}\)/i
+        if match = str.match(size_regex) 
+          match.captures.compact.first.downcase
+        end
       end
 
       def print(post, atr)

@@ -10,6 +10,27 @@ RSpec.describe PostParser do
     end
   end
 
+  describe 'find size' do
+    it 'talla S' do
+      expect(PostParser.parse(post)[:size]).to eq 'L'
+    end
+
+    it 'lowercase' do
+      post.description = 'Santa Cruz v10 talla xs'
+      expect(PostParser.parse(post)[:size]).to eq 'XS'
+    end
+
+    it 't-S' do
+      post.description = 'Santa Cruz v10 t-S rebajada'
+      expect(PostParser.parse(post)[:size]).to eq 'S'
+    end
+
+    it '(S)' do
+      post.description = 'Santa Cruz v10 (L) casi nueva'
+      expect(PostParser.parse(post)[:size]).to eq 'L'
+    end
+  end
+
   let(:post) { build(:post) }
   describe '.parse' do
     # think works? left half done
@@ -17,12 +38,6 @@ RSpec.describe PostParser do
       expect(PostParser.parse(post)[:frame_only]).to be true
       post.title = 'Santa Cruz v10'
       expect(PostParser.parse(post)[:frame_only]).not_to be true
-    end
-
-    it 'finds size' do
-      expect(PostParser.parse(post)[:size]).to eq 'L'
-      post.description = 'Santa Cruz v10 talla xs'
-      expect(PostParser.parse(post)[:size]).to eq 'XS'
     end
 
     it 'finds is_sold' do
@@ -46,8 +61,6 @@ RSpec.describe PostParser do
     end
 
     it 'returns only attributes needed for bike' do
-      expect(PostParser.parse(post).keys).to match_array [:price, :brand_id, :model_id, :size, :frame_only, :is_sold]
-      # TODO add sold
     end
 
     it 'saves bike in db' do
