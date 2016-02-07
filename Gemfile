@@ -7,6 +7,8 @@ gem 'chronic'
 gem 'will_paginate'
 gem 'will_paginate-bootstrap'
 gem 'thor'
+gem 'mechanize'
+gem 'sqlite3'
 
 group :production do
   gem 'unicorn'
@@ -15,10 +17,8 @@ end
 
 group :test, :development do
   gem 'thin'
-  gem 'sqlite3'
   gem 'rspec'
 
-  gem 'mechanize'
   gem 'vcr'
   gem 'webmock'
   gem 'database_cleaner'
