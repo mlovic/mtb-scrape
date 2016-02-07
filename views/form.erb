@@ -1,15 +1,28 @@
 <form action="/" method="get">
 
-  <label for="min_travel">min travel</label>
-  <input type="text" name="min_travel" value="<%= params[:min_travel] %>" />
-  
-  <label for="max_travel">max travel</label>
-  <input type="text" name="max_travel" id="max_travel" value="<%= params[:max_travel] %>" />
+  <div class="form-inline">
+    
+    <div class="form-group">
+      <label for="min_travel">min travel</label>
+      <input class="form-control" type="text" name="min_travel" id="min_travel" value="<%= params[:min_travel] %>" />
+    </div>
+    
+    <div class="form-group">
+      <label for="max_travel">max travel</label>
+      <input class="form-control" type="text" name="max_travel" id="max_travel" value="<%= params[:max_travel] %>" />
+    </div>
 
-  <label for="max_travel">min price</label>
-  <input type="text" name="min_price" value="<%= params[:min_price] %>"/>
-  max price
-  <input type="text" name="max_price" value="<%= params[:max_price] %>" />
+    <div class="form-group">
+      <label for="min_price">min price</label>
+      <input class="form-control" type="text" name="min_price" id="min_price" value="<%= params[:min_price] %>"/>
+    </div>
+
+    <div class="form-group">
+      <label for="max_price">max price</label>
+      <input class="form-control" type="text" name="max_price" id="max_price" value="<%= params[:max_price] %>" />
+    </div>
+
+  </div>
 
   <div class="checkbox">
     <% %w[XS S M L XL].each do |size| %>

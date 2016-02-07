@@ -62,7 +62,7 @@
       <% end %>
       </td>
       <td class="model-name"><%= bike.model_name or word_after_brand(bike) %></td>
-      <td class="submodel-name"><%= bike.model && bike.model.submodel %></td>
+      <td class="submodel-name"><%= bike.model&.submodel || '-' %></td>
       <td>
       <% unless bike.model&.confirmed? %>
         <form action="/confirm-model" method="post">
