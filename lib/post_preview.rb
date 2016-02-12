@@ -5,6 +5,10 @@ module PostPreview
   def scrape
   end
 
+  def url
+    css('.title a').last['href']
+  end
+
   def sticky?
     self.attributes["class"].value.include?('sticky')
   end

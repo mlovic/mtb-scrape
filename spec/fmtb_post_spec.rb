@@ -53,7 +53,8 @@ RSpec.describe FmtbPost do
       # mock scrape
       VCR.use_cassette('scrape_post') do
         expect(fmtb_post.scrape).to be_a Hash
-        expect(fmtb_post.scrape.keys.sort).to eq %i[title description posted_at last_message_at images uri thread_id].sort
+        # TODO use array matcher
+        expect(fmtb_post.scrape.keys).to match_array %i[title description posted_at last_message_at images uri thread_id username visits]
       end
 
     end

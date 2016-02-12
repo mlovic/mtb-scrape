@@ -19,6 +19,9 @@ class PriceFinder
                                 # could also filter by last digit being a 0
                                 
   # TODO log how many matches are found
+                                #
+  # TODO deal with updater by adding an instance of it as attr, then sending it
+                                # a changed message or something?
 
   # sort by
   #   title price, take cheapest

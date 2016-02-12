@@ -1,7 +1,9 @@
 require 'forwardable'
+require_relative 'post_preview'
 
 class FmtbPost
   extend Forwardable
+  include PostPreview
   attr_reader :preview
 
   def initialize(doc, agent, page)
@@ -14,7 +16,7 @@ class FmtbPost
     get_post_page.all_attrs.merge @preview.all_attrs
   end
 
-  private
+  #private
 
     def get_post_page
       l = @preview.css('.PreviewTooltip').first # try css_at without the .first
@@ -25,7 +27,7 @@ class FmtbPost
   
   # TODO keep post preview or not?
   
-  def_delegators :@preview, :thread_id, :last_message_at, :title, :sticky?
+  def_delegators :@preview, :thread_id, :last_message_at, :title, :sticky?, :url
 
   #def sticky?
     #@preview.attributes["class"].value.include?('sticky')

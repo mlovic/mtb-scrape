@@ -23,6 +23,12 @@ RSpec.describe PostPreview do
     end
   end
 
+  describe '#uri' do
+    it 'uri' do
+      p post_preview.url
+    end
+  end
+
   describe '#thread_id' do
     it 'returns thread id' do
       expect(post_preview.thread_id).to eq 1281012
