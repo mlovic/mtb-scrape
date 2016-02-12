@@ -35,11 +35,6 @@ ActiveRecord::Base.establish_connection(configuration['development'])
                                    dry_run: options[:dry])
     end
 
-    desc 'reset_bikes', 'deletes all bikes recreates them after parsing all posts'
-    def reset_bikes
-      MtbScrape::reset_bikes
-    end
-
     desc 'update', 'scrapes foromtb and updates post information and bikes table'
     def update
       MtbScrape::update

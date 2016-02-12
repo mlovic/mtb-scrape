@@ -29,15 +29,4 @@ module PostPage
     self.uri.to_s
   end
 
-      #attributes[:thread_id] = @current_thread # TODO make this better
-      #attributes[:last_message_at] = @last_message_time
-
-      #attributes = {
-        #description: page.root.css('.messageList blockquote').first
-      #}
-      #attributes[:images] = page.root.css('li.image .filename a').map { |i| i['href'] }
-      #attributes[:title] = page.at('.titleBar h1').text
-      #attributes[:uri] = page.uri.to_s
-      #attributes[:thread_id] = @current_thread # TODO make this better
-      #attributes[:last_message_at] = @last_message_time
 end

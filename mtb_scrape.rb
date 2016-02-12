@@ -1,10 +1,4 @@
-#require_relative 'init'
-#require_relative 'lib/post_parser'
-#require_relative 'lib/foromtb'
-#require_relative 'lib/post'
-#require_relative 'lib/post_preview'
 Dir[File.dirname(__FILE__) + '/lib/*.rb'].each {|file| require file }
-
 
 module MtbScrape
 
@@ -12,39 +6,6 @@ module MtbScrape
 
   def log(arg)
     logger.info arg
-  end
-  # Not being used
-  class Scraper
-    def self.scrape(num_pages = 1, &block)
-      num_pages.times do |n|
-        page = ForoMtb.new.visit_page(n+1)
-        page.posts.each do |p|
-          yield p
-        end
-      end
-
-      puts "#{Post.all.size} posts in db"
-      # use count when possible
-    end
-  end
-
-  def self.reset_bikes
-    # come up with method that tracks changes. At least number of records changed
-    Bike.delete_all
-    puts 'All bikes deleted'
-    Post.all.each do |post|
-      attributes = PostParser.parse(post)
-      next if attributes[:buyer]
-      # TODO pass attrs hash to bike
-      bike = Bike.new(price: attributes[:price], 
-                      frame_only: attributes[:frame_only],
-                      size: attributes[:size],
-                      brand_id: attributes[:brand_id],
-                      model_id: attributes[:model_id],
-                      post_id: post.id
-                     )
-      bike.save!
-    end
   end
 
   def self.parse_virgin_posts
@@ -111,16 +72,5 @@ module MtbScrape
     end
     raise
   end
-  
-  def parse_lonely_posts
-    
-  end
 
-  def self.parse_posts
-    # TODO should re-parse all posts in db
-    
-  end
-
-
-  ROOT_DIR = '/home/marko/mtb_scrape'
 end
