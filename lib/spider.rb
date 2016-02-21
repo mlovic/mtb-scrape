@@ -7,30 +7,20 @@ class Spider
     @urls = {}
   end
 
-  def crawl(num_pages, offset: 1, root:)
-    page_range = get_page_range(num_pages, offset)
-    page_range.each do |num|
-      url = URI.join(root, "page-#{num}")
-      store.enqueue_index(url)
-    end
-    puts 'page range set' + page_range.to_s
+  def crawl
     until store.empty?
-      puts 'looping!'
       url, type = store.take
       page = @agent.get url
-      puts "retrieved #{type} page...  #{page.header["content-length"]}"
+      puts "retrieved #{type} page...  #{page.uri}"
       if type == :index
-        page.extend ListPage
         @processor.process_list(page)
       elsif type == :post
-        page.extend PostPage
         @processor.process_post page, url
       else
         puts url
         raise "Unknown type #{type}"
       end
     end
-      # maybe check 
       # abstract this to just some send_page method
   end
 
@@ -51,11 +41,6 @@ class Spider
 
   private
 
-    def get_page_range(num_pages, offset)
-      start_page = offset
-      end_page   = offset + num_pages - 1
-      (start_page..end_page)
-    end
 
     def store
       PostUriStore.instance

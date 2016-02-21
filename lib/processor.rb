@@ -3,30 +3,48 @@ class Processor
   end
 
   def process_list(page)
+    # posts = site.process_index
+    page.extend ListPage
     page.posts.each { |post| eval_post(post) }
   end
 
   def scrape(num_pages, offset: 1, root: ForoMtb::FOROMTB_URI)
-    spider.crawl(num_pages, offset: offset, root: root)
+    page_range = get_page_range(num_pages, offset)
+    page_range.each do |num|
+      # TODO doesn't belong here
+      # site.url_for_page(n)
+      url = URI.join(root, "page-#{num}")
+      store.enqueue_index(url)
+    end
+    spider.crawl
+  end
+
+  def get_page_range(num_pages, offset)
+    start_page = offset
+    end_page   = offset + num_pages - 1
+    (start_page..end_page)
   end
 
   def process_post(post_page, url)
+    post_page.extend PostPage
+    # attrs = site.process_page(page)
     post_preview = store.get_prev(url)
     attrs = post_page.all_attrs.merge post_preview.all_attrs
-    new_post = Post.new(attrs)
-    new_post.save!
-    puts "  #{new_post.id}"
+    if db_post = Post.find_by(thread_id: attrs[:thread_id])
+      db_post.update(attrs)
+      puts "Post #{db_post.id} updated"
+    else
+      new_post = Post.create!(attrs)
+      puts "Post #{new_post.id} created"
+    end
   end
 
   def eval_post(post)
-    if new_post?(post)
-      # TODO PROBLEM: how to keep track of post prev
+    if new_post?(post) || title_changed?(post)
       #spider.enqueue(post.url, :post)
       store.enqueue_post(post.url, post.preview)
-      #post_page = spider.scrape(post.url)
-      #process_post(post_page, post.preview)
     else 
-      update_post(post)
+      update_last_msg(post)
     end
   end
 
@@ -35,20 +53,6 @@ class Processor
     p post.title
     p db_post.title
     post.title != db_post.title
-  end
-
-  def update_post(post)
-    if title_changed?(post)
-      puts 'title changed!'
-      db_post = Post.find_by!(thread_id: post.thread_id)
-      post_page = spider.scrape(post.url)
-      attrs = post_page.all_attrs.merge post.preview.all_attrs
-      db_post.update(attrs)
-      # TODO should pass only url
-      # fix preview too
-    else
-      update_last_msg(post)
-    end
   end
 
   def update_last_msg(post)
