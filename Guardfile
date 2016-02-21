@@ -25,11 +25,8 @@ guard :rspec, cmd: 'bundle exec rspec' do
   watch('app/controllers/application_controller.rb')  { "spec/controllers" }
   watch('spec/rails_helper.rb')                       { "spec" }
 
-  # Capybara features specs
-  watch(%r{^app/views/(.+)/.*\.(erb|haml|slim)$})     { |m| "spec/features/#{m[1]}_spec.rb" }
+  # CUSTOM
+  watch('lib/processor.rb') { "spec/mtb_scrape_spec.rb" }
+  watch('lib/spider.rb')    { "spec/mtb_scrape_spec.rb" }
 
-  # Turnip features and steps
-  watch(%r{^spec/acceptance/(.+)\.feature$})
-  watch(%r{^spec/acceptance/steps/(.+)_steps\.rb$})   { |m| Dir[File.join("**/#{m[1]}.feature")][0] || 'spec/acceptance' }
 end
-

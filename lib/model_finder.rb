@@ -24,6 +24,7 @@ class ModelFinder
     #[:confirmed, :unconfirmed].each do |status|
     Brand.send(status).find do |b| # use find here
       if match = str.match(/\b#{b.name.gsub(' ', "\s?")}\b/i)
+        # TODO $+ for last group
         @brand_context = str.split(match.to_s, 2).last
         # TODO tolerate space in brand name. same for model
         #   gsub space for \s? on interpolation?
