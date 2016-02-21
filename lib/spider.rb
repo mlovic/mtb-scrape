@@ -1,31 +1,53 @@
 class Spider
   # later try with enum instead of num urls
 
-  def initialize(processor, agent)
+  def initialize(processor, agent = Mechanize.new)
     @processor = processor
     @agent = agent
-  end
-
-  def visit_page(num, root)
-    page = @agent.get URI.join(root, "page-#{num}")
-    puts "retrieved main page...  #{page.header["content-length"]}"
-    page.extend ListPage
-    page.agent = @agent
-    return page
+    @urls = {}
   end
 
   def crawl(num_pages, offset: 1, root:)
     page_range = get_page_range(num_pages, offset)
-    page_range.each do
-      page = visit_page(1, root)
-      @processor.process_list(page)
+    page_range.each do |num|
+      url = URI.join(root, "page-#{num}")
+      store.enqueue_index(url)
     end
+    puts 'page range set' + page_range.to_s
+    until store.empty?
+      puts 'looping!'
+      url, type = store.take
+      page = @agent.get url
+      puts "retrieved #{type} page...  #{page.header["content-length"]}"
+      if type == :index
+        page.extend ListPage
+        @processor.process_list(page)
+      elsif type == :post
+        page.extend PostPage
+        @processor.process_post page, url
+      else
+        puts url
+        raise "Unknown type #{type}"
+      end
+    end
+      # maybe check 
+      # abstract this to just some send_page method
   end
 
-  def scrape(post)
-    post_page = post.get_post_page
-    @processor.process_post(post_page, post.preview)
+  def enqueue(url, type)
+    #PostUriStore.set(post.url)
+    #@urls[url] = type
+    # TODO is this right?
   end
+
+
+  # TODO get rid of this. Follow crawl + enqueue sys
+  #def scrape(url)
+    #puts 'visiting ' + url + ' ...' 
+    #post_page = @agent.get URI.join(ForoMtb::ROOT, url)
+    #post_page.extend PostPage
+    #return post_page
+  #end
 
   private
 
@@ -35,10 +57,8 @@ class Spider
       (start_page..end_page)
     end
 
-    def enqueue(post)
-      PostUriStore.set(post.url)
-
-      # TODO is this right?
+    def store
+      PostUriStore.instance
     end
 
 end

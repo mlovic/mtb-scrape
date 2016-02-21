@@ -1,4 +1,5 @@
 Dir[File.dirname(__FILE__) + '/lib/*.rb'].each {|file| require file }
+require 'mechanize'
 
 module MtbScrape
 
@@ -54,8 +55,8 @@ module MtbScrape
   def self.fmtb_scrape(num_pages = 1, options = {})
     start_page = options[:start_page] || 1
 
-    spider = Spider.new(Processor.new, Mechanize.new)
-    spider.crawl(num_pages, offset: start_page, root: ForoMtb::FOROMTB_URI)
+    spider = Processor.new()
+    spider.scrape(num_pages, offset: start_page, root: ForoMtb::FOROMTB_URI)
 
     # TODO log: 
     # puts "#{new_posts.size} new posts in db"
@@ -66,7 +67,7 @@ module MtbScrape
     # puts "#{Post.count} total posts in db"
     # puts "#{post_update_count} posts updated in db"
   rescue
-    unless Bike.find_by(post_id: Post.last.id)
+    unless Bike.find_by(post_id: Post.last&.id)
       puts 'There are posts in the database that need to be parsed'
       puts "Try\n\n\tthor mtb_scrape:parse_lonely_posts\n\n"
     end

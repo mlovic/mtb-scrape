@@ -6,6 +6,12 @@ RSpec.describe MtbScrape do
 
       VCR.use_cassette 'scrape_first_page' do
 
+        agent = Mechanize.new
+        logger = Logger.new(STDOUT)
+        logger.level = 'INFO'
+        agent.log = logger
+        allow(Mechanize).to receive(:new) {agent}
+
         MtbScrape.fmtb_scrape
 
         expect(Post.all.size).to eq 20
@@ -18,6 +24,7 @@ RSpec.describe MtbScrape do
   end
 
   describe '.parse_virgin_posts' do
+    pending
     it 'works' do
       VCR.use_cassette 'scrape_first_page' do
 
