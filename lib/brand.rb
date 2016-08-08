@@ -5,7 +5,8 @@ class Brand < ActiveRecord::Base
 
   validates :name, presence: true, uniqueness: true
   has_many :models
-  #def destroy
+  def destroy
+    fail 'testtt'
     #raise ActiveRecord::ReadOnlyRecord
-  #end
+  end
 end
