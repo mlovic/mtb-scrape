@@ -9,6 +9,7 @@ gem 'will_paginate-bootstrap'
 gem 'thor'
 gem 'mechanize'
 gem 'sqlite3'
+gem 'concurrent-ruby', require: 'concurrent'
 
 group :production do
   gem 'unicorn'

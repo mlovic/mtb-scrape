@@ -10,3 +10,4 @@ site/*
 utils/*
 .gitignore
 *.py
+Guardfile
