@@ -66,7 +66,7 @@ FactoryGirl.define do
   factory :post do
     title "USADO (REBAJADO)CUADRO MONDRAKER FOXY RR+TALAS 36 RC2"
     uri "http://www.foromtb.com/threads/rebajado-cuadro-mondraker-foxy-rr-talas-36-rc2.1205912/"
-    thread_id 1205912
+    sequence :thread_id, 1205912
     images []
     last_message_at { Time.parse("2015-11-12 16:32:03 +1") }
     posted_at { Time.parse("2015-11-10 12:36:23 +1") }

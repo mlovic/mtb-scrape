@@ -2,13 +2,15 @@ require 'active_record'
 
 class Post < ActiveRecord::Base
   validates :title, presence: true
-  validates :thread_id, presence: true, uniqueness: true
+  validates :thread_id, presence: true, uniqueness: true, unless: :is_old
   validates :posted_at, presence: true
   validates :uri, presence: true
   validates :last_message_at, presence: true
 
   has_one :bike
 
+  default_scope { where(is_old: false) }
+  #scope :only_latest, -> { where(is_old: false) }
   scope :not_parsed, -> { joins('LEFT OUTER JOIN bikes ON bikes.post_id = posts.id').where('post_id IS NULL') }
 
   def self.oldest_last_message
