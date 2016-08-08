@@ -67,12 +67,12 @@ RSpec.describe Bike do
   end
 
   it 'orders by last_message time by default' do
-    new_post = Post.new(fixture('post.yml'))
+    #new_bike = Bike.new(fixture('bike.yml')) 
+    new_post = build(:post, thread_id: 1234)
     new_post.last_message_at = Time.now
     new_post.save!
-    new_bike = Bike.new(fixture('bike.yml')) 
-    new_bike.post = new_post
-    bike.post = post
+    new_bike = build(:bike, price: 1800, post: new_post)
+    #bike.post = post
     bike.save!
     new_bike.save!
     #p Bike.joins(:post).first.last_message_at
