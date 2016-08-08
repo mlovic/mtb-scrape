@@ -48,6 +48,7 @@ class PriceFinder
   def find_price
 
     # could abstract further to title_tokens || priority_tokens || until one 
+    # TODO reduce dupication
     if title_tokens = get_tokens(@title) 
       return title_tokens.sort.first 
     end

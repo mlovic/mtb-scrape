@@ -53,10 +53,17 @@ module MtbScrape
   end
 
   def self.fmtb_scrape(num_pages = 1, options = {})
-    start_page = options[:start_page] || 1
+    Scraper.new.scrape(num_pages, options)
+    #start_page = options[:start_page] || 1
 
-    spider = Processor.new()
-    spider.scrape(num_pages, offset: start_page, root: ForoMtb::FOROMTB_URI)
+    #require 'benchmark'
+      #time = Benchmark.measure do
+
+        #spider = Processor.new()
+        #spider.scrape(num_pages, offset: start_page, root: ForoMtb::FOROMTB_URI)
+
+      #end
+      #puts "total: " + time.to_s
 
     # TODO log: 
     # puts "#{new_posts.size} new posts in db"
