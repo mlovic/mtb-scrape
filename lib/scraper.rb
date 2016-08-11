@@ -1,60 +1,52 @@
-#require 'benchmark'
-#time = Benchmark.measure do
-#end
-#puts "total: " + time.to_s
+require 'uri'
+require 'mechanize'
+
+require_relative 'list_page_handler'
+require_relative 'post_page_handler'
+require_relative 'processor'
+require_relative 'foromtb'
 
 class Scraper
   def initialize
-    @processor = Processor.new
-    @spider = Spider.new(@processor)
   end
 
-  def scrape(num_pages, options)
+  def scrape(num_pages, options = {})
     offset = options[:start_page] || 1
     page_range = get_page_range(num_pages, offset) 
 
+    Thread.abort_on_exception = true
+
+    url_q   = Queue.new
+    pages_q = Queue.new
+    
+    pphandler = PostPageHandler.new(url_q)
+    lphandler = ListPageHandler.new(url_q, pphandler)
+    processor = Processor.new(pages_q, pphandler, lphandler)
+
+    # TODO where to put this?
     root = ForoMtb::FOROMTB_URI
     page_range.each do |num|
-      # TODO doesn't belong here
-      # site.url_for_page(n)
-      url = URI.join(root, "page-#{num}")
-      @spider.enqueue_index(url)
+      url = URI.join(root, "page-#{num}") # TODO where to put this?
+      # Use symbol instead of class reference? 
+      url_q << [url, ListPageHandler]
     end
-    @spider.crawl
 
-
-    # TODO log: 
-    # puts "#{new_posts.size} new posts in db"
-    # puts "Oldest last message in db: #{Post.oldest_last_message.to_s}"
-    # puts "Oldest last message seen: #{Post.order('updated_at DESC').first.last_message_at.to_s}"
-    # try where(nil).size
-    # TODO not working. Error from Arel. Maybe ruby 2.3 thing?  `rescue in visit': Cannot visit ThreadSafe::Array (TypeError)   
-    # puts "#{Post.count} total posts in db"
-    # puts "#{post_update_count} posts updated in db"
-  rescue
-    unless Bike.find_by(post_id: Post.last&.id)
-      puts 'There are posts in the database that need to be parsed'
-      puts "Try\n\n\tthor mtb_scrape:parse_lonely_posts\n\n"
-    end
-    raise
+    # TODO handle errors in spider thread
+    spider = Spider.new(Mechanize.new) # get rid of hardcoded limit
+    spider.crawl_async(url_q, pages_q) # Async. Starts thread and returns immediately.
+    # TODO handle potential deadlock error. Sleep and retry?
+    processor.dispatch(*pages_q.pop) until url_q.empty? && 
+                                           !spider.waiting_for_response? 
+    puts "Done. Closing queues..."
+    url_q.close # Triggers Spider thread to exit
+    pages_q.close 
   end
-
-  #def scrape(num_pages, offset: 1, root: ForoMtb::FOROMTB_URI)
-    #page_range.each do |num|
-      ## TODO doesn't belong here
-      ## site.url_for_page(n)
-      #url = URI.join(root, "page-#{num}")
-      #spider.enqueue_index(url)
-    #end
-    #spider.crawl
-  #end
 
   private
-  def get_page_range(num_pages, offset)
-    start_page = offset
-    end_page   = offset + num_pages - 1
-    (start_page..end_page)
-  end
 
-
+    def get_page_range(num_pages, offset)
+      start_page = offset
+      end_page   = offset + num_pages - 1
+      (start_page..end_page)
+    end
 end

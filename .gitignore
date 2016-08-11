@@ -11,3 +11,4 @@ utils/*
 .gitignore
 *.py
 Guardfile
+tags
