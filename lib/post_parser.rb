@@ -1,8 +1,8 @@
 require 'nokogiri'
 
 require_relative 'post'
-require_relative 'model_finder'
-require_relative 'price_finder'
+require_relative 'parser/model_finder'
+require_relative 'parser/price_finder'
 
 class PostParser
 

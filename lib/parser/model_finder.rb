@@ -1,3 +1,7 @@
+require 'active_support'
+require_relative '../brand'
+require_relative '../model'
+
 class ModelFinder
 
   def initialize(title, description)

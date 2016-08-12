@@ -17,12 +17,13 @@
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 #
+# TODO remove all this
 require_relative 'helpers'
 require_relative '../lib/post_parser'
 require_relative '../lib/bike'
 require_relative '../lib/brand'
 require_relative '../lib/model'
-require_relative '../lib/model_finder'
+require_relative '../lib/parser/model_finder'
 require_relative '../lib/bike_updater'
 require_relative '../lib/scraper/spider'
 require_relative '../lib/scraper/processor'

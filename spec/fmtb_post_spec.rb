@@ -1,6 +1,6 @@
 require 'mechanize'
 require_relative 'spec_helper'
-require_relative '../lib/fmtb_post'
+require_relative '../lib/scraper/fmtb_post'
 
 RSpec.describe FmtbPost do
   let(:fmtb_post) { 
