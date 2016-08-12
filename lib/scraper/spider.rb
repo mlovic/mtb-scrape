@@ -16,6 +16,7 @@ class Spider
                     @waiting_for_response = true
                     puts "Fetching #{url}..."
                     page = @agent.get(url)
+                    #raise NetworkError unless page.code.match(/^2/)
                     @waiting_for_response = false
                     puts "Done fetching #{url}"
                     out_queue.push [page, handler]

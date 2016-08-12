@@ -1,10 +1,10 @@
 require 'uri'
 require 'mechanize'
 
-require_relative 'list_page_handler'
-require_relative 'post_page_handler'
-require_relative 'processor'
-require_relative 'foromtb'
+require_relative 'scraper/list_page_handler'
+require_relative 'scraper/post_page_handler'
+require_relative 'scraper/processor'
+require_relative 'scraper/foromtb'
 
 class Scraper
   def initialize

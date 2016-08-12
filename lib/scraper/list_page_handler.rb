@@ -1,5 +1,5 @@
 require_relative 'list_page'
-require_relative 'post'
+require_relative '../post'
 
 class ListPageHandler
   # TODO move to parent class?
