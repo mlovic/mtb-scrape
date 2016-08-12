@@ -9,7 +9,6 @@ class PostParser
   class << self
 
     def parse(post)
-
       # TODO add inches to size
       # TODO check for despiece
       # TODO check for retirad@ / se retira / retiro la bici / comprado
@@ -21,31 +20,28 @@ class PostParser
       #
       # TODO what if they update only desc. Like make a discount. Reparse periodically?
       # TODO follow posts
-      attributes = {}
-
       return {buyer: true} if buyer?(post.title) # so that dnatables doesn't get undefined
+      attributes = get_basic_attributes(post)
 
-      attributes[:frame_only] = !!contains_cuadro?(post.title) 
-      attributes[:is_sold] = sold?(post.title)
-      
       finder = ModelFinder.new(post.title, post.description_no_html)
       attributes[:brand_id] = finder.get_brand&.id 
       attributes[:model_id] = finder.get_model&.id
 
-      model = attributes[:model_id]
-
-      pfinder = PriceFinder.new(post.title, post.description_no_html, model, attributes[:frame_only])
+      pfinder = PriceFinder.new(post.title, post.description_no_html, attributes[:frame_only])
       attributes[:price] = pfinder.find_price
-
-
-      # Get size
-      size = find_size(post.title) || find_size(post.description_no_html)
-      attributes[:size] = size && size.upcase
-
-      #print(post, attributes)
       
       return attributes
     end
+
+    def get_basic_attributes(post)
+      attributes = {}
+      size = find_size(post.title) || find_size(post.description_no_html)
+      attributes[:size] = size && size.upcase
+      attributes[:frame_only] = !!contains_cuadro?(post.title) 
+      attributes[:is_sold] = sold?(post.title)
+      return attributes
+    end
+
     alias_method :get_post_attributes, :parse
 
     private
