@@ -2,9 +2,11 @@ require_relative 'spec_helper'
 
 RSpec.describe Scraper do
   describe '#scrape' do
-    it 'works' do
+    it 'works', slow: true do
 
       VCR.use_cassette 'scrape_first_page' do
+
+        # TODO handle thread in test
 
         agent = Mechanize.new
         logger = Logger.new(STDOUT)

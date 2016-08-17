@@ -6,8 +6,9 @@ RSpec.describe FmtbPost do
   let(:fmtb_post) { 
     doc = Nokogiri::HTML::Document.parse(fixture('post_preview.html')).at('li')
     agent = Mechanize.new
-    page = VCR.use_cassette('get_first_page') { ForoMtb.new.visit_page(1) }
-    FmtbPost.new doc, agent, page
+    page = VCR.use_cassette('get_first_page') { agent.get(ForoMtb::FOROMTB_URI) }
+    #page = Nokogiri::HTML::Document.parse(fixture('first_page.html'))
+    FmtbPost.new doc, page
   }
 
   let(:sticky_post_preview) {

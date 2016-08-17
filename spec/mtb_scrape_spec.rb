@@ -3,6 +3,7 @@ require_relative 'spec_helper'
 RSpec.describe MtbScrape do
   describe '.fmtb_scrape' do
     it 'works' do
+      pending
 
       VCR.use_cassette 'scrape_first_page' do
 
@@ -26,6 +27,7 @@ RSpec.describe MtbScrape do
   describe '.parse_virgin_posts' do
     pending
     it 'works' do
+      pending
       VCR.use_cassette 'scrape_first_page' do
 
         MtbScrape.fmtb_scrape

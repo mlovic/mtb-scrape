@@ -1,3 +1,4 @@
+require 'mechanize'
 require_relative 'spec_helper'
 
 RSpec.describe ListPage do
@@ -5,7 +6,7 @@ RSpec.describe ListPage do
     # fix this
     first_page = nil
     VCR.use_cassette('get_first_page') do
-      first_page = ForoMtb.new.visit_page(1)
+      first_page = Mechanize.new.get(ForoMtb::FOROMTB_URI)
     end
     first_page.extend ListPage
   end
