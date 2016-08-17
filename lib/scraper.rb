@@ -4,6 +4,7 @@ require 'mechanize'
 require_relative 'scraper/list_page_handler'
 require_relative 'scraper/post_page_handler'
 require_relative 'scraper/processor'
+require_relative 'scraper/spider'
 require_relative 'scraper/foromtb'
 
 class Scraper

@@ -21,8 +21,6 @@ class PostPageHandler
   def get_post_data(page, url)
     # TODO page should carry url
     page.extend PostPage
-    # attrs = site.process_page(page)
-    puts "previews: #{@previews.keys}"
     post_preview = @previews[url] or raise "Post preview was not found in cache!"
     @previews.delete(url)
     # TODO need to remove from hash? Hash best structure?

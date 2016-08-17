@@ -18,7 +18,7 @@ class Spider
                     page = @agent.get(url)
                     #raise NetworkError unless page.code.match(/^2/)
                     @waiting_for_response = false
-                    puts "Done fetching #{url}"
+                    #puts "Done fetching #{url}"
                     out_queue.push [page, handler]
                     sleep @wait_time # sleep variable amount of time depending on request time?
                   end
