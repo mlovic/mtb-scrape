@@ -63,6 +63,7 @@ get '/' do
                 .includes(:model, :brand, :post)
                 .filter(params)
                 .order_by(params[:order])
+  @admin = true unless ENV['RACK_ENV'] == 'production'
   erb :index
 end
 

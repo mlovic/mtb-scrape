@@ -28,10 +28,10 @@
       <th></th>
       <th>price</th>
       <th>brand</th>
-      <th></th>
+      <% if @admin %> <th></th> <% end %>
       <th class="col-md-1" id="model-col">model</th>
       <th>submodel</th>
-      <th></th>
+      <% if @admin %> <th></th> <% end %>
       <th>size</th>
       <th>travel</th>
       <th>title</th>
@@ -51,7 +51,7 @@
       <td>€<%= bike.price %></td>
       <td class="brand-name"><%= bike.brand_name %></td>
       <td>
-      <% if bike.brand&.unconfirmed? %>
+      <% if @admin && bike.brand&.unconfirmed? %>
           <button type="button" class="btn confirm-brand" data-brand-id="<%= bike.brand.id %>">
             <span class="glyphicon glyphicon-ok"></span>
           </button>
@@ -64,7 +64,7 @@
       <td class="model-name"><%= bike.model_name or word_after_brand(bike) %></td>
       <td class="submodel-name"><%= bike.model&.submodel || '-' %></td>
       <td>
-      <% unless bike.model&.confirmed? %>
+      <% unless @admin && bike.model&.confirmed? %>
         <form action="/confirm-model" method="post">
           <button type="button" class="btn confirm-model" data-model-id="<%= bike.model_id %>" data-bike-id="<%= bike.id %>">
             <span class="glyphicon glyphicon-ok"></span>
