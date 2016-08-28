@@ -12,3 +12,12 @@ utils/*
 *.py
 Guardfile
 tags
+
+public/old_assets/*
+public/bootstrap/*
+public/bootstrap-sass/*
+public/seiyria-bootstrap-slider/*
+public/chosen-bootstrap/*
+public/jquery/*
+public/jeditable/*
+public/chosen/*

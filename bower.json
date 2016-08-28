@@ -1,0 +1,25 @@
+{
+  "name": "mtb-scrape",
+  "homepage": "https://github.com/mlovic/mtb-scrape",
+  "authors": [
+    "Marko Lovic <markolovic@hotmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "seiyria-bootstrap-slider": "^9.2.0",
+    "bootstrap-sass": "^3.3.7",
+    "bootstrap": "^3.3.7",
+    "jeditable": "^1.7.3",
+    "chosen": "^1.6.2"
+  }
+}
