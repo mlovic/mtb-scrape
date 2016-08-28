@@ -13,8 +13,12 @@ module MtbScrape
     # TODO somehow consolidate with updater
     counter = 0
     Post.not_parsed.each do |post|
+      puts "Parsing " + post.title
       attributes = PostParser.parse(post)
-      next if attributes[:buyer]
+      if attributes[:buyer]
+        post.update(buyer: true)
+        next
+      end
       bike = Bike.new(attributes)
       bike.post = post
       bike.save!
@@ -54,31 +58,21 @@ module MtbScrape
 
   def self.fmtb_scrape(num_pages = 1, options = {})
     Scraper.new.scrape(num_pages, options)
-    #start_page = options[:start_page] || 1
 
-    #require 'benchmark'
-      #time = Benchmark.measure do
-
-        #spider = Processor.new()
-        #spider.scrape(num_pages, offset: start_page, root: ForoMtb::FOROMTB_URI)
-
-      #end
-      #puts "total: " + time.to_s
-
-    # TODO log: 
-    # puts "#{new_posts.size} new posts in db"
-    # puts "Oldest last message in db: #{Post.oldest_last_message.to_s}"
-    # puts "Oldest last message seen: #{Post.order('updated_at DESC').first.last_message_at.to_s}"
-    # try where(nil).size
-    # TODO not working. Error from Arel. Maybe ruby 2.3 thing?  `rescue in visit': Cannot visit ThreadSafe::Array (TypeError)   
-    # puts "#{Post.count} total posts in db"
-    # puts "#{post_update_count} posts updated in db"
-  rescue
-    unless Bike.find_by(post_id: Post.last&.id)
-      puts 'There are posts in the database that need to be parsed'
-      puts "Try\n\n\tthor mtb_scrape:parse_lonely_posts\n\n"
-    end
-    raise
+     #TODO log: 
+     #puts "#{new_posts.size} new posts in db"
+     #puts "Oldest last message in db: #{Post.oldest_last_message.to_s}"
+     #puts "Oldest last message seen: #{Post.order('updated_at DESC').first.last_message_at.to_s}"
+     #try where(nil).size
+     ##TODO not working. Error from Arel. Maybe ruby 2.3 thing?  `rescue in visit': Cannot visit ThreadSafe::Array (TypeError)   
+     #puts "#{Post.count} total posts in db"
+    ## puts "#{post_update_count} posts updated in db"
+  #rescue
+    #unless Bike.find_by(post_id: Post.last&.id)
+      #puts 'There are posts in the database that need to be parsed'
+      #puts "Try\n\n\tthor mtb_scrape:parse_lonely_posts\n\n"
+    #end
+    #raise
   end
 
 end
