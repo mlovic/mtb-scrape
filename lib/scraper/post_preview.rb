@@ -1,4 +1,5 @@
 require 'chronic'
+require_relative 'date_element_parser'
 
 module PostPreview
 
