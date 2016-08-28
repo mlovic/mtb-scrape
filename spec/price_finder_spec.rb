@@ -19,6 +19,17 @@ RSpec.describe PriceFinder do
     expect(finder.find_price).to eq 3000
   end
 
+  it 'no euro symbol' do
+    pending
+    finder = PriceFinder.new('Vendo bici por 2400', 'no desc')
+    expect(finder.find_price).to eq 2400
+  end
+
+  it 'con mejoras REBAJADA 1990euros!!!' do
+    finder = PriceFinder.new('Froggy 721 con mejoras REBAJADA 1990euros!!!', 'no desc')
+    expect(finder.find_price).to eq 1990 
+  end
+
   describe 'priority regexes' do
     it 'la vendo por' do
       finder = PriceFinder.new('no price', 'La compre por 3000e, la vendo por 1700')
@@ -34,12 +45,23 @@ RSpec.describe PriceFinder do
       finder = PriceFinder.new('no price', 'La vendia pr 2400e, precio final: 2100')
       expect(finder.find_price).to eq 2100
     end
+
+    it 'nuevo precio' do
+      finder = PriceFinder.new('no price', 'Antes 2400e, nuevo precio: 2100€')
+      expect(finder.find_price).to eq 2100
+    end
   end
 
-  it 'no euro symbol' do
-    pending
-    finder = PriceFinder.new('Vendo bici por 2400', 'no desc')
-    expect(finder.find_price).to eq 2400
+  it 'extra test cases' do
+    ['2300e la rebajo a 2100',
+     '1900e, rebajado a 2100',
+     'rebajado a 2100, desde 2400e',
+     'La vendia por 900e, ahora €2100',
+     'comprada por 1800 ... Precio: 2100 E'
+    ].each do |str|
+      finder = PriceFinder.new('no price', str)
+      expect(finder.find_price).to eq 2100
+    end
   end
 
   #it 'filters by credible vals' do

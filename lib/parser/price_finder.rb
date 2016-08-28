@@ -5,17 +5,16 @@ class PriceFinder
   num = /([0-9]?\.?[0-9]{3})/
   NUM_REGEX = num
   PRICE_REGEX    = Regexp.union /[€]#{num}/, /#{num}\s?[€]/, /#{num}\s?eur/i, 
-                                /precio\s?#{num}/i, /#{num}e/i
-  PRIORITY_REGEX = Regexp.union /la\svendo\spor\s?#{num}/i, 
-                                /ahora\s?[a-zA-Z]+\s?#{num}/i,
-                                /rebajada\s?\w?#{num}/i,
-                                /precio\s?final:?\s*#{num}/i # TODO not catching
+                                /precio:?\s?#{num}/i, /#{num}e/i
+                                # TODO put in priority order?
+  PRIORITY_REGEX = Regexp.union /la\svendo\spor\s?[€]?#{num}/i, 
+                                /ahora\s?[a-zA-Z]*\s?[€]?#{num}/i,
+                                /rebaj[a-zA-Z]+\s?\w?\s?[€]?#{num}/i,
+                                /precio\s?final:?\s*[€]?#{num}/i, # TODO not catching
+                                /nuevo\sprecio:?\s*[€]?#{num}/i,
+                                /precio\snuevo:?\s*[€]?#{num}/i
                                                              # bike number 1380
                                 
-                                # TODO ahora [eurosign]2100 wouldn't work
-                                #
-                                # TODO add 'rebajado a...'
-  # precio final:
                                 # could also filter by last digit being a 0
                                 
   # TODO log how many matches are found
