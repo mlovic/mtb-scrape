@@ -23,8 +23,18 @@
 
 .chosen {
   min-width: 140px;
+  /*max-width: 140px;*/
 }
 
+.chosen-container {
+  max-width: 150px;
+}
 .brand-name {
   text-align: right;
+}
+
+/*TODO responsive?*/
+.container-fluid {
+    padding-right: 40px;
+    padding-left: 50px;
 }
