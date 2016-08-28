@@ -1,7 +1,8 @@
 
 <link href="chosen/chosen.css" rel="stylesheet">
-<link href="bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="bootstrap/dist/css/bootstrap.css" rel="stylesheet">
 <link href="chosen-bootstrap/chosen.bootstrap.css" rel="stylesheet">
+<link href="seiyria-bootstrap-slider/dist/css/bootstrap-slider.css" rel="stylesheet">
 <%#TODO chosen-bootstrap not working%>
 <link href="style.css" rel="stylesheet">
 <script type="text/javascript" charset="utf-8" src="jquery/dist/jquery.js"></script>
@@ -9,6 +10,7 @@
 <script src="bikes.js"></script>
 <script src="jeditable/jquery.jeditable.js"></script>
 <script src="chosen/chosen.jquery.js"></script>
+<script src="seiyria-bootstrap-slider/dist/bootstrap-slider.js"></script>
 
 <div class="container-fluid">
   
@@ -50,8 +52,8 @@
       </td>
       <td>€<%= bike.price %></td>
       <td class="brand-name"><%= bike.brand_name %></td>
-      <td>
       <% if @admin && bike.brand&.unconfirmed? %>
+      <td>
           <button type="button" class="btn confirm-brand" data-brand-id="<%= bike.brand.id %>">
             <span class="glyphicon glyphicon-ok"></span>
           </button>
@@ -59,8 +61,8 @@
           <button type="button" class="btn delete-brand" data-brand-id="<%= bike.brand.id %>">
             <span class="glyphicon glyphicon-remove"></span>
           </button>
-      <% end %>
       </td>
+      <% end %>
       <td class="model-name"><%= bike.model_name or word_after_brand(bike) %></td>
       <td class="submodel-name"><%= bike.model&.submodel || '-' %></td>
       <td>
