@@ -48,3 +48,6 @@ task :rollback => :load_config do
 
 end
 
+task :copy_assets do
+  FileUtils.cp_r 'assets/.', 'public', verbose: true
+end
