@@ -1,6 +1,8 @@
 require 'mechanize'
 require_relative 'spec_helper'
 require_relative '../lib/scraper/fmtb_post'
+require_relative '../lib/scraper/foromtb'
+require_relative '../lib/scraper/post_preview'
 
 RSpec.describe FmtbPost do
   let(:fmtb_post) { 
@@ -54,7 +56,6 @@ RSpec.describe FmtbPost do
       # mock scrape
       VCR.use_cassette('scrape_post') do
         expect(fmtb_post.scrape).to be_a Hash
-        # TODO use array matcher
         expect(fmtb_post.scrape.keys).to match_array %i[title description posted_at last_message_at images uri thread_id username visits]
       end
 

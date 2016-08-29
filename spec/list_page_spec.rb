@@ -1,5 +1,7 @@
 require 'mechanize'
 require_relative 'spec_helper'
+require_relative '../lib/scraper/list_page'
+require_relative '../lib/scraper/foromtb'
 
 RSpec.describe ListPage do
   let(:page) do

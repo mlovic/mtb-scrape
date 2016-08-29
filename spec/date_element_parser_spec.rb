@@ -1,4 +1,7 @@
 require_relative 'spec_helper'
+require 'nokogiri'
+require_relative '../lib/scraper/date_element_parser'
+require_relative '../lib/scraper/post_preview'
 
 RSpec.describe DateElementParser do
 

@@ -1,4 +1,5 @@
 require_relative 'spec_helper'
+require_relative '../mtb_scrape'
 
 RSpec.describe MtbScrape do
   describe '.fmtb_scrape' do

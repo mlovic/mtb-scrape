@@ -1,5 +1,8 @@
 require 'spec_helper'
 require 'mechanize'
+require_relative '../lib/scraper/spider'
+require_relative '../lib/scraper/processor'
+require_relative '../lib/scraper/foromtb'
 
 RSpec.describe Spider do
   let(:processor) { Processor.new }

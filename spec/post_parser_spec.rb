@@ -1,4 +1,6 @@
 require_relative 'spec_helper'
+require_relative '../lib/post_parser'
+require_relative '../lib/brand' # TODO remove this dependency
 
 RSpec.describe PostParser do
 

@@ -19,29 +19,14 @@
 #
 # TODO remove all this
 require_relative 'helpers'
-require_relative '../lib/post_parser'
-require_relative '../lib/bike'
-require_relative '../lib/brand'
-require_relative '../lib/model'
-require_relative '../lib/parser/model_finder'
-require_relative '../lib/bike_updater'
-require_relative '../lib/scraper/spider'
-require_relative '../lib/scraper/processor'
-require_relative '../lib/scraper/list_page_handler'
-require_relative '../lib/scraper/foromtb'
-require_relative '../lib/scraper/date_element_parser'
-require_relative '../lib/scraper/post_preview'
-require_relative '../mtb_scrape'
-require 'nokogiri'
-require 'pp'
+
 require 'vcr'
 require 'webmock'
+require 'active_record'
 require 'database_cleaner'
 require 'factory_girl'
-require 'will_paginate'
-require 'will_paginate/active_record'
 
-require_relative 'factories'
+#require_relative 'factories'
 
 # Later move to use only when needed!
 ActiveRecord::Base.logger = Logger.new('db/test_debug.log')

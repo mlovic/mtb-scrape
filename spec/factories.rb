@@ -1,3 +1,7 @@
+require_relative '../lib/brand'
+require_relative '../lib/bike'
+require_relative '../lib/model'
+
 FactoryGirl.define do
   # TODO awful. fix at some point
   factory :bike do

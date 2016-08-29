@@ -1,4 +1,5 @@
 require_relative 'spec_helper'
+require_relative '../lib/brand'
 
 RSpec.describe Brand do
   let!(:brand) { Brand.create name: 'Mondraker' }
