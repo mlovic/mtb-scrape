@@ -26,5 +26,6 @@ group :test, :development do
   gem 'guard-rspec'
   gem 'factory_girl'
   gem 'guard-rake'
+  gem 'timecop'
 end
 
