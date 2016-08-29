@@ -30,6 +30,11 @@ RSpec.describe PriceFinder do
     expect(finder.find_price).to eq 1990 
   end
 
+ it 'la bici fue mas de 8000 euros. Precio 3.500' do
+    finder = PriceFinder.new('', 'la bici fue mas de 8000 euros. Precio 3.500')
+    expect(finder.find_price).to eq 3500
+ end
+
   describe 'priority regexes' do
     it 'la vendo por' do
       finder = PriceFinder.new('no price', 'La compre por 3000e, la vendo por 1700')

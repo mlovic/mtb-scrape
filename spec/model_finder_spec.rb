@@ -1,4 +1,7 @@
 require_relative 'spec_helper'
+require_relative '../lib/model'
+require_relative '../lib/brand'
+require_relative '../lib/parser/model_finder'
 
 RSpec.describe ModelFinder do
   let(:post) { Post.new(fixture('post.yml')) }
@@ -22,6 +25,15 @@ RSpec.describe ModelFinder do
       expect(finder.get_brand.name).to eq 'Specialized'
   end
 
+  it 'when model name contains space' do
+    Model.create name: 'Foxy', brand_id: 1, confirmation_status: 'confirmed' 
+    Brand.create name: 'Trek', confirmation_status: 'confirmed' 
+    Model.create name: 'Top Fuel', brand_id: 2, confirmation_status: 'confirmed' 
+    finder = ModelFinder.new('TREK TOP FUEL 8 muy mejorada en Talla 18.5" (10.8Kg)', 'Mondraker Foxy')
+    #puts finder.scan_for_model('TREK TOP FUEL 8 muy mejorada en Talla 18.5" (10.8Kg)').name
+      expect(finder.get_model.name).to eq 'Top Fuel'
+      expect(finder.get_brand.name).to eq 'Trek'
+  end
 
   it 'searches title before description' do
   end
