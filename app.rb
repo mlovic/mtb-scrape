@@ -96,6 +96,7 @@ post '/update-model' do
   params['value']
 end
 
+# Not used for now
 post '/update-submodel' do
   model = Bike.find(params['bike_id']).model
   model.update(submodel: params['value'])

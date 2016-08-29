@@ -32,7 +32,7 @@
       <th>brand</th>
       <% if @admin %> <th></th> <% end %>
       <th class="col-md-1" id="model-col">model</th>
-      <th>submodel</th>
+      <%#<th>submodel</th>%>
       <% if @admin %> <th></th> <% end %>
       <th>size</th>
       <th>travel</th>
@@ -68,7 +68,7 @@
         </td>
       <% end %>
       <td class="model-name"><%= bike.model_name or word_after_brand(bike) %></td>
-      <td class="submodel-name"><%= bike.model&.submodel || '-' %></td>
+      <%#<td class="submodel-name"><%= bike.model&.submodel || '-' </td>%>
       <% if @admin  %>
         <td>
         <% if bike.model&.unconfirmed? %>
