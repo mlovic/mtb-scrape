@@ -63,7 +63,7 @@ $(document).ready( function() {
       console.log(travel);
       $.ajax({
         type: "POST",
-        url: 'add-travel/' + bikeID,
+        url: 'bikes/' + bikeID + '/add-travel',
         data: $(this).serialize(), // serializes the form's elements
         success: function(data) {
           form.replaceWith(travel);
@@ -87,9 +87,8 @@ $(document).ready( function() {
     var button = $(this);
 
       $.ajax({
-          url: '/confirm-brand',
+          url: '/brands/' + $(this).data('brand-id') + '/confirm',
           type: 'POST',
-          data: {'submit':true, 'id': $(this).data('brand-id') }, // An object with key 'submit' and value 'true;
           success: function (result) {
               $('#confirmation-message').show();
               $('#confirmation-message').delay(3000).fadeOut("slow");
@@ -119,13 +118,13 @@ $(document).ready( function() {
     var button = $(this);
 
       $.ajax({
-          url: '/confirm-model',
+          url: '/models/' + $(this).data('model-id') + '/confirm',
           type: 'POST',
-          data: {
-              'submit':true, 
-              'bike_id': $(this).data('bike-id'),
-              'id': $(this).data('model-id')
-          }, // An object with key 'submit' and value 'true;
+          //data: {
+              //'submit':true, 
+              //'bike_id': $(this).data('bike-id'),
+              //'id': $(this).data('model-id')
+          //}, // An object with key 'submit' and value 'true;
           success: function (result) {
               $('#confirmation-message').show();
               $('#confirmation-message').delay(3000).fadeOut("slow");
@@ -134,6 +133,9 @@ $(document).ready( function() {
       });  
 
   });
+
+//$("#price-slider").slider({});
+
 });
 
 

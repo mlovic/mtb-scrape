@@ -19,7 +19,9 @@ configure :development do
   require 'thin'
   set :server, 'thin'
   set :database, {adapter: "sqlite3", database: "db/foromtb.db"}
-  #ActiveRecord::Base.logger = Logger.new('db/debug.log')
+  require 'fmtb_scheduler'
+  FmtbScheduler.start
+  ActiveRecord::Base.logger = Logger.new('db/debug.log')
 end
 
 configure :production do
@@ -67,18 +69,18 @@ get '/' do
   erb :index
 end
 
-post '/add-travel/:id' do
-  Bike.find(params['id']).model.update!(travel: params['travel'])
+post 'bikes/:id/add-travel' do |id|
+  Bike.find(id).model.update!(travel: params['travel'])
   # error unless if travel.valid?
 end
 
-post '/confirm-brand' do
-  Brand.find(params['id']).confirmed!
+post '/brands/:id/confirm' do |id|
+  Brand.find(id).confirmed!
   # take away and put into mtbscrape
 end
 
-post '/delete-brand' do
-  brand = Brand.find(params['id'])
+delete '/brands/:id' do |id|
+  brand = Brand.find(id)
   puts 'Destroying brand ' + brand.name
   brand.destroy
 end
@@ -101,9 +103,13 @@ post '/update-submodel' do
   params['value']
 end
 
-post '/confirm-model' do
+post '/brands/:id/confirm' do |id|
+  Brand.find(id).confirmed!
+end
+
+post '/models/:id/confirm' do |id|
   #bike = Bike.find(params['bike_id'])
-  Model.find(params['id']).confirmed!
+  Model.find(id).confirmed!
   # confirm bike as well?
   #
   #model = Model.create!(name: params['model_name'].titleize, 
@@ -127,6 +133,7 @@ get '/models' do
   end
 end
 
+# Not used
 get '/data' do
   content_type :json
   @posts = Post.all
