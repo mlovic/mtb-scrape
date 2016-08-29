@@ -21,7 +21,9 @@ class Post < ActiveRecord::Base
 
   # make default?
   def description_no_html
-    Nokogiri::HTML(description).xpath("//text()").remove.to_s
+    doc = Nokogiri::HTML(description)
+    doc.xpath("//script").remove
+    doc.text
   end
 
   def time_since_last_message
