@@ -17,6 +17,8 @@ class ModelFinder
   def get_brand
     # TODO how about throw/catch here
     @brand = scan_for_brand(@title, :confirmed) ||
+      # HACK. This is the most common situation. Need to completely restructure this class
+             scan_for_model(@title, :confirmed).tap { |model| @model = model }&.brand ||
              # scan_for_model(@title, :confirmed)&.brand
              scan_for_brand(@description, :confirmed) ||
              scan_for_brand(@title, :unconfirmed) ||
@@ -42,7 +44,7 @@ class ModelFinder
     models.find do |m| # use find here
       # TODO remove tildes
       # # TODO blacklist?
-      str.match(/\b#{m.name}\b/i)
+      str&.match(/\b#{m.name}\b/i) # str might be nil
         #throw :found_model
       # here i could directly end. throw model
     end
@@ -64,7 +66,10 @@ class ModelFinder
   #   scan for all confirmed models
 
   def get_model
+    # HACK See above
+    return @model if @model
     @brand ||= get_brand
+    return @model if @model
     if @brand
       if model = scan_for_model(@brand_context, :confirmed, brand_id: @brand.id) || 
                  scan_for_model(@brand_context, :unconfirmed, brand_id: @brand.id)
