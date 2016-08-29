@@ -2,22 +2,16 @@ require_relative 'spec_helper'
 
 RSpec.describe DateElementParser do
 
-  # TODO clean this up
-  let(:date_element_1) {
-    doc = Nokogiri::HTML::Document.parse(fixture('post_preview.html'))
+  def build_date_element(fixture_path)
+    doc = Nokogiri::HTML::Document.parse(fixture(fixture_path))
     doc.at('li').extend PostPreview
-    date_element = doc.css('.posterDate .DateTime')
-  }
-  let(:date_element_2) {
-    doc = Nokogiri::HTML::Document.parse(fixture('post_preview_2.html'))
-    doc.at('li').extend PostPreview
-    date_element = doc.css('.posterDate .DateTime')
-  }
-  let(:date_element_3) {
-    doc = Nokogiri::HTML::Document.parse(fixture('post_preview_3.html'))
-    doc.at('li').extend PostPreview
-    date_element = doc.css('.posterDate .DateTime')
-  }
+    doc.css('.posterDate .DateTime')
+  end
+
+  let(:date_element_1) { build_date_element('post_preview.html') }
+  let(:date_element_2) { build_date_element('post_preview_2.html') }
+  let(:date_element_3) { build_date_element('post_preview_3.html') }
+
   it 'parses with unix time' do
     expect(DateElementParser.parse(date_element_1).change(sec: 0)).to eq Time.parse('7 Nov 2015 12:59:00 +01:00')
   end
@@ -28,6 +22,5 @@ RSpec.describe DateElementParser do
   it 'parses spanish date' do
     expect(DateElementParser.parse(date_element_3)).to eq Time.parse('1 Dec 2015 12:00')
   end
-
 
 end
