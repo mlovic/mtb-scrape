@@ -25,7 +25,7 @@
 <table id="bikes-table-new" class="table">
   <thead>
     <tr>
-      <th>id</th>
+      <% if @admin %> <th>id</th> <% end %>
       <th id="last-msg-at-col"></th>
       <th></th>
       <th>price</th>
@@ -43,8 +43,10 @@
   <% @bikes.each do |bike| %>
     <tr class='bike' id="<%= bike.id %>">
       <%#Might want to remove just number from id field later%>
-      <td><%= bike.id %></td>
-      <td><%= humanize(bike.time_since_last_message) %></td>
+      <% if @admin %>
+        <td><%= bike.id %></td>
+      <% end %>
+      <td class="time-since-last-msg"><%= humanize(bike.time_since_last_message) %></td>
       <td>
       <% if bike.frame_only %>
         <img src="bike_frame_30px.png" alt="bike frame" />
@@ -52,8 +54,9 @@
       </td>
       <td>€<%= bike.price %></td>
       <td class="brand-name"><%= bike.brand_name %></td>
-      <% if @admin && bike.brand&.unconfirmed? %>
-      <td>
+      <% if @admin %>
+        <td>
+        <% if bike.brand&.unconfirmed? %>
           <button type="button" class="btn confirm-brand" data-brand-id="<%= bike.brand.id %>">
             <span class="glyphicon glyphicon-ok"></span>
           </button>
@@ -61,24 +64,27 @@
           <button type="button" class="btn delete-brand" data-brand-id="<%= bike.brand.id %>">
             <span class="glyphicon glyphicon-remove"></span>
           </button>
-      </td>
+        <% end %>
+        </td>
       <% end %>
       <td class="model-name"><%= bike.model_name or word_after_brand(bike) %></td>
       <td class="submodel-name"><%= bike.model&.submodel || '-' %></td>
-      <td>
-      <% unless @admin && bike.model&.confirmed? %>
-        <form action="/confirm-model" method="post">
-          <button type="button" class="btn confirm-model" data-model-id="<%= bike.model_id %>" data-bike-id="<%= bike.id %>">
-            <span class="glyphicon glyphicon-ok"></span>
-          </button>
-        </form>
+      <% if @admin  %>
+        <td>
+        <% if bike.model&.unconfirmed? %>
+          <form action="/confirm-model" method="post">
+            <button type="button" class="btn confirm-model" data-model-id="<%= bike.model_id %>" data-bike-id="<%= bike.id %>">
+              <span class="glyphicon glyphicon-ok"></span>
+            </button>
+          </form>
+        <% end %>
+        </td>
       <% end %>
-      </td>
       <td><%= bike.size %></td>
       <td>
         <% if bike.model&.travel  %>
           <%= bike.model&.travel %>
-        <% else %>
+        <% elsif @admin %>
           <form class="travel-form" action="add-travel" method="post">
             <input type="text" name="travel" class="travel-input" value="" />
           </form>
@@ -92,4 +98,4 @@
 </table>
 <%= will_paginate @bikes, renderer: BootstrapPagination::Sinatra %>
 
-</div>
+  </div>
