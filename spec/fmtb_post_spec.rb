@@ -1,8 +1,17 @@
 require 'mechanize'
-require_relative 'spec_helper'
+#require_relative 'spec_helper'
 require_relative '../lib/scraper/fmtb_post'
 require_relative '../lib/scraper/foromtb'
 require_relative '../lib/scraper/post_preview'
+require_relative 'helpers'
+require 'vcr'
+
+include Helpers
+
+VCR.configure do |config|
+  config.cassette_library_dir = "spec/fixtures/vcr_cassettes"
+  config.hook_into :webmock
+end
 
 RSpec.describe FmtbPost do
   let(:fmtb_post) { 

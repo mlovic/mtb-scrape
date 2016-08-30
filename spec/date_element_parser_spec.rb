@@ -1,7 +1,10 @@
-require_relative 'spec_helper'
+#require_relative 'spec_helper'
 require 'nokogiri'
 require_relative '../lib/scraper/date_element_parser'
 require_relative '../lib/scraper/post_preview'
+require_relative 'helpers'
+
+include Helpers
 
 RSpec.describe DateElementParser do
 
@@ -16,7 +19,7 @@ RSpec.describe DateElementParser do
   let(:date_element_3) { build_date_element('post_preview_3.html') }
 
   it 'parses with unix time' do
-    expect(DateElementParser.parse(date_element_1).change(sec: 0)).to eq Time.parse('7 Nov 2015 12:59:00 +01:00')
+    expect(DateElementParser.parse(date_element_1).to_time.round).to eq Time.parse('7 Nov 2015 12:59:20 +01:00')
   end
   
   it 'parses without unix time' do

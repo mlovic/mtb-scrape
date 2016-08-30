@@ -1,6 +1,9 @@
 require 'nokogiri'
-require_relative 'spec_helper'
+#require_relative 'spec_helper'
 require_relative '../lib/scraper/post_preview'
+require_relative 'helpers'
+
+include Helpers
 
 RSpec.describe PostPreview do
   let(:post_preview) { 
@@ -71,7 +74,7 @@ RSpec.describe PostPreview do
 
   describe '#posted_at' do
     it 'returns time of post publication when unix_time is offered' do
-      expect(post_preview.posted_at.change(sec: 0)).to eq DateTime.parse('7 Nov 2015 12:59:00 +01:00') # round seconds down
+      expect(post_preview.posted_at.to_time.round).to eq Time.parse('7 Nov 2015 12:59:20 +01:00') # round seconds down
     end
   end
 
