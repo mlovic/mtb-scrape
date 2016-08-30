@@ -15,6 +15,13 @@ RSpec.describe PriceFinder do
     #expect(finder.find_price).to eq 1000
   #end
 
+  # using priority regex
+  it 'prefers prices in title' do
+    # TODO
+    finder = PriceFinder.new('Cuadro Epic. Antes 550, ahora 500', 'Precio 600e')
+    expect(finder.find_price).to eq 500
+  end
+
   it 'with thousands place point' do
     finder = PriceFinder.new('no price', 'La compre por 3.000e')
     expect(finder.find_price).to eq 3000

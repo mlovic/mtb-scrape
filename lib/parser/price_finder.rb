@@ -4,12 +4,13 @@ class PriceFinder
   TYPICAL_RANGE_FOR_FRAME = 200..2000
   num = /([0-9]?\.?[0-9]{3})/
   NUM_REGEX = num
-  PRICE_REGEX    = Regexp.union /[€]#{num}/, /#{num}\s?[€]/, /#{num}\s?eur/i, 
-                                /precio:?\s?#{num}/i, /#{num}e/i
+  PRICE_REGEX    = Regexp.union /precio:?\s?#{num}/i, /[€]#{num}/, 
+                                /#{num}\s?[€]/, /#{num}\s?eur/i, 
+                                /#{num}e/i
                                 # TODO put in priority order?
   PRIORITY_REGEX = Regexp.union /la\svendo\spor\s?[€]?#{num}/i, 
                                 /ahora\s?[a-zA-Z]*\s?[€]?#{num}/i,
-                                /rebaj[a-zA-Z]+\s?\w?\s?[€]?#{num}/i,
+                                /rebaj[a-zA-Z]+\s?a?\s?[€]?#{num}/i, # only 'a'?
                                 /precio\s?final:?\s*[€]?#{num}/i, # TODO not catching
                                 /nuevo\sprecio:?\s*[€]?#{num}/i,
                                 /precio\snuevo:?\s*[€]?#{num}/i
@@ -48,22 +49,24 @@ class PriceFinder
 
     # could abstract further to title_tokens || priority_tokens || until one 
     # TODO reduce dupication
-    if title_tokens = get_tokens(@title) 
+    # TODO use priority in title as well 
+    if prior_title_tokens = get_tokens(@title, priority: true) 
+      return prior_title_tokens.sort.first 
+    elsif title_tokens = get_tokens(@title) 
       return title_tokens.sort.first 
-    end
-    if prior_tokens = get_tokens(@description, priority: true)
+    elsif prior_tokens = get_tokens(@description, priority: true)
       return prior_tokens.sort.last
     end
 
     tokens = get_tokens(@description)
     return if tokens.nil?
     return tokens.first if tokens&.size == 1
-    return filter_by_realistic(tokens).first
+    return filter_by_realistic(tokens).first # lowest
   end
 
   def filter_by_realistic(tokens)
     range = @frame_only ? TYPICAL_RANGE_FOR_FRAME : TYPICAL_RANGE  
-    tokens.select { |t| range.include? t.to_i }
+    tokens.select { |t| range.include? t.to_i }.sort
   end
  
   def filter_by_credible_values
@@ -74,7 +77,7 @@ class PriceFinder
   def get_tokens(str, priority: false)
     regex = priority ? PRIORITY_REGEX : PRICE_REGEX
     tokens = str.scan(regex).flatten.compact.map { |t| t.gsub('.', '') }.map(&:to_i)
-    return tokens.present? ? tokens : nil
+    return !tokens.empty? ? tokens : nil
     # maybe this shouldn't return nil
   end
 
