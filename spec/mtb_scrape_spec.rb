@@ -25,7 +25,7 @@ RSpec.describe MtbScrape do
     end
   end
 
-  describe '.parse_virgin_posts' do
+  describe '.parse_new_or_updated_posts' do
     pending
     it 'works' do
       pending
@@ -33,7 +33,7 @@ RSpec.describe MtbScrape do
 
         MtbScrape.fmtb_scrape
 
-        MtbScrape.parse_virgin_posts
+        MtbScrape.parse_new_or_updated_posts
         expect(Bike.count).to eq 19
         # todo here count working??
       end

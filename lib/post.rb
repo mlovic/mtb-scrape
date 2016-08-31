@@ -1,5 +1,5 @@
 require 'active_record'
-require 'post_parser'
+require_relative 'post_parser'
 
 class Post < ActiveRecord::Base
   MIN_DESCRIPTION_LENGTH = 30
@@ -15,7 +15,11 @@ class Post < ActiveRecord::Base
 
   default_scope { where(is_old: false) }
   #scope :only_latest, -> { where(is_old: false) }
-  scope :not_parsed, -> { joins('LEFT OUTER JOIN bikes ON bikes.post_id = posts.id').where('post_id IS NULL').where(buyer: false) }
+  scope :not_parsed, -> { joins('LEFT OUTER JOIN bikes ON bikes.post_id = posts.id').where('post_id IS NULL') }
+
+  scope :updated, -> { joins('LEFT OUTER JOIN bikes ON bikes.post_id = posts.id').where('posts.updated_at > bikes.updated_at ') }
+
+  scope :active, -> { where(buyer: false, closed: false, deleted: false) }
 
   before_save do
     self.closed = (PostParser.sold?(self.title) || PostParser.closed?(self.title))

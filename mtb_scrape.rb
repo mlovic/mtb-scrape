@@ -9,28 +9,25 @@ module MtbScrape
     logger.info arg
   end
 
-  def self.parse_virgin_posts
+  def self.parse_new_or_updated_posts
     # TODO somehow consolidate with updater
-    counter = 0
-    Post.not_parsed.each do |post|
+    # TODO also parse updated posts
+    Post.active.not_parsed..each do |post|
       puts "Parsing " + post.title
       attributes = PostParser.parse(post)
-      if attributes[:buyer]
-        post.update(buyer: true)
-        next
-      end
       bike = Bike.new(attributes)
       bike.post = post
       bike.save!
-      counter += 1
     end
-    puts "parsed #{counter} new posts"
+    Post.active.updated.each do |post|
+      BikeUpdater.update(post.bike.id)
+    end
   end
 
   def self.update(num_pages = 5)
     # really only have to go to last_message_at of last in db
     new_posts = fmtb_scrape(num_pages) # 5? think about this
-    parse_virgin_posts
+    parse_new_or_updated_posts
   end
 
   def self.create_new_bikes(posts = nil)

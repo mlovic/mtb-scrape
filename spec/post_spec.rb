@@ -6,6 +6,18 @@ require_relative '../lib/post'
 RSpec.describe Post do
   let(:post) { build(:post) }
 
+  describe 'updated' do
+    it 'includes posts that were updated more recently than corresponsing bike' do
+      post.save
+      bike = create(:bike, post_id: post.id)
+      expect(Post.updated.count).to eq 0
+      post.update(title: "New title!")
+      expect(Post.updated.count).to eq 1
+      bike.update(price: 2000) 
+      expect(Post.updated.count).to eq 0
+    end
+  end
+
   describe 'on save' do
     it 'marks post as deleted if description is too short' do
       post = create(:post, description: "Vendida, gracias a todos")

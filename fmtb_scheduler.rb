@@ -5,8 +5,7 @@ module FmtbScheduler
     scheduler = Rufus::Scheduler.new
     scheduler.every '5m', first: :now do
       ::MtbScrape.fmtb_scrape(1)
-      ::MtbScrape.parse_virgin_posts
-      # TODO change name, why is it virgin???
+      ::MtbScrape.parse_new_or_updated_posts
     end
     # TODO do a more thorough check/scrape every longer time?
     # would only make sense if posts are edited without being bumped to top
