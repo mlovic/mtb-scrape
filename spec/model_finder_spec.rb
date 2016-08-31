@@ -1,4 +1,5 @@
 require_relative 'spec_helper'
+require_relative 'factories'
 require_relative '../lib/model'
 require_relative '../lib/brand'
 require_relative '../lib/parser/model_finder'
@@ -23,6 +24,18 @@ RSpec.describe ModelFinder do
     finder = ModelFinder.new('EPIC SWORKS 2015 a FULL!!', 'Mondraker Dune')
       expect(finder.get_model.name).to eq 'Epic'
       expect(finder.get_brand.name).to eq 'Specialized'
+  end
+
+  it 'does not guess blacklisted model names' do
+    Model.create name: 'Foxy', brand_id: 1, confirmation_status: 'confirmed' 
+    finder = ModelFinder.new('Mondraker vendida', '')
+    expect(finder.get_model).to eq nil
+    finder = ModelFinder.new('Mondraker talla m', '')
+    expect(finder.get_model).to eq nil
+    finder = ModelFinder.new('Mondraker precio 2000', '')
+    expect(finder.get_model).to eq nil
+    finder = ModelFinder.new('Cuadro Mondraker con horquilla', '')
+    expect(finder.get_model).to eq nil
   end
 
   it 'when model name contains space' do

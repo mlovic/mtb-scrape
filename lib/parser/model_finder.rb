@@ -3,6 +3,7 @@ require_relative '../brand'
 require_relative '../model'
 
 class ModelFinder
+  MODEL_NAME_BLACKLIST = %w(precio talla con carbono doble vendida)
 
   def initialize(title, description)
     @title = ActiveSupport::Inflector.transliterate(title)
@@ -91,10 +92,10 @@ class ModelFinder
   # TODO blacklist: precio, doble, years, wheel size
   def guess_model(str)
     possible_name = /(\w{3,14})/
-    match = str.gsub(/(vendida|precio)/i, '').strip.match(/^#{possible_name}\b/)
+    match = str.gsub(/(#{MODEL_NAME_BLACKLIST.join("|")})/i, '').strip.match(/^#{possible_name}\b/)
     if match
       model_name = match.captures.first.to_s.downcase.capitalize
-      Model.create!(brand_id: @brand.id, name: model_name)
+      Model.create(brand_id: @brand.id, name: model_name)
     end
   end
 
