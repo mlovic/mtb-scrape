@@ -1,6 +1,9 @@
 require 'active_record'
+require 'post_parser'
 
 class Post < ActiveRecord::Base
+  MIN_DESCRIPTION_LENGTH = 30
+
   validates :title, presence: true
   validates :thread_id, presence: true, uniqueness: true, unless: :is_old
   # is_old not being used, in favor of closed
@@ -13,6 +16,13 @@ class Post < ActiveRecord::Base
   default_scope { where(is_old: false) }
   #scope :only_latest, -> { where(is_old: false) }
   scope :not_parsed, -> { joins('LEFT OUTER JOIN bikes ON bikes.post_id = posts.id').where('post_id IS NULL').where(buyer: false) }
+
+  before_save do
+    self.sold  = PostParser.sold?(self.title)
+    self.buyer = PostParser.buyer?(self.title)
+    self.deleted = true if self.description_no_html.gsub(/\s/, '').length < MIN_DESCRIPTION_LENGTH 
+    # TODO how to deal with 'cerrado'
+  end
 
   def self.oldest_last_message
     order('last_message_at ASC').first.last_message_at
@@ -33,5 +43,9 @@ class Post < ActiveRecord::Base
   def time_since_posted
     Time.now - posted_at
   end
+
+  #def active?
+    #!buyer && !is_old
+  #end
 
 end

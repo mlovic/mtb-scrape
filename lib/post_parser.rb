@@ -44,15 +44,15 @@ class PostParser
 
     alias_method :get_post_attributes, :parse
 
+    def sold?(str)
+      !!str.match(/vendid/i)
+    end
+
+    def buyer?(str)
+      str.match(/compro/i) || str.match(/busco/i)
+    end
+
     private
-
-      def sold?(str)
-        !!str.match(/vendid/i)
-      end
-
-      def buyer?(str)
-        str.match(/compro/i) || str.match(/busco/i)
-      end
 
       def contains_cuadro?(str)
         # search also in desc? Maybe use price to decide as well

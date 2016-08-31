@@ -1,8 +1,28 @@
 require 'timecop'
 require_relative 'spec_helper'
+require_relative 'factories'
+require_relative '../lib/post'
 
 RSpec.describe Post do
   let(:post) { build(:post) }
+
+  describe 'on save' do
+    it 'marks post as deleted if description is too short' do
+      post = create(:post, description: "Vendida, gracias a todos")
+      expect(post.deleted).to eq true
+    end
+
+    it 'marks post as sold if title contains keyword is too short' do
+      expect(post.sold).to_not eq true
+      post.update(title: "Vendida")
+      expect(post.sold).to eq true
+    end
+
+    it 'marks post as buyer if title contains keyword' do
+      post = create(:post, title: "Busco cuadro dh")
+      expect(post.buyer).to eq true
+    end
+  end
 
   it 'does not include old posts by default' do
     post.save

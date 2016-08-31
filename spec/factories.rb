@@ -1,6 +1,7 @@
 require_relative '../lib/brand'
 require_relative '../lib/bike'
 require_relative '../lib/model'
+require_relative '../lib/post'
 
 FactoryGirl.define do
   # TODO awful. fix at some point
