@@ -44,7 +44,8 @@ class ModelFinder
     models.find do |m| # use find here
       # TODO remove tildes
       # # TODO blacklist?
-      str&.match(/\b#{m.name}\b/i) # str might be nil
+      #puts "Scanning  #{str}     for #{m.name}"
+      str&.match(/\b#{m.name}\b/i)#.tap { |match| puts("found it!") if match; fail if m.name == "Top Fuel"}# str might be nil
         #throw :found_model
       # here i could directly end. throw model
     end
@@ -71,7 +72,9 @@ class ModelFinder
     @brand ||= get_brand
     return @model if @model
     if @brand
-      if model = scan_for_model(@brand_context, :confirmed, brand_id: @brand.id) || 
+      if model = scan_for_model(@title, :confirmed, brand_id: @brand.id) || 
+                 scan_for_model(@title, :unconfirmed, brand_id: @brand.id) || 
+                 scan_for_model(@brand_context, :confirmed, brand_id: @brand.id) || 
                  scan_for_model(@brand_context, :unconfirmed, brand_id: @brand.id)
         return model
       else
@@ -88,7 +91,7 @@ class ModelFinder
   # TODO blacklist: precio, doble, years, wheel size
   def guess_model(str)
     possible_name = /(\w{3,14})/
-    match = str.strip.match(/^#{possible_name}\b/)
+    match = str.gsub(/(vendida|precio)/i, '').strip.match(/^#{possible_name}\b/)
     if match
       model_name = match.captures.first.to_s.downcase.capitalize
       Model.create!(brand_id: @brand.id, name: model_name)
