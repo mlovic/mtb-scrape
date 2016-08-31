@@ -20,7 +20,7 @@ module MtbScrape
       bike.save!
     end
     Post.active.updated.each do |post|
-      BikeUpdater.update(post.bike.id)
+      BikeUpdater.update(post.bike)
     end
   end
 

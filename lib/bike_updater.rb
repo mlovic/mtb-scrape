@@ -66,9 +66,19 @@ class BikeUpdater
   GENERATED_ATTRS = %i(name brand_id price frame_only size model_id is_sold)
   # TODO probably not the place for this
 
-  def update_bike(id, dry_run: false)
-    bike = Bike.find(id)
+  #diff
+  def changes(attrs1, attrs2)
+    old_attrs = attrs1.slice(*GENERATED_ATTRS)
+    new_attrs = attrs2.slice(*GENERATED_ATTRS)
 
+    return if old_attrs == new_attrs
+    old_attrs.each do |k, v|
+      next if new_attrs[k] == v
+      @changes << Change.new(nil, k, v, new_attrs[k]) 
+    end
+  end
+
+  def update_bike(bike, dry_run: false)
     parsed_attributes = PostParser.parse(bike.post)
     # TODO still creating models even when dry. deal with? 
 
@@ -99,7 +109,7 @@ class BikeUpdater
     end
 
     bikes.each do |bike|
-      update_bike(bike.id, dry_run: dry_run)
+      update_bike(bike, dry_run: dry_run)
     end
 
     report
