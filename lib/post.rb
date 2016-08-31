@@ -18,7 +18,7 @@ class Post < ActiveRecord::Base
   scope :not_parsed, -> { joins('LEFT OUTER JOIN bikes ON bikes.post_id = posts.id').where('post_id IS NULL').where(buyer: false) }
 
   before_save do
-    self.sold  = PostParser.sold?(self.title)
+    self.closed = (PostParser.sold?(self.title) || PostParser.closed?(self.title))
     self.buyer = PostParser.buyer?(self.title)
     self.deleted = true if self.description_no_html.gsub(/\s/, '').length < MIN_DESCRIPTION_LENGTH 
     # TODO how to deal with 'cerrado'

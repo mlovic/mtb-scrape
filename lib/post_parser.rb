@@ -48,6 +48,10 @@ class PostParser
       !!str.match(/vendid/i)
     end
 
+    def closed?(str)
+      !!str.match(/cerrad/i) # retirado de la venta?
+    end
+
     def buyer?(str)
       str.match(/compro/i) || str.match(/busco/i)
     end

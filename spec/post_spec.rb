@@ -12,10 +12,10 @@ RSpec.describe Post do
       expect(post.deleted).to eq true
     end
 
-    it 'marks post as sold if title contains keyword is too short' do
-      expect(post.sold).to_not eq true
+    it 'marks post as closed if title contains sold keyword' do
+      expect(post.closed).to_not eq true
       post.update(title: "Vendida")
-      expect(post.sold).to eq true
+      expect(post.closed).to eq true
     end
 
     it 'marks post as buyer if title contains keyword' do
