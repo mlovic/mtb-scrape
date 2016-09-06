@@ -2,12 +2,10 @@ $(document).ready( function() {
 
   $('#confirmation-message').hide();
 
-  //var bikeID = .parents('.bike').attr('id');
-  console.log($(this)); 
-  //$('.model-name').editable('/' + console.log($(this)));
-  //
   $('.chosen').chosen();
 
+  // Listen for change on "brand" select box. When changed, update options for
+  // the "model" select box with the models belonging to the selected brand only.
   $('#brand-select').on('change', function(evt, params) {
     console.log($('#brand-select').val())
     var brand = $('#brand-select').val()
@@ -18,7 +16,6 @@ $(document).ready( function() {
     $('#brand-select').trigger('chosen:updated');
   }
 
-  //cv?
   function setModelOptions(brand) {
     $.ajax({
       type: 'GET',
@@ -37,6 +34,7 @@ $(document).ready( function() {
     });
   }
 
+  // Make "model" field editable
   $('.model-name').each(function() {
      var $this = $(this);
      //$this.editable('/bikes/' + $this.parent().attr('id') + '/update', {
@@ -46,6 +44,7 @@ $(document).ready( function() {
      });
   });
 
+  // Make "submodel" field editable
   $('.submodel-name').each(function() {
      var $this = $(this);
      $this.editable('/update-submodel', {
@@ -53,6 +52,7 @@ $(document).ready( function() {
      });
   });
 
+  // Attach bike-id to form params before sending
   $('.travel-form').submit(function (e) {
       var form = $(this);
       var bikeID = form.parents('.bike').attr('id');
@@ -72,17 +72,16 @@ $(document).ready( function() {
       e.preventDefault(); // avoid to execute the actual submit of the form.
   });
 
+  // Send form on <Enter> keypress
   $('.travel-input').keypress(function (e) {
     if (e.which == 13) {
       console.log( 'trigger submit');
       $(this).trigger('submit');
     }
-
-
       //e.preventDefault(); // avoid to execute the actual submit of the form.
-      //return false;    
   });
 
+  // Confirm and Delete buttons. Admin view only.
   $('.confirm-brand').click(function() { 
     var button = $(this);
 
