@@ -10,6 +10,7 @@ site/*
 utils/*
 .gitignore
 *.py
+!bikes.py
 Guardfile
 tags
 
