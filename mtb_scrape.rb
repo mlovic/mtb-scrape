@@ -12,7 +12,7 @@ module MtbScrape
   def self.parse_new_or_updated_posts
     # TODO somehow consolidate with updater
     # TODO also parse updated posts
-    Post.active.not_parsed..each do |post|
+    Post.active.not_parsed.each do |post|
       puts "Parsing " + post.title
       attributes = PostParser.parse(post)
       bike = Bike.new(attributes)
