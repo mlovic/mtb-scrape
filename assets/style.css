@@ -43,3 +43,31 @@
   font-size: 14px; 
   color: gray;
 }
+
+.container-fluid {
+  padding-top: 20px;
+}
+
+#search-form .form-inline {
+  margin-bottom: 10px;
+}
+
+#search-form .form-group {
+  /*vertical-align: top;*/
+  float: left;
+}
+
+#search-form .checkbox {
+  clear: both;
+  padding-top: 20px;
+  padding-bottom: 10px;
+}
+
+#search-form .form-group label {
+  width: 75px;
+  text-align: right
+}
+
+#search-form .form-group input {
+  max-width: 80px;
+}

@@ -1,26 +1,33 @@
-<form action="/" method="get">
+<%#<form class="form-inline" action="/" method="get">%>
+<form id="search-form" action="/" method="get">
 
   <div class="form-inline">
     
-    <div class="form-group">
-      <label for="min_travel">min travel</label>
-      <input class="form-control" type="text" name="min_travel" id="min_travel" value="<%= params[:min_travel] %>" />
-    </div>
-    
-    <div class="form-group">
-      <label for="max_travel">max travel</label>
-      <input class="form-control" type="text" name="max_travel" id="max_travel" value="<%= params[:max_travel] %>" />
-    </div>
+  <%#<div class="form-group">%>
+    <%#<label for="price-slider">price</label>%>
+    <%#<input id="price-slider" type="text" class="span2" value="" data-slider-min="10" data-slider-max="1000" data-slider-step="5" data-slider-value="[250,450]"/>%>
+  <%#</div>%>
 
-    <div class="form-group">
-      <label for="min_price">min price</label>
-      <input class="form-control" type="text" name="min_price" id="min_price" value="<%= params[:min_price] %>"/>
-    </div>
+  <div class="form-group">
+    <label for="min_travel">min travel</label>
+    <input class="form-control" type="text" name="min_travel" id="min_travel" value="<%= params[:min_travel] %>" />
+  </div>
+  
+  <div class="form-group">
+    <label for="max_travel">max travel</label>
+    <input class="form-control" type="text" name="max_travel" id="max_travel" value="<%= params[:max_travel] %>" />
+  </div>
 
-    <div class="form-group">
-      <label for="max_price">max price</label>
-      <input class="form-control" type="text" name="max_price" id="max_price" value="<%= params[:max_price] %>" />
-    </div>
+
+  <div class="form-group">
+    <label for="min_price">min price</label>
+    <input class="form-control" type="text" name="min_price" id="min_price" value="<%= params[:min_price] %>"/>
+  </div>
+
+  <div class="form-group">
+    <label for="max_price">max price</label>
+    <input class="form-control" type="text" name="max_price" id="max_price" value="<%= params[:max_price] %>" />
+  </div>
 
   </div>
 
