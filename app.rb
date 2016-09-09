@@ -19,9 +19,11 @@ configure :development do
   require 'thin'
   set :server, 'thin'
   set :database, {adapter: "sqlite3", database: "db/foromtb.db"}
-  require 'fmtb_scheduler'
-  FmtbScheduler.start
-  ActiveRecord::Base.logger = Logger.new('db/debug.log')
+  if ENV['START_SCHEDULER'] == true
+    require 'fmtb_scheduler'
+    FmtbScheduler.start
+    ActiveRecord::Base.logger = Logger.new('db/debug.log')
+  end
 end
 
 configure :production do
@@ -92,6 +94,7 @@ post '/update-model' do
   # or no change
   # or name has been taken
   model = Bike.find(params['bike_id']).model
+  puts "Changing model name from #{model.name} to #{params['value']} and confirming"
   model.update(name: params['value'])
   model.confirmed! # maybe unwise
   params['value']
