@@ -1,16 +1,13 @@
-require 'spec_helper'
+#require 'spec_helper'
 require 'mechanize'
-require_relative '../lib/scraper/spider'
-require_relative '../lib/scraper/processor'
-require_relative '../lib/scraper/foromtb'
+require 'scraper/spider'
+#require_relative '../lib/scraper/processor'
+#require_relative '../lib/scraper/foromtb'
 
 RSpec.describe Spider do
-  let(:processor) { Processor.new }
   let(:agent) { Mechanize.new }
   # could later stub agent with fmtb page fixture and get rid of vcr
   let(:spider) { Spider.new(processor, agent) }
-
-  before { create(:post) }
 
   describe '#crawl' do
     it 'adds post uris to PostStore' do

@@ -1,7 +1,7 @@
 require 'nokogiri'
 #require_relative 'spec_helper'
-require_relative '../lib/scraper/post_preview'
-require_relative 'helpers'
+require 'scraper/post_preview'
+require_relative '../helpers'
 
 include Helpers
 

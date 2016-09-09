@@ -1,9 +1,10 @@
 require 'mechanize'
 #require_relative 'spec_helper'
-require_relative '../lib/scraper/fmtb_post'
-require_relative '../lib/scraper/foromtb'
-require_relative '../lib/scraper/post_preview'
-require_relative 'helpers'
+#require_relative '../../lib/scraper/fmtb_post'
+require 'scraper/fmtb_post'
+require 'scraper/foromtb'
+require 'scraper/post_preview'
+require_relative '../helpers'
 require 'vcr'
 
 include Helpers

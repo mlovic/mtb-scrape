@@ -1,8 +1,8 @@
 #require_relative 'spec_helper'
 require 'nokogiri'
-require_relative '../lib/scraper/date_element_parser'
-require_relative '../lib/scraper/post_preview'
-require_relative 'helpers'
+require 'scraper/date_element_parser'
+require 'scraper/post_preview'
+require_relative '../helpers'
 
 include Helpers
 

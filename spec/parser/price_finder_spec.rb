@@ -1,4 +1,4 @@
-require_relative '../lib/parser/price_finder'
+require 'parser/price_finder'
 
 RSpec.describe PriceFinder do
 

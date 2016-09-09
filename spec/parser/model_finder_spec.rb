@@ -1,8 +1,8 @@
-require_relative 'spec_helper'
-require_relative 'factories'
-require_relative '../lib/model'
-require_relative '../lib/brand'
-require_relative '../lib/parser/model_finder'
+require_relative '../spec_helper'
+require_relative '../factories'
+require 'model'
+require 'brand'
+require 'parser/model_finder'
 
 RSpec.describe ModelFinder do
   let(:post) { Post.new(fixture('post.yml')) }
