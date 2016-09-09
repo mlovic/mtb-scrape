@@ -88,6 +88,7 @@ class BikeUpdater
     return if old_attrs == new_attrs
     old_attrs.each do |k, v|
       next if new_attrs[k] == v
+      puts "Changes for  #{bike.post.title}"
       @changes << Change.new(bike.id, k, v, new_attrs[k]) 
       #puts @changes.last.to_s
       puts @changes.last.report
@@ -105,7 +106,7 @@ class BikeUpdater
     elsif count
       bikes = Bike.ordered_by_last_message.limit(count) # limit?
     elsif
-      bikes = Bike.all # okay?
+      bikes = Bike.joins(:post).where.not('posts.deleted = 1').all # okay?
     end
 
     bikes.each do |bike|
