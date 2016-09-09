@@ -26,6 +26,15 @@ RSpec.describe ModelFinder do
       expect(finder.get_brand.name).to eq 'Specialized'
   end
 
+  it 'does not guess precio or vendida' do
+    pending
+    Model.create name: 'Foxy', brand_id: 1, confirmation_status: 'confirmed' 
+    finder = ModelFinder.new('Mondraker vendida', '')
+    #puts finder.scan_for_model('TREK TOP FUEL 8 muy mejorada en Talla 18.5" (10.8Kg)').name
+      expect(finder.get_model).to eq nil
+  # using priority regex
+  end
+
   it 'does not guess blacklisted model names' do
     Model.create name: 'Foxy', brand_id: 1, confirmation_status: 'confirmed' 
     finder = ModelFinder.new('Mondraker vendida', '')
@@ -69,6 +78,7 @@ RSpec.describe ModelFinder do
     end
 
     it 'creates model when model does not exist' do
+      pending 'Not using this feature'
       expect(finder.get_model.name).to eq 'Foxy'
       expect(Model.all.size).to eq 1
     end

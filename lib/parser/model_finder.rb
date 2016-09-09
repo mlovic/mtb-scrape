@@ -3,7 +3,7 @@ require_relative '../brand'
 require_relative '../model'
 
 class ModelFinder
-  MODEL_NAME_BLACKLIST = %w(precio talla con carbono doble vendida)
+  MODEL_NAME_BLACKLIST = %w(precio talla con carbono doble vendida cuadro horquilla)
 
   def initialize(title, description)
     @title = ActiveSupport::Inflector.transliterate(title)
@@ -79,7 +79,8 @@ class ModelFinder
                  scan_for_model(@brand_context, :unconfirmed, brand_id: @brand.id)
         return model
       else
-        guess_model(@brand_context)
+        #guess_model(@brand_context)
+        nil
       end
     else
       scan_for_model(@title, :confirmed) ||
