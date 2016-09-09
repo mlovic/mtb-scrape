@@ -3,9 +3,6 @@ require_relative 'date_element_parser'
 
 module PostPreview
 
-  def scrape
-  end
-
   def url
     css('.title a').last['href']
   end
@@ -15,7 +12,6 @@ module PostPreview
   end
 
   def username
-    #at_css('.titleText .username').text # use slug instead?
     attr('data-author')
   end
 
@@ -28,20 +24,15 @@ module PostPreview
   end
 
   def last_message_at
-    #unix_time = self.css('.lastPost .DateTime').attr('data-time').value.to_i
-    # TODO Failing when date is absolute!!
-    #return Time.at(unix_time).to_datetime
     date_element = css('.lastPost .DateTime')
     DateElementParser.parse(date_element)
   end
 
   def title
-    # fix the .last hack. Or make comment
     css('.title a').last.text.strip 
   end
 
   def posted_at
-    # error somteimes: undefined method 'value' for nil:nilClass
     date_element = css('.posterDate .DateTime')
     DateElementParser.parse(date_element)
   end
