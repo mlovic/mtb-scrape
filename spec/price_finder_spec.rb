@@ -1,26 +1,6 @@
 require_relative '../lib/parser/price_finder'
 
 RSpec.describe PriceFinder do
-  # TODO remove dependency on Post
-  #it 'test' do
-    #post = build(:post)
-    #finder = PriceFinder.new(post.title, post.description)
-    #expect(finder.find_price).to eq 1250
-  #end
-
-  #it 'another test' do
-    #post = build(:post)
-    #post.title = 'vendo por 1000e bici que costaba 2000 euros'
-    #finder = PriceFinder.new(post.title, post.description)
-    #expect(finder.find_price).to eq 1000
-  #end
-
-  # using priority regex
-  it 'prefers prices in title' do
-    # TODO
-    finder = PriceFinder.new('Cuadro Epic. Antes 550, ahora 500', 'Precio 600e')
-    expect(finder.find_price).to eq 500
-  end
 
   it 'with thousands place point' do
     finder = PriceFinder.new('no price', 'La compre por 3.000e')
@@ -28,7 +8,8 @@ RSpec.describe PriceFinder do
   end
 
   it 'no euro symbol' do
-    pending
+    # TODO 
+    pending "this rule could be conflictive"
     finder = PriceFinder.new('Vendo bici por 2400', 'no desc')
     expect(finder.find_price).to eq 2400
   end
@@ -38,12 +19,40 @@ RSpec.describe PriceFinder do
     expect(finder.find_price).to eq 1990 
   end
 
- it 'la bici fue mas de 8000 euros. Precio 3.500' do
+  it 'la bici fue mas de 8000 euros. Precio 3.500' do
     finder = PriceFinder.new('', 'la bici fue mas de 8000 euros. Precio 3.500')
     expect(finder.find_price).to eq 3500
- end
+  end
+
+  it 'distinguishes between frame and bike'
+
+  describe 'preferences' do
+    it 'prefers prices in title' do
+      finder = PriceFinder.new('Cuadro Epic. Antes 550, ahora 500', 'Precio 600e', nil, true)
+      expect(finder.find_price).to eq 500
+    end
+
+    it 'prefers regular price in title over priority regex in descriptions' do
+      finder = PriceFinder.new('Froggy 721 1600e', 'Rebajada a 1800')
+      expect(finder.find_price).to eq 1600
+    end
+
+    #it 'prefers the lowest price'
+    it 'prefers the last price to appear' do
+      finder = PriceFinder.new('Froggy 721', 'Precio 1100e...1000e')
+      expect(finder.find_price).to eq 1000
+    end
+
+    it 'prefers prices in the typical range' do
+      finder = PriceFinder.new('Froggy 721', 'Esta por 1100e. Tambien horquilla suelta por 200e.')
+      expect(finder.find_price).to eq 1100
+    end
+
+    it 'applies typical range filter before last price filter'
+  end
 
   describe 'priority regexes' do
+    # TODO ineffective tests: prefers last number anyway
     it 'la vendo por' do
       finder = PriceFinder.new('no price', 'La compre por 3000e, la vendo por 1700')
       expect(finder.find_price).to eq 1700
@@ -76,8 +85,5 @@ RSpec.describe PriceFinder do
       expect(finder.find_price).to eq 2100
     end
   end
-
-  #it 'filters by credible vals' do
-  #end
 
 end
