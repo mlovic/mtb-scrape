@@ -6,23 +6,43 @@ class Spider
     @wait_time = time_between_requests
   end
   
+  def kill
+    @thread&.kill
+  end
+
   def crawl_async(in_queue, out_queue)
-    # TODO why mechanize? Switch to Net::HTTP?
-    # TODO error handling - check status, etc.
+    # TODO why mechanize? Switch to Net::HTTP + Nokogiri?
       @thread = Thread.new do
                   until in_queue.closed?
                     # TODO no reason for spider to know about handler
                     (url, handler = in_queue.pop) or Thread.exit
                     @waiting_for_response = true
                     puts "Fetching #{url}..."
-                    page = @agent.get(url)
-                    #raise NetworkError unless page.code.match(/^2/)
+                    begin
+                      page = @agent.get(url)
+                    # How to do this without requiring Mechanize
+                    #rescue Mechanize::Error => e
+                      #puts e.message
+                      #next
+                    rescue StandardError => e
+                      puts "An Error occurred while requesting #{url}:"
+                      puts e.message
+                      puts e.backtrace
+                      next
+                    end
+                    #check_status(page)
                     @waiting_for_response = false
                     #puts "Done fetching #{url}"
                     out_queue.push [page, handler]
                     sleep @wait_time # sleep variable amount of time depending on request time?
                   end
                 end
+  end
+
+  def check_status(page)
+    unless page.code =~ /2../
+      puts "HTTP #{} Request not successftul"
+    end
   end
   
   def waiting_for_response?

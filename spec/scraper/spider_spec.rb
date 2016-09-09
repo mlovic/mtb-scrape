@@ -1,32 +1,80 @@
-#require 'spec_helper'
-require 'mechanize'
+require 'thread'
+require 'timeout'
 require 'scraper/spider'
-#require_relative '../lib/scraper/processor'
-#require_relative '../lib/scraper/foromtb'
+
+Thread.abort_on_exception = true
+
+# TODO move to Helpers
+def wait_until(timeout = 5, sleep_time = 0.01)
+  Timeout::timeout(timeout) do # raises exception if timeout
+    while !yield
+      sleep sleep_time
+    end
+  end
+end
 
 RSpec.describe Spider do
-  let(:agent) { Mechanize.new }
   # could later stub agent with fmtb page fixture and get rid of vcr
-  let(:spider) { Spider.new(processor, agent) }
+  # TODO Are threads being killed when Spider goes out of scope?
+  let(:spider) { Spider.new(agent, time_between_requests: 0) }
+  let(:in_q)  { Queue.new }
+  let(:out_q) { Queue.new }
+  let(:agent) { double("agent") }
 
-  describe '#crawl' do
-    it 'adds post uris to PostStore' do
-      VCR.use_cassette 'scrape_first_page' do
-        #expect(PostUriStore).to receive(:set).at_least(:once) { "OK" }
-        #expect(processor).to receive(:process_list).twice
+  describe '#kill!' do
+    it 'kills internal thread' do
+      thread = spider.crawl_async(in_q, out_q)
+      expect(thread.alive?).to eq true
+      spider.kill
+      wait_until(0.1) { !thread.alive? }
+      expect(thread.alive?).to eq false
+    end
 
-        spider.crawl(1, root: ForoMtb::FOROMTB_URI)
-      end
+    it 'does nothing if there is no thread' do
+      expect{ spider.kill }.to_not raise_error
     end
   end
 
-  describe '#visit_page' do
-    let(:first_page) do
-      VCR.use_cassette('get_first_page') { spider.visit_page(1, ForoMtb::FOROMTB_URI) }
+  describe '#crawl_async' do
+    it 'consumes download queue until input_queue is closed' do
+      in_q.push(1)
+      allow(agent).to receive(:get, &:itself)
+      spider = Spider.new(agent, time_between_requests: 0)
+
+      spider.crawl_async(in_q, out_q)
+      wait_until { in_q.empty? }
+      expect(out_q.pop).to eq [1, nil] # ["success", "success"]
+
+      in_q << 2
+      wait_until { in_q.empty? }
+      expect(out_q.pop).to eq [2, nil] # ["success", "success"]
+      in_q.close
     end
 
-    it 'extends ListPage' do
-      expect(first_page).to respond_to :posts
+    it 'returns thread' do
+      expect(spider.crawl_async(in_q, out_q)).to be_a Thread
+    end
+
+    it 'kills thread when input queue closes' do
+      thread = spider.crawl_async(in_q, out_q)
+      in_q.close
+      wait_until(1) { !thread.alive? }
+      expect(thread.alive?).to eq false
+    end
+    # TODO test logging?
+
+    context 'Exception is raised' do
+      it 'continues with next item from the queue' do
+        in_q.push("good url").push("bad url").push("good url")
+        allow(agent).to receive(:get).with("good url").and_return("success")
+        allow(agent).to receive(:get).with("bad url").and_raise("Stub error")
+        spider = Spider.new(agent, time_between_requests: 0)
+
+        spider.crawl_async(in_q, out_q)
+        wait_until { in_q.empty? }
+        in_q.close
+        expect(out_q.size).to eq 2 # ["success", "success"]
+      end
     end
   end
 end
