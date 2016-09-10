@@ -1,4 +1,5 @@
 $:.unshift File.dirname(__FILE__)
+$: << File.expand_path(File.join(File.dirname(__FILE__), 'lib/')) 
 
 require 'pp'
 require 'sinatra'
@@ -16,7 +17,7 @@ configure :development do
   require 'thin'
   set :server, 'thin'
   set :database, {adapter: "sqlite3", database: "db/foromtb.db"}
-  if ENV['START_SCHEDULER'] == true
+  if ENV['START_SCHEDULER']
     require 'fmtb_scheduler'
     FmtbScheduler.start
     ActiveRecord::Base.logger = Logger.new('db/debug.log')

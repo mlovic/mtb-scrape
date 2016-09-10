@@ -1,4 +1,10 @@
-Dir[File.dirname(__FILE__) + '/lib/*.rb'].each {|file| require file }
+$:.unshift File.dirname(__FILE__)
+require 'lib/post'
+require 'lib/bike'
+require 'lib/scraper'
+require 'lib/bike_updater'
+require 'lib/post_parser'
+
 require 'mechanize'
 
 module MtbScrape

@@ -1,4 +1,5 @@
 require 'rufus-scheduler'
+require_relative 'mtb_scrape'
 
 module FmtbScheduler
   def self.start
