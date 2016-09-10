@@ -22,7 +22,9 @@ class Post < ActiveRecord::Base
   scope :active, -> { where(buyer: false, closed: false, deleted: false) }
 
   before_save do
-    self.closed = (PostParser.sold?(self.title) || PostParser.closed?(self.title))
+    if PostParser.sold?(title) || PostParser.closed?(title)
+      self.closed = true
+    end
     self.buyer = PostParser.buyer?(self.title)
     self.deleted = true if self.description_no_html.gsub(/\s/, '').length < MIN_DESCRIPTION_LENGTH 
     # TODO how to deal with 'cerrado'
