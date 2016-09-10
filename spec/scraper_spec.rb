@@ -1,4 +1,5 @@
 require_relative 'spec_helper'
+require 'scraper'
 
 RSpec.describe Scraper do
   describe '#scrape' do
@@ -7,6 +8,7 @@ RSpec.describe Scraper do
       VCR.use_cassette 'scrape_first_page' do
 
         # TODO handle thread in test
+        allow(Spider).to receive(:new).and_return(Spider.new(Mechanize.new, time_between_requests: 0))
 
         agent = Mechanize.new
         logger = Logger.new(STDOUT)
