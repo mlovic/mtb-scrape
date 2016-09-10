@@ -15,16 +15,17 @@ class ListPageHandler
 
   # eval_preview?
   def eval_post(post)
-    if new_post?(post) 
+    db_post = get_post_from_db(post.thread_id)
+    if db_post.nil? # new post?
       download(post)
-    elsif title_changed?(post)
+    elsif title_changed?(post, db_post)
       if post.title.match(/(vendid|cerrad)/i)
-        get_post_from_db(post.thread_id).update!(closed: true, last_message_at: post.last_message_at) 
+        db_post.update!(closed: true, last_message_at: post.last_message_at) 
       else 
         download(post)
       end
     else 
-      update_last_msg(post)
+      update_last_msg(post, db_post)
     end
   end
 
@@ -38,21 +39,14 @@ class ListPageHandler
     Post.find_by(thread_id: thread_id)
   end
 
-  def new_post?(post)
-    !Post.find_by(thread_id: post.thread_id)
-  end
-
-  def title_changed?(post)
-    db_post = Post.find_by!(thread_id: post.thread_id)
+  def title_changed?(post, db_post)
     post.title != db_post.title
   end
 
-  def update_last_msg(post)
-    db_post = Post.find_by!(thread_id: post.thread_id)
+  def update_last_msg(post, db_post)
     unless db_post.last_message_at == post.last_message_at
       puts 'updating last message...'
       db_post.update last_message_at: post.last_message_at
     end
   end
-
 end
