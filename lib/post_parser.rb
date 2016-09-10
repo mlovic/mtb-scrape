@@ -1,7 +1,7 @@
 require 'nokogiri'
 
-require_relative 'post'
-require_relative 'parser/model_finder'
+# TODO how to avoid requiring AR
+#require_relative 'parser/model_finder'
 require_relative 'parser/price_finder'
 
 class PostParser
@@ -33,6 +33,7 @@ class PostParser
       return attributes
     end
 
+    # TODO extract this to BasicParser class? Easier to test
     def get_basic_attributes(post)
       attributes = {}
       size = find_size(post.title) || find_size(post.description_no_html)
