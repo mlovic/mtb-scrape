@@ -1,15 +1,11 @@
-require_relative 'fmtb_post'
+require 'scraper/post_preview'
 
 module ListPage
-  #attr_accessor :agent
 
   def posts(with_sticky: false)
-    #raise 'agent nil!!' unless @agent
     ps = root.css('.discussionListItem').map do |n| 
-      FmtbPost.new n.extend(PostPreview), self
+      n.extend(PostPreview)
     end
-    ps.reject(&:sticky?) unless with_sticky
+    with_sticky ? ps : ps.reject(&:sticky?)
   end
-
-
 end

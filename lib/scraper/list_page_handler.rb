@@ -32,7 +32,7 @@ class ListPageHandler
   def download(post)
     @download_queue << [post.url, @post_page_handler.class] # tuple?
     # TODO distinguish between post and ppreview
-    @post_page_handler.add_post_preview(post.url, post.preview)
+    @post_page_handler.add_post_preview(post.url, post)
   end
 
   def get_post_from_db(thread_id)

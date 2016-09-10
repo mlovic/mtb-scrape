@@ -1,24 +1,34 @@
 require 'spec_helper'
 require 'scraper/list_page_handler'
 require_relative '../factories'
+require 'scraper/post_preview'
 
 RSpec.describe ListPageHandler do
+  before(:all) do
+    doc = Nokogiri::HTML::Document.parse(fixture('post_preview.html'))
+    @post_preview = doc.at('li').extend(PostPreview)
+    @post_preview.freeze
+  end
+
   let(:download_queue) { Array.new } # impl uses Queue. Double must impl <</push.
   let(:pp_handler) { double("pp_handler", add_post_preview: nil) }
   let(:lp_handler) { ListPageHandler.new(download_queue, pp_handler)  }
 
   describe '#eval_post' do
-    let(:preview) { double("preview", title: 'mondraker', last_message_at: Time.now, thread_id: 1234, preview: 'preview', url: 'url here')}
+    let(:preview) do
+      # Will raise error when PostPreview interface breaks
+      object_double(@post_preview, title: 'mondraker', last_message_at: Time.now, 
+                                   thread_id: 1234, url: 'url here')
+    end
 
     context 'when post is new' do
-
       it 'the url is queued for download' do
         lp_handler.eval_post(preview)
         expect(download_queue.first.first).to eq 'url here'
       end
 
       it 'it is added to pp_handler cache' do
-        expect(pp_handler).to receive(:add_post_preview).with('url here', 'preview')
+        expect(pp_handler).to receive(:add_post_preview).with('url here', preview)
         lp_handler.eval_post(preview)
       end
     end
