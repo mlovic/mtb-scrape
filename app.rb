@@ -29,7 +29,10 @@ configure :production do
   FmtbScheduler.start
   set :root, File.dirname(__FILE__) 
   set :server, 'unicorn'
-  set :database, {adapter: "sqlite3", database: "db/foromtb.db"}
+  set :database, {adapter:  "postgresql", 
+                  database: "mtb-scrape",
+                  username: "mtb-scrape", 
+                  password: ENV['DB_PASSWORD']}
 end
 
 helpers do

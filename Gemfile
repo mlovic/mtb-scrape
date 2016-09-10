@@ -14,6 +14,7 @@ gem 'concurrent-ruby', require: 'concurrent'
 group :production do
   gem 'unicorn'
   gem 'rufus-scheduler'
+  gem 'pg'
 end
 
 group :test, :development do
