@@ -1,3 +1,4 @@
+require_relative 'spec_helper'
 require_relative '../lib/brand'
 require_relative '../lib/bike'
 require_relative '../lib/model'
