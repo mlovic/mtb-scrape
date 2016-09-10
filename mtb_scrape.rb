@@ -3,6 +3,7 @@ require 'lib/post'
 require 'lib/bike'
 require 'lib/scraper'
 require 'lib/bike_updater'
+require 'lib/parser/model_finder' # needs to come before post_parser
 require 'lib/post_parser'
 
 require 'mechanize'
