@@ -5,11 +5,11 @@ require_relative '../lib/bike'
 require_relative '../lib/post'
 require_relative 'factories'
 
-RSpec.describe 'Bike update feature' do
+#RSpec.describe 'Bike update feature' do
   #BikeUpdater.update
-end
+#end
 
-RSpec.describe BikeUpdater do
+RSpec.describe BikeUpdater, loads_DB: true do
   before do
     @bike = create(:bike, :with_names, size: nil, brand_name: 'Mondraker', model_name: 'Foxy')
     create(:brand, name: 'Specialized', confirmation_status: 1)
@@ -42,3 +42,6 @@ RSpec.describe BikeUpdater do
     expect(Bike.first.brand_name).to eq 'Specialized'
   end
 end
+
+
+

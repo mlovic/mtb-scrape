@@ -1,7 +1,7 @@
 require_relative 'spec_helper'
 require 'scraper'
 
-RSpec.describe Scraper do
+RSpec.describe Scraper, loads_DB: true do
   describe '#scrape' do
     it 'works', slow: true do
 

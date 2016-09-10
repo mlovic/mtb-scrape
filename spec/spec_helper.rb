@@ -90,7 +90,7 @@ RSpec.configure do |config|
 
   # TODO too slow?
   config.before(:each) do
-    DatabaseCleaner.clean_with(:truncation)
+    DatabaseCleaner.clean_with(:truncation) if self.class.metadata[:loads_DB]
   end
 
   end

@@ -3,7 +3,7 @@ require 'scraper/list_page_handler'
 require_relative '../factories'
 require 'scraper/post_preview'
 
-RSpec.describe ListPageHandler do
+RSpec.describe ListPageHandler, loads_DB: true do
   before(:all) do
     doc = Nokogiri::HTML::Document.parse(fixture('post_preview.html'))
     @post_preview = doc.at('li').extend(PostPreview)

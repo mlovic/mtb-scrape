@@ -1,7 +1,7 @@
 require_relative 'spec_helper'
 require_relative '../lib/brand'
 
-RSpec.describe Brand do
+RSpec.describe Brand, loads_DB: true do
   let!(:brand) { Brand.create name: 'Mondraker' }
   it "can't be destroyed" do
     #brand = Brand.create(name: 'Mondraker')

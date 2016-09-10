@@ -1,6 +1,6 @@
 require_relative 'spec_helper'
 
-RSpec.describe 'Features' do
+RSpec.describe 'Features', loads_DB: true do
   it 'can parse posts and save to bikes table' do
     post = Post.create(fixture('post.yml')) 
     Brand.create name: 'Mondraker', confirmation_status: 'confirmed' 

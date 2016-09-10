@@ -3,7 +3,7 @@ require_relative 'spec_helper'
 require_relative 'factories'
 require_relative '../lib/post'
 
-RSpec.describe Post do
+RSpec.describe Post, loads_DB: true do
   let(:post) { build(:post) }
 
   describe 'updated' do

@@ -8,7 +8,7 @@ require_relative '../lib/post'
 require 'will_paginate'
 require 'will_paginate/active_record'
 
-RSpec.describe Bike do
+RSpec.describe Bike, loads_DB: true do
   let(:post) { Post.create(fixture('post.yml')) }
   #let(:bike) { Bike.new(fixture('bike.yml')) }
   let(:bike) { build(:bike) }

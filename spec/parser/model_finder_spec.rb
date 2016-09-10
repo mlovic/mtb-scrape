@@ -4,7 +4,7 @@ require 'model'
 require 'brand'
 require 'parser/model_finder'
 
-RSpec.describe ModelFinder do
+RSpec.describe ModelFinder, loads_DB: true do
   let(:post) { Post.new(fixture('post.yml')) }
   let(:title) { post.title }
   let(:description) { post.description }
