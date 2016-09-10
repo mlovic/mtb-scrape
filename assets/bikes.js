@@ -16,6 +16,8 @@ $(document).ready( function() {
     $('#brand-select').trigger('chosen:updated');
   }
 
+  // Would probably be faster for client to request json of all models, 
+  // even with 1000+ models
   function setModelOptions(brand) {
     $.ajax({
       type: 'GET',

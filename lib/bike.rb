@@ -22,7 +22,7 @@ class Bike < ActiveRecord::Base
     attrs.slice(*supported_filters).reduce(all.joins(:model)) do |scope, (key, value)|
       value.present? ? scope.send(key, value) : scope
     end  
-    # TODO is above 'all' making query?
+    # TODO is above 'all' making query? Specs pass with just self.joins
   end
 
   def self.order_by(order)

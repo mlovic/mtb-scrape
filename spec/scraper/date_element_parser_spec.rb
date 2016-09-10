@@ -1,4 +1,3 @@
-#require_relative 'spec_helper'
 require 'nokogiri'
 require 'scraper/date_element_parser'
 require 'scraper/post_preview'
@@ -19,6 +18,7 @@ RSpec.describe DateElementParser do
   let(:date_element_3) { build_date_element('post_preview_3.html') }
 
   it 'parses with unix time' do
+    # TODO use be_within
     expect(DateElementParser.parse(date_element_1).to_time.round).to eq Time.parse('7 Nov 2015 12:59:20 +01:00')
   end
   
