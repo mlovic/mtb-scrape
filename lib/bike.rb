@@ -26,8 +26,7 @@ class Bike < ActiveRecord::Base
   end
 
   def self.order_by(order)
-    # TODO fix map to_s
-    supported_orders = [:last_message, :last_posted].map(&:to_s)
+    supported_orders = %w(last_message, last_posted)
     return ordered_by_last_message unless supported_orders.include? order 
     send("ordered_by_#{order}")
   end

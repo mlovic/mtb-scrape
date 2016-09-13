@@ -19,9 +19,13 @@ RSpec.describe Bike, loads_DB: true do
   end
 
   describe '.order_by' do
-    # TODO
+    it 'orders in DESC order by the right attribute' do
+      create(:bike, id: 1, post: create(:post, posted_at: (Time.now - 60)))
+      create(:bike, id: 2, post: create(:post, posted_at: Time.now))
+      expect(Bike.order_by('last_posted').map(&:id)).to eq [2 ,1]
+    end
 
-    it 'rejects unsupported orders' do
+    it 'does not fail if given an unsupported order' do
       expect { Bike.order_by('nil') }.to_not raise_error
     end 
   end
