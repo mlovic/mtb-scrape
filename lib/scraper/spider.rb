@@ -10,20 +10,16 @@ class Spider
     @thread&.kill
   end
 
+  # TODO why mechanize? Switch to Net::HTTP + Nokogiri?
+  # TODO no reason for spider to know about handler
   def crawl_async(in_queue, out_queue)
-    # TODO why mechanize? Switch to Net::HTTP + Nokogiri?
       @thread = Thread.new do
                   until in_queue.closed?
-                    # TODO no reason for spider to know about handler
                     (url, handler = in_queue.pop) or Thread.exit
                     @waiting_for_response = true
                     puts "Fetching #{url}..."
                     begin
                       page = @agent.get(url)
-                    # How to do this without requiring Mechanize
-                    #rescue Mechanize::Error => e
-                      #puts e.message
-                      #next
                     rescue StandardError => e
                       puts "An Error occurred while requesting #{url}:"
                       puts e.message
