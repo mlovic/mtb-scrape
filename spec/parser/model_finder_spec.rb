@@ -16,14 +16,13 @@ RSpec.describe ModelFinder, loads_DB: true do
     #create(:model, name: 'Gambler', brand: scott)
   end
 
-  # TODO important!
   it 'when only model name is present in title' do
     Model.create name: 'Foxy', brand_id: 1, confirmation_status: 'confirmed' 
     Brand.create name: 'Specialized', confirmation_status: 'confirmed' 
     Model.create name: 'Epic', brand_id: 2, confirmation_status: 'confirmed' 
     finder = ModelFinder.new('EPIC SWORKS 2015 a FULL!!', 'Mondraker Dune')
-      expect(finder.get_model.name).to eq 'Epic'
-      expect(finder.get_brand.name).to eq 'Specialized'
+    expect(finder.get_model.name).to eq 'Epic'
+    expect(finder.get_brand.name).to eq 'Specialized'
   end
 
   it 'does not guess precio or vendida' do

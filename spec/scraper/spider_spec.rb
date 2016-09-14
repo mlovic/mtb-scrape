@@ -4,7 +4,7 @@ require 'scraper/spider'
 
 Thread.abort_on_exception = true
 
-# TODO move to Helpers
+# move to Helpers?
 def wait_until(timeout = 5, sleep_time = 0.01)
   Timeout::timeout(timeout) do # raises exception if timeout
     while !yield
@@ -14,7 +14,6 @@ def wait_until(timeout = 5, sleep_time = 0.01)
 end
 
 RSpec.describe Spider do
-  # could later stub agent with fmtb page fixture and get rid of vcr
   # TODO Are threads being killed when Spider goes out of scope?
   let(:spider) { Spider.new(agent, time_between_requests: 0) }
   let(:in_q)  { Queue.new }
@@ -43,11 +42,11 @@ RSpec.describe Spider do
 
       spider.crawl_async(in_q, out_q)
       wait_until { in_q.empty? }
-      expect(out_q.pop).to eq [1, nil] # ["success", "success"]
+      expect(out_q.pop).to eq [1, nil]
 
       in_q << 2
       wait_until { in_q.empty? }
-      expect(out_q.pop).to eq [2, nil] # ["success", "success"]
+      expect(out_q.pop).to eq [2, nil]
       in_q.close
     end
 
@@ -61,7 +60,6 @@ RSpec.describe Spider do
       wait_until(1) { !thread.alive? }
       expect(thread.alive?).to eq false
     end
-    # TODO test logging?
 
     context 'Exception is raised' do
       it 'continues with next item from the queue' do
@@ -73,7 +71,7 @@ RSpec.describe Spider do
         spider.crawl_async(in_q, out_q)
         wait_until { in_q.empty? }
         in_q.close
-        expect(out_q.size).to eq 2 # ["success", "success"]
+        expect(out_q.size).to eq 2
       end
     end
   end

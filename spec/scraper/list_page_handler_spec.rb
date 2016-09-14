@@ -33,7 +33,6 @@ RSpec.describe ListPageHandler, loads_DB: true do
       end
     end
 
-    # TODO add post prev dep and use verifying double
     context 'when post is already in db' do
       before do 
         create(:post, title: 'mondraker', thread_id: 1234, last_message_at: (Time.now - 60*20))

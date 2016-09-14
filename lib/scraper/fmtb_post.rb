@@ -11,8 +11,6 @@ class FmtbPost
     @page = page
   end
 
-  # TODO keep post preview or not?
-  
   def_delegators :@preview, :thread_id, :last_message_at, :title, :sticky?, :url
 
 end

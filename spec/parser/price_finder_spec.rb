@@ -8,8 +8,7 @@ RSpec.describe PriceFinder do
   end
 
   it 'no euro symbol' do
-    # TODO 
-    pending "this rule could be conflictive"
+    pending "This rule is conflictive with others. Not using for now"
     finder = PriceFinder.new('Vendo bici por 2400', 'no desc')
     expect(finder.find_price).to eq 2400
   end
