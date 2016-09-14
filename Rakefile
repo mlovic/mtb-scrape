@@ -3,37 +3,30 @@ require 'sqlite3'
 require 'logger'
 require 'yaml'
 
-#task :default => :migrate
-
-#ActiveRecord::Base.logger = Logger.new('debug.log')
-#configuration = YAML::load(IO.read('db/database.yml'))
-#ActiveRecord::Base.establish_connection(configuration['test'])
-
-#desc "Run migrations"
-#task :migrate do
-  #ActiveRecord::Migrator.migrate('db/migrations', ENV["VERSION"] ? ENV["VERSION"].to_i : nil)
-  ## Migrate dev db
-  ## Migrate test db
-#end
-
-
-
 ActiveRecord::Base.logger = Logger.new('debug.log')
+MIGRATIONS_DIR = 'db/migrations'
+
+def migrate_db(db_config)
+  ActiveRecord::Base.establish_connection(db_config)
+  ActiveRecord::Migrator.migrate(MIGRATIONS_DIR, ENV["VERSION"] ? ENV["VERSION"].to_i : nil)
+end
 
 task :load_config do
-  MIGRATIONS_DIR = 'db/migrations'
   @configuration = YAML::load(IO.read('db/database.yml'))
 end
 
 desc "Run migrations"
 task :migrate => :load_config do
-  puts 'running task'
-  # Migrate dev db
-  ActiveRecord::Base.establish_connection(@configuration['development'])
-  ActiveRecord::Migrator.migrate(MIGRATIONS_DIR, ENV["VERSION"] ? ENV["VERSION"].to_i : nil)
-  # Migrate test db
-  ActiveRecord::Base.establish_connection(@configuration['test'])
-  ActiveRecord::Migrator.migrate(MIGRATIONS_DIR, ENV["VERSION"] ? ENV["VERSION"].to_i : nil)
+  env = ENV['RACK_ENV']
+  case env
+  when 'production', 'development', 'test'
+    migrate_db(@configuration[env])
+  when nil
+    migrate_db(@configuration['development'])
+    migrate_db(@configuration['test'])
+  else
+    raise "Unknown environment: #{env}"
+  end
 end
 
 desc 'Rolls the schema back to the previous version (specify steps w/ STEP=n).'
