@@ -11,6 +11,17 @@ def migrate_db(db_config)
   ActiveRecord::Migrator.migrate(MIGRATIONS_DIR, ENV["VERSION"] ? ENV["VERSION"].to_i : nil)
 end
 
+directory "public"
+
+task :build do
+  puts "Migrating database..."
+  Rake::Task['migrate'].invoke
+  puts "Copying assets to public/ ..."
+  Rake::Task['copy_assets'].invoke
+  puts "Installing front-end dependencies..."
+  sh 'bower install'
+end
+
 task :load_config do
   @configuration = YAML::load(IO.read('db/database.yml'))
 end
@@ -41,6 +52,6 @@ task :rollback => :load_config do
 
 end
 
-task :copy_assets do
+task :copy_assets => :public do
   FileUtils.cp_r 'assets/.', 'public', verbose: true
 end
