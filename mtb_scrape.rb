@@ -1,10 +1,11 @@
-$:.unshift File.dirname(__FILE__)
-require 'lib/post'
-require 'lib/bike'
-require 'lib/scraper'
-require 'lib/bike_updater'
-require 'lib/parser/model_finder' # needs to come before post_parser
-require 'lib/post_parser'
+$: << File.expand_path(File.join(File.dirname(__FILE__), 'lib/')) 
+
+require 'post'
+require 'bike'
+require 'scraper'
+require 'bike_updater'
+require 'parser/model_finder' # needs to come before post_parser
+require 'post_parser'
 
 require 'mechanize'
 
