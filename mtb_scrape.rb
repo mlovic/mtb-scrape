@@ -6,22 +6,19 @@ require 'scraper'
 require 'bike_updater'
 require 'parser/model_finder' # needs to come before post_parser
 require 'post_parser'
+require 'logging'
 
 require 'mechanize'
 
 module MtbScrape
 
-  logger = Logger.new(STDOUT)
-
-  def log(arg)
-    logger.info arg
-  end
+  extend Logging
 
   def self.parse_new_or_updated_posts
     # TODO somehow consolidate with updater
     # TODO also parse updated posts
     Post.active.not_parsed.each do |post|
-      puts "Parsing " + post.title
+      logger.debug "Parsing " + post.title
       attributes = PostParser.parse(post)
       bike = Bike.new(attributes)
       bike.post = post
@@ -34,7 +31,7 @@ module MtbScrape
 
   def self.update(num_pages = 5)
     # really only have to go to last_message_at of last in db
-    new_posts = fmtb_scrape(num_pages) # 5? think about this
+    new_posts = fmtb_scrape(num_pages)
     parse_new_or_updated_posts
   end
 
@@ -81,3 +78,7 @@ module MtbScrape
   end
 
 end
+
+
+
+

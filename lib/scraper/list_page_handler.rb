@@ -1,9 +1,13 @@
 require_relative 'list_page'
 require_relative '../post'
+require_relative '../logging'
 
 class ListPageHandler
 
+  include Logging
+
   def initialize(queue, post_page_handler)
+  
     @download_queue = queue
     @post_page_handler = post_page_handler
   end
@@ -45,7 +49,7 @@ class ListPageHandler
 
   def update_last_msg(post, db_post)
     unless db_post.last_message_at == post.last_message_at
-      puts 'updating last message...'
+      logger.debug 'updating last message...'
       db_post.update last_message_at: post.last_message_at
     end
   end

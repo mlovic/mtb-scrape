@@ -1,8 +1,11 @@
 require_relative 'post_page'
 require_relative '../post'
 require_relative '../bike_updater'
+require_relative '../logging'
 
 class PostPageHandler
+
+  include Logging
 
   def initialize(queue)
     @download_queue = queue
@@ -40,17 +43,15 @@ class PostPageHandler
     # TODO keep title if vendida
     #if db_post.title == attrs[title]
 
-    puts db_post.title
     # TODO report the changes
     db_post.update(attrs)
     # log changes 
     BikeUpdater.new.update_bike(db_post.bike, dry_run: true) if db_post.bike
-    puts "Post #{db_post.id} updated"
-    puts attrs[:title]
+    logger.info "Post #{db_post.id} updated - #{attrs[:title]}"
   end
 
   def create_post(attrs)
     new_post = Post.create!(attrs)
-    puts "Post #{new_post.id} created"
+    logger.info "Post #{new_post.id} created - #{attrs[:title]}"
   end
 end

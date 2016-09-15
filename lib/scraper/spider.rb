@@ -1,4 +1,8 @@
+require_relative '../logging'
+
 class Spider
+
+  include Logging
 
   def initialize(agent, time_between_requests: 2)
     @agent = agent
@@ -17,13 +21,13 @@ class Spider
                   until in_queue.closed?
                     (url, handler = in_queue.pop) or Thread.exit
                     @waiting_for_response = true
-                    puts "Fetching #{url}..."
+                    logger.debug "Fetching #{url}..."
                     begin
                       page = @agent.get(url)
                     rescue StandardError => e
-                      puts "An Error occurred while requesting #{url}:"
-                      puts e.message
-                      puts e.backtrace
+                      logger.error "An Error occurred while requesting #{url}:"
+                      logger.error e.message
+                      logger.error e.backtrace
                       next
                     end
                     #check_status(page)
@@ -36,8 +40,8 @@ class Spider
   end
 
   def check_status(page)
-    unless page.code =~ /2../
-      puts "HTTP #{} Request not successftul"
+    unless page.code =~ /2[0-9]{2}/
+      logger.error "HTTP #{} Request not successftul"
     end
   end
   

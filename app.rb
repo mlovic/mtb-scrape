@@ -12,9 +12,13 @@ require 'lib/bike'
 require 'lib/brand'
 require 'lib/model'
 require 'lib/post'
+require 'lib/logging'
+
+extend Logging 
 
 configure :development do
   require 'thin'
+  set :show_exceptions, :after_handler
   set :server, 'thin'
   set :database, {adapter: "sqlite3", database: "db/foromtb.db"}
   if ENV['START_SCHEDULER']
@@ -63,7 +67,7 @@ end
 
 delete '/brands/:id' do |id|
   brand = Brand.find(id)
-  puts 'Destroying brand ' + brand.name
+  debug.info 'Destroying brand ' + brand.name
   brand.destroy
 end
 
@@ -75,15 +79,20 @@ get '/models' do
 end
 
 post '/update-model' do
+  content_type :json
   # TODO what if bike is not found. Other exception handling
   # or if invalid
   # or no change
   # or name has been taken
-  model = Bike.find!(params['bike_id']).model
-  puts "Changing model name from #{model.name} to #{params['value']} and confirming"
+  model = Bike.find(params['bike_id'])&.model
+  logger.info "Changing model name from #{model.name} to #{params['value']} and confirming"
   model.update!(name: params['value'])
   model.confirmed! # maybe unwise
   params['value']
+end
+
+error ActiveRecord::RecordNotFound do
+  status 404
 end
 
 post '/models/:id/confirm' do |id|

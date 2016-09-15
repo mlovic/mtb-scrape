@@ -6,8 +6,12 @@ require_relative 'scraper/post_page_handler'
 require_relative 'scraper/processor'
 require_relative 'scraper/spider'
 require_relative 'scraper/foromtb'
+require_relative 'logging'
 
 class Scraper
+
+  include Logging
+
   def initialize
   end
 
@@ -38,7 +42,7 @@ class Scraper
     # TODO handle potential deadlock error. Sleep and retry?
     processor.dispatch(*pages_q.pop) until url_q.empty? && 
                                            !spider.waiting_for_response? 
-    puts "Done. Closing queues..."
+    logger.debug "Done. Closing queues..."
     url_q.close # Triggers Spider thread to exit
     pages_q.close 
   end
