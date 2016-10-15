@@ -45,8 +45,6 @@ class PostPageHandler
 
     # TODO report the changes
     db_post.update(attrs)
-    # log changes 
-    BikeUpdater.new.update_bike(db_post.bike, dry_run: true) if db_post.bike
     logger.info "Post #{db_post.id} updated - #{attrs[:title]}"
   end
 
