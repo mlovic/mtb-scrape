@@ -1,6 +1,5 @@
 require_relative 'post_page'
 require_relative '../post'
-require_relative '../bike_updater'
 require_relative '../logging'
 
 class PostPageHandler

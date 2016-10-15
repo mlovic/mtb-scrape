@@ -1,5 +1,5 @@
 require 'active_record'
-require_relative 'post_parser'
+require 'nokogiri'
 
 class Post < ActiveRecord::Base
   MIN_DESCRIPTION_LENGTH = 30
@@ -22,10 +22,11 @@ class Post < ActiveRecord::Base
   scope :active, -> { where(buyer: false, closed: false, deleted: false) }
 
   before_save do
-    if PostParser.sold?(title) || PostParser.closed?(title)
+      
+    if title.match(/vendid/i) || title.match(/cerrad/i)
       self.closed = true
     end
-    self.buyer = PostParser.buyer?(self.title)
+    self.buyer = self.title.match(/(compro|busco)/i)
     self.deleted = true if self.description_no_html.gsub(/\s/, '').length < MIN_DESCRIPTION_LENGTH 
     # TODO how to deal with 'cerrado'
   end
