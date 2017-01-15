@@ -13,6 +13,7 @@ require 'lib/brand'
 require 'lib/model'
 require 'lib/post'
 require 'lib/logging'
+require 'post_analyzer_init'
 
 extend Logging 
 
