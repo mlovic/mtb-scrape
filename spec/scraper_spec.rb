@@ -7,6 +7,8 @@ RSpec.describe Scraper, loads_DB: true do
 
       VCR.use_cassette 'scrape_first_page' do
 
+        # TODO fails with 19/20 sometimes. Probably doesn't wait for spider
+
         # TODO handle thread in test
         allow(Spider).to receive(:new).and_return(Spider.new(Mechanize.new, time_between_requests: 0))
 
@@ -14,7 +16,7 @@ RSpec.describe Scraper, loads_DB: true do
         logger = Logger.new(STDOUT)
         logger.level = 'INFO'
         agent.log = logger
-        allow(Mechanize).to receive(:new) {agent}
+        allow(Mechanize).to receive(:new).and_return(agent)
 
         scraper = Scraper.new
         scraper.scrape(1)

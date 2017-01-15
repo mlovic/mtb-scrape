@@ -79,6 +79,7 @@ GEM
       nenv (~> 0.1)
       shellany (~> 0.0)
     ntlm-http (0.1.1)
+    pg (0.18.4)
     pkg-config (1.1.7)
     pry (0.10.4)
       coderay (~> 1.1.0)
@@ -156,6 +157,7 @@ DEPENDENCIES
   guard-rake
   guard-rspec
   mechanize
+  pg
   rspec
   rufus-scheduler
   sinatra

@@ -13,6 +13,7 @@ utils/*
 !bikes.py
 Guardfile
 tags
+tmp/
 
 public/*
 

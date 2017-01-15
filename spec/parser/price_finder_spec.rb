@@ -1,7 +1,8 @@
 require 'parser/price_finder'
 
 RSpec.describe PriceFinder do
-
+  # TODO 215 euros
+  # TODO PRECIO REBAJADO: 800 €
   it 'with thousands place point' do
     finder = PriceFinder.new('no price', 'La compre por 3.000e')
     expect(finder.find_price).to eq 3000

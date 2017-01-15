@@ -17,6 +17,7 @@ require 'lib/logging'
 extend Logging 
 
 configure :development do
+  set :port, 4444
   require 'thin'
   set :show_exceptions, :after_handler
   set :server, 'thin'
@@ -29,9 +30,10 @@ configure :development do
 end
 
 configure :production do
+
   require 'unicorn'
-  require 'fmtb_scheduler'
-  FmtbScheduler.start
+  #require 'fmtb_scheduler'
+  #FmtbScheduler.start
   set :root, File.dirname(__FILE__) 
   set :server, 'unicorn'
   set :database, {adapter:  "postgresql", 
