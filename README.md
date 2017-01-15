@@ -47,10 +47,18 @@ There is also a [thor](http://whatisthor.com) CLI provided with the following co
     thor mtb_cli:update            # Scrape last 5 pages of foromtb and update bike infor...
     thor mtb:scrape
 
+## Data 
+
+The application recognizes and creates bikes based on lists of brands and models from the database. You can get this data from sql dumps hosted on  . To import the data into a postgres database:
+
+    curl http://mlovic.com/mtb-scrape/brands.sql > brands.sql
+    psql databasename < brands.sql
+    psql databasename < models.sql
+
 ## Contributing
 Contributions are very welcome. 
 
-For specs that require the database/ActiveRecord, require `spec_helper` and add the `loads_DB: true` RSpec metadata to the example group. If the spec can run without ActiveRecord, leave these out for faster tests!
+For specs that require the database/ActiveRecord, require `'spec_helper'` and add the `loads_DB: true` RSpec metadata to the example group. If the spec can run without ActiveRecord, leave these out for faster tests!
 
 ## TODO
 - Allow users to save searches and receive notifications for new bikes
@@ -62,4 +70,3 @@ For specs that require the database/ActiveRecord, require `spec_helper` and add 
 - scheduler
 - run tests
 - where to download brand and model data
-   
