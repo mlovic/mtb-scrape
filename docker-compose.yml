@@ -1,0 +1,9 @@
+postgres:
+  image: postgres:9.4.5
+  environment:
+    POSTGRES_USER: mtb-scrape
+    POSTGRES_PASSWORD: mtb-scrape
+  ports:
+    - '5432:5432'
+  volumes:
+    - mtb-scrape-postgres:/var/lib/postgresql/data
